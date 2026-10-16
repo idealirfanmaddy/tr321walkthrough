@@ -1,0 +1,1424 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TR 321 Walkthrough</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a full-bleed 3D stage; the controls float on its edges like a docent's clipboard, captions sit above the player. */
+:root {
+  --stage: #d9dfe3;
+  --panel: rgba(250, 251, 251, 0.93);
+  --panel-solid: #fafbfb;
+  --ink: #15212a;
+  --muted: #55636d;
+  --line: rgba(21, 33, 42, 0.13);
+  --accent: #1d7c94;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(29, 124, 148, 0.12);
+  --signal: #d9a514;
+  --cap-bg: rgba(9, 13, 16, 0.8);
+  --cap-fg: #f4f7f8;
+  --shadow: 0 10px 30px rgba(21, 33, 42, 0.16);
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --stage: #0c1215; --panel: rgba(16, 23, 28, 0.9); --panel-solid: #10171c; --ink: #e6edf1; --muted: #96a5ae;
+    --line: rgba(230, 237, 241, 0.13); --accent: #52b8d1; --accent-ink: #052129; --accent-soft: rgba(82, 184, 209, 0.16);
+    --signal: #f0c541; --shadow: 0 10px 30px rgba(0, 0, 0, 0.45); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --stage: #0c1215; --panel: rgba(16, 23, 28, 0.9); --panel-solid: #10171c; --ink: #e6edf1; --muted: #96a5ae;
+  --line: rgba(230, 237, 241, 0.13); --accent: #52b8d1; --accent-ink: #052129; --accent-soft: rgba(82, 184, 209, 0.16);
+  --signal: #f0c541; --shadow: 0 10px 30px rgba(0, 0, 0, 0.45); color-scheme: dark;
+}
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { background: var(--stage); color: var(--ink); font-family: var(--f-body); font-size: 15px; overflow: hidden; }
+* { box-sizing: border-box; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+#app { position: fixed; inset: 0; overflow: hidden; }
+#stage { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+#stage.is-dragging { cursor: grabbing; }
+.seg-inline { display: contents; }
+.spotpin { position: absolute; left: 0; top: 0; z-index: 2; margin: 0; padding: 0; border: 0; background: none; cursor: pointer; pointer-events: auto;
+  display: flex; flex-direction: column; align-items: center; gap: 4px; transform-origin: 50% 100%; }
+.spotpin .disc { width: 46px; height: 18px; border-radius: 50%; border: 3px solid #fff; background: rgba(29, 124, 148, 0.55); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35); order: 2; }
+.spotpin .tag { background: var(--cap-bg); color: var(--cap-fg); font-weight: 700; font-size: 13px; padding: 4px 9px; border-radius: 999px; white-space: nowrap; order: 1; }
+.spotpin:hover .disc, .spotpin:focus-visible .disc { background: var(--accent); }
+
+.glass { background: var(--panel); border: 1px solid var(--line); box-shadow: var(--shadow); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+
+/* top bar */
+.topbar { position: absolute; top: calc(12px + env(safe-area-inset-top, 0px)); left: var(--gutter-l); right: var(--gutter-r);
+  display: flex; align-items: center; gap: 10px; pointer-events: none; z-index: 5; }
+.topbar > * { pointer-events: auto; }
+.brand { display: flex; align-items: center; gap: 10px; padding: 6px 12px 6px 6px; border-radius: 12px; min-width: 0; }
+.roomcode { font-family: var(--f-mono); font-weight: 600; font-size: 12px; letter-spacing: 0.06em; background: var(--ink); color: var(--panel-solid);
+  padding: 5px 8px; border-radius: 8px; white-space: nowrap; }
+.brand-name { font-family: var(--f-display); font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.spacer { flex: 1; }
+.seg { display: inline-flex; padding: 3px; border-radius: 11px; gap: 2px; }
+.seg button { border: 0; background: transparent; padding: 7px 12px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 13px;
+  color: var(--muted); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--panel-solid); }
+.seg button:not([aria-pressed="true"]):hover { color: var(--ink); background: var(--accent-soft); }
+.iconbtn { width: 40px; height: 40px; border-radius: 10px; border: 0; background: transparent; display: inline-grid; place-items: center; cursor: pointer; flex: none; }
+.iconbtn:hover { background: var(--accent-soft); }
+.iconbtn[aria-pressed="true"] { color: var(--accent); background: var(--accent-soft); }
+.iconbtn svg { width: 20px; height: 20px; }
+.topbar .iconbtn.glass { border-radius: 12px; }
+
+/* bottom dock */
+.dock { position: absolute; left: var(--gutter-l); right: var(--gutter-r); bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 5; pointer-events: none; }
+.dock > * { pointer-events: auto; }
+.caption { max-width: min(62ch, 100%); background: var(--cap-bg); color: var(--cap-fg); font-size: 17px; line-height: 1.4; padding: 8px 14px;
+  border-radius: 10px; text-align: center; text-wrap: balance; }
+.caption:empty { display: none; }
+.player { width: min(880px, 100%); border-radius: 16px; padding: 8px 10px 10px; display: flex; flex-direction: column; gap: 6px; }
+.player-row { display: flex; align-items: center; gap: 4px; min-width: 0; }
+.playbtn { width: 44px; height: 44px; border-radius: 50%; background: var(--ink); color: var(--panel-solid); }
+.playbtn:hover { background: var(--accent); color: var(--accent-ink); }
+.nowplaying { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 10px; padding: 0 8px; }
+.chapno { font-family: var(--f-mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.chaptitle { font-family: var(--f-display); font-weight: 600; font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.clock { font-family: var(--f-mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; padding-right: 6px; }
+.track { display: flex; gap: 3px; height: 18px; align-items: center; cursor: pointer; padding: 0 4px; touch-action: none; }
+.track button { all: unset; position: relative; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; cursor: pointer; flex-basis: 0; }
+.track button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.track button:hover { height: 9px; }
+.track .fill { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--accent); }
+.track button.is-current .fill { background: var(--signal); }
+
+.explorebar { width: min(640px, 100%); border-radius: 16px; padding: 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.explorebar .hint { color: var(--muted); font-size: 13px; flex: 1 1 200px; text-align: center; min-width: 0; }
+
+/* side sheets */
+.sheet { position: absolute; z-index: 6; right: var(--gutter-r); top: calc(68px + env(safe-area-inset-top, 0px)); width: min(360px, calc(100% - 32px));
+  max-height: calc(100% - 200px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; }
+.sheet header { display: flex; align-items: center; gap: 8px; padding: 12px 8px 8px 16px; }
+.sheet h2 { font-family: var(--f-display); font-weight: 700; font-size: 18px; margin: 0; flex: 1; text-wrap: balance; }
+.sheet .body { overflow-y: auto; padding: 0 16px 16px; min-height: 0; }
+.chlist { list-style: none; margin: 0; padding: 0 8px 10px; overflow-y: auto; }
+.chlist button { all: unset; box-sizing: border-box; width: 100%; display: grid; grid-template-columns: 30px 1fr auto; gap: 4px 8px; align-items: baseline;
+  padding: 9px 8px; border-radius: 10px; cursor: pointer; }
+.chlist button:hover { background: var(--accent-soft); }
+.chlist button:focus-visible { outline: 2px solid var(--accent); }
+.chlist .n { font-family: var(--f-mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.chlist .t { font-weight: 700; }
+.chlist .d { font-family: var(--f-mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.chlist .tx { grid-column: 2 / 4; color: var(--muted); font-size: 14px; line-height: 1.45; display: none; }
+.chlist li.is-current button { background: var(--accent-soft); }
+.chlist li.is-current .n { color: var(--accent); font-weight: 600; }
+.chlist li.is-current .tx { display: block; }
+.eyebrow { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.info-text { line-height: 1.55; margin: 6px 0 14px; max-width: 60ch; }
+.btnrow { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { border: 1px solid var(--line); background: transparent; padding: 9px 14px; border-radius: 10px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+.btn:hover { background: var(--accent-soft); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+.btn.primary:hover { filter: brightness(1.08); background: var(--accent); }
+.btn svg { width: 18px; height: 18px; }
+
+/* pins */
+#pins { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+.pin { position: absolute; left: 0; top: 0; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; border: 2px solid #fff;
+  background: var(--accent); color: var(--accent-ink); font-family: var(--f-mono); font-weight: 600; font-size: 13px; display: grid; place-items: center;
+  cursor: pointer; pointer-events: auto; box-shadow: 0 2px 10px rgba(0,0,0,0.3); transition: opacity 0.3s; will-change: transform; padding: 0; }
+.pin:hover { box-shadow: 0 0 0 4px var(--accent-soft), 0 2px 10px rgba(0,0,0,0.3); }
+.pin .lbl { position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); white-space: nowrap; background: var(--cap-bg); color: var(--cap-fg);
+  font-family: var(--f-body); font-weight: 700; font-size: 13px; padding: 4px 9px; border-radius: 7px; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+.pin:hover .lbl, .pin:focus-visible .lbl, .pin.is-featured .lbl { opacity: 1; }
+.pin.is-muted { opacity: 0.45; }
+.pin.is-featured { background: var(--signal); color: #1b1503; }
+.pin.is-featured::after { content: ""; position: absolute; inset: -8px; border-radius: 50%; border: 2px solid var(--signal); animation: ping 1.6s ease-out infinite; }
+@keyframes ping { from { transform: scale(0.7); opacity: 1; } to { transform: scale(1.5); opacity: 0; } }
+
+/* overlays */
+.overlay { position: absolute; inset: 0; z-index: 10; display: grid; place-items: center; padding: calc(16px + env(safe-area-inset-top, 0px)) var(--gutter-r) calc(16px + env(safe-area-inset-bottom, 0px)) var(--gutter-l);
+  background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--stage) 55%, transparent) 100%); overflow-y: auto; }
+.card { width: min(540px, 100%); border-radius: 20px; padding: 26px 26px 22px; display: flex; flex-direction: column; gap: 14px; }
+.card h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(28px, 6vw, 40px); line-height: 1.05; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+.card p { margin: 0; line-height: 1.55; color: var(--muted); max-width: 60ch; }
+.features { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.features li { font-size: 12.5px; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink); }
+.meta { font-family: var(--f-mono); font-size: 12px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.card .btnrow { margin-top: 4px; }
+.card .btn { padding: 12px 16px; }
+.err { color: #b4232a; font-weight: 700; }
+
+.photostop { position: absolute; z-index: 4; right: var(--gutter-r); top: calc(68px + env(safe-area-inset-top, 0px)); width: min(42vw, 560px); margin: 0;
+  border-radius: 14px; overflow: hidden; background: #0b0f12; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.14);
+  opacity: 0; transform: translateY(10px) scale(0.98); transition: opacity 0.5s ease, transform 0.5s ease; pointer-events: none; }
+.photostop.is-on { opacity: 1; transform: none; }
+.photostop img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.photostop.is-on img { animation: kenburns 10s ease-out both; }
+@keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.07); } }
+.photostop figcaption { position: absolute; left: 10px; bottom: 10px; right: 10px; display: flex; flex-direction: column; gap: 2px; align-items: flex-start; }
+.photostop figcaption span { background: var(--cap-bg); color: var(--cap-fg); padding: 4px 9px; border-radius: 7px; font-weight: 700; font-size: 14px; }
+.photostop figcaption .eyebrow { color: #8fd6e8; font-size: 10.5px; padding: 3px 7px; }
+.info-img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 10px; margin: 2px 0 4px; background: var(--line); }
+.hero { display: block; width: 100%; aspect-ratio: 16 / 7; object-fit: cover; border-radius: 12px; margin-bottom: 2px; background: var(--line); }
+@media (max-width: 640px) {
+  .photostop { left: var(--gutter-l); right: var(--gutter-r); width: auto; top: calc(64px + env(safe-area-inset-top, 0px)); }
+  .brand-name { display: none; }
+  .seg button { padding: 7px 10px; }
+  .seg button .lbltext { display: none; }
+  .seg button .lbltext-short { display: inline; }
+  .chaptitle { font-size: 15px; }
+  .player-row { flex-wrap: wrap; }
+  .nowplaying { order: -1; flex-basis: 100%; padding: 2px 8px 4px; }
+  .player-row .spacer-sm { flex: 1; }
+  .caption { font-size: 15px; }
+  .hide-sm { display: none !important; }
+  .sheet { left: var(--gutter-l); right: var(--gutter-r); width: auto; top: auto; bottom: calc(150px + env(safe-area-inset-bottom, 0px)); max-height: 52%; }
+  .card { padding: 22px 18px 18px; }
+}
+@media (min-width: 641px) { .lbltext-short { display: none; } }
+@media (prefers-reduced-motion: reduce) { .pin.is-featured::after, .photostop.is-on img { animation: none; } }
+</style>
+
+<div id="app">
+  <canvas id="stage" aria-label="3D model of the TR 321 smart classroom"></canvas>
+  <div id="pins" aria-label="Feature markers"></div>
+  <figure class="photostop" id="photostop" aria-hidden="true"><img id="photostopImg" alt=""><figcaption><span class="eyebrow">Close-up</span><span id="photostopLabel"></span></figcaption></figure>
+
+  <div class="topbar">
+    <div class="brand glass"><span class="roomcode">TR 321</span><span class="brand-name">Smart Classroom walkthrough</span></div>
+    <div class="spacer"></div>
+    <div class="seg glass" role="group" aria-label="Mode">
+      <button id="modeTour" aria-pressed="true" type="button"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span class="lbltext">Guided tour</span><span class="lbltext-short">Tour</span></button>
+      <button id="modeExplore" aria-pressed="false" type="button"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z" fill="currentColor"/></svg><span class="lbltext">Explore</span><span class="lbltext-short">Explore</span></button>
+    </div>
+    <button class="iconbtn glass" id="btnChapters" type="button" aria-label="Chapters and transcript" aria-pressed="false" aria-controls="chapters">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1" fill="currentColor"/><circle cx="4.5" cy="12" r="1" fill="currentColor"/><circle cx="4.5" cy="18" r="1" fill="currentColor"/></svg>
+    </button>
+    <button class="iconbtn glass hide-sm" id="btnFull" type="button" aria-label="Full screen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+    </button>
+  </div>
+
+  <aside class="sheet glass" id="chapters" hidden aria-label="Chapters">
+    <header><h2>Chapters</h2><button class="iconbtn" type="button" data-close="chapters" aria-label="Close chapters"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
+    <ol class="chlist" id="chlist"></ol>
+  </aside>
+
+  <aside class="sheet glass" id="info" hidden aria-label="Feature details">
+    <header><div style="flex:1;min-width:0"><div class="eyebrow" id="infoNo">Feature 1 of 9</div><h2 id="infoTitle">Feature</h2></div>
+      <button class="iconbtn" type="button" data-close="info" aria-label="Close feature details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
+    <div class="body">
+      <img class="info-img" id="infoImg" alt="" hidden>
+      <p class="info-text" id="infoText"></p>
+      <div class="btnrow">
+        <button class="btn primary" type="button" id="infoAction" hidden></button>
+        <button class="btn" type="button" id="infoPlay"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Play this chapter</button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="dock">
+    <div class="caption" id="caption" aria-hidden="true"></div>
+    <div class="player glass" id="player" hidden>
+      <div class="player-row">
+        <button class="iconbtn" id="btnPrev" type="button" aria-label="Previous chapter"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9.5 12z"/></svg></button>
+        <button class="iconbtn playbtn" id="btnPlay" type="button" aria-label="Play"><svg id="icoPlay" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><svg id="icoPause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" hidden><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></button>
+        <button class="iconbtn" id="btnNext" type="button" aria-label="Next chapter"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5v14l10.5-7z"/></svg></button>
+        <div class="nowplaying"><span class="chapno" id="chapNo">01/13</span><span class="chaptitle" id="chapTitle">Welcome to TR 321</span></div>
+        <span class="spacer-sm" aria-hidden="true"></span><span class="clock hide-sm" id="clock">0:00 / 4:00</span>
+        <button class="iconbtn" id="btnCC" type="button" aria-label="Captions" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10.5 10.2a2.2 2.2 0 1 0 0 3.6M17 10.2a2.2 2.2 0 1 0 0 3.6" stroke-linecap="round"/></svg></button>
+        <button class="iconbtn" id="btnMute" type="button" aria-label="Mute narration" aria-pressed="false"><svg id="icoVol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg><svg id="icoMute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" hidden><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg></button>
+      </div>
+      <div class="track" id="track" role="group" aria-label="Tour progress"></div>
+    </div>
+    <div class="explorebar glass" id="explorebar" hidden>
+      <div class="seg" role="group" aria-label="Explore view">
+        <span id="spotBtns" class="seg-inline"></span>
+        <button id="viewHouse" aria-pressed="false" type="button"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/></svg>Dollhouse</button>
+      </div>
+      <span class="hint" id="hint">Drag to look around. Pinch or scroll to zoom.</span>
+      <button class="iconbtn" id="btnReset" type="button" aria-label="Reset view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5"/></svg></button>
+    </div>
+  </div>
+
+  <div class="overlay" id="intro">
+    <div class="card glass" role="dialog" aria-labelledby="introTitle">
+      <img class="hero" src="photos/room-overview.jpg" alt="TR 321 seen from the back: group tables in the middle, interactive displays on the side walls and the double display at the front">
+      <div class="eyebrow">Virtual walkthrough · Hybrid learning space</div>
+      <h1 id="introTitle">TR 321 Smart Classroom</h1>
+      <p>A narrated tour of the room's 360° photo, with close-ups of each feature and a 3D dollhouse model, covering the technology that supports hybrid collaborative learning: real-time co-creation, group workspaces, central room control and AI-assisted audio and video.</p>
+      <ul class="features" aria-label="Features covered">
+        <li>Flexible seating</li><li>Interactive displays</li><li>AI tracking camera</li><li>Ceiling microphone</li><li>Teacher's station</li><li>Control panel</li><li>HD webcams</li><li>Smart blinds</li><li>Ceiling fans</li>
+      </ul>
+      <div class="meta"><span>13 chapters</span><span id="metaDur">4 min</span><span>Narrated, with captions</span><span>Real 360° photo</span></div>
+      <div class="btnrow">
+        <button class="btn primary" type="button" id="startTour" disabled><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span>Loading the room…</span></button>
+        <button class="btn" type="button" id="startExplore" disabled>Explore on my own</button>
+      </div>
+      <p class="err" id="glErr" hidden>This device couldn't start 3D graphics. Try a recent version of Chrome, Safari, Edge or Firefox.</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="endcard" hidden>
+    <div class="card glass" role="dialog" aria-labelledby="endTitle">
+      <div class="eyebrow">Tour complete</div>
+      <h1 id="endTitle">You've seen all of TR 321</h1>
+      <p>Look around the room yourself, open each numbered marker to read about it, or watch the tour again.</p>
+      <div class="btnrow">
+        <button class="btn primary" type="button" id="endExplore">Explore the room</button>
+        <button class="btn" type="button" id="endReplay">Replay tour</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+
+/* ---------------------------------------------------------------- data */
+const CUES = [{"id":"intro","title":"Welcome to TR 321","duration":25.42,"cues":[{"start":0.3,"end":5.96,"text":"Welcome to TR 321, a smart classroom built for hybrid, collaborative learning."},{"start":6.31,"end":19.26,"text":"Over the next few minutes, we'll walk through the room together and look at the technology that lets students and tutors co-create, collaborate and connect, whether they're here in person or joining remotely."},{"start":19.61,"end":24.52,"text":"You can pause at any time, or switch to Explore mode to look around on your own."}]},{"id":"layout","title":"The room at a glance","duration":24.02,"cues":[{"start":0.3,"end":2.36,"text":"Let's start at the entrance."},{"start":2.71,"end":6.44,"text":"You come in through one of two doors at the back of the room."},{"start":6.79,"end":15.57,"text":"From here you can see the whole space: a teaching wall at the front, interactive display walls on both sides, and five group tables in between."},{"start":15.92,"end":18.94,"text":"Nothing in this room faces only one direction."},{"start":19.29,"end":23.12,"text":"Every group has a screen and a writing surface within reach."}]},{"id":"seating","title":"Flexible seating","duration":23.96,"cues":[{"start":0.3,"end":4.34,"text":"The furniture is the first thing that makes this room flexible."},{"start":4.69,"end":10.64,"text":"The tables and chairs are modern, mobile pieces on castors, so the layout can change in minutes."},{"start":10.99,"end":13.95,"text":"Group pods suit discussion and project work."},{"start":14.3,"end":18.27,"text":"Pull the tables into rows, and the same room works for a lecture."},{"start":18.62,"end":23.06,"text":"Then bring them back together into pods for collaborative learning."}]},{"id":"front","title":"Front teaching wall","duration":21.1,"cues":[{"start":0.3,"end":6.28,"text":"At the front is the main teaching wall, with two large interactive display panels side by side."},{"start":6.63,"end":11.84,"text":"A tutor can present slides on one screen while writing and annotating on the other."},{"start":12.19,"end":20.2,"text":"Both panels work as digital blackboards, support screen sharing for presentations, and connect remote learners through Zoom."}]},{"id":"camera","title":"AI tracking camera","duration":19.64,"cues":[{"start":0.3,"end":4.26,"text":"Mounted above the displays is an AI-enhanced tracking camera."},{"start":4.61,"end":10.49,"text":"It automatically focuses on whoever is speaking, zooms in, and tracks movement in real time."},{"start":10.84,"end":16.27,"text":"Tutors are free to move around the room, and remote learners always see who is talking."},{"start":16.62,"end":18.74,"text":"It's ideal for hybrid classes."}]},{"id":"mic","title":"Ceiling microphone","duration":20.93,"cues":[{"start":0.3,"end":3.42,"text":"Look up, and you'll find the ceiling microphone."},{"start":3.77,"end":7.76,"text":"It's placed to capture sound from every angle of the classroom."},{"start":8.11,"end":20.03,"text":"It amplifies the tutor's voice for students on site, and gives remote participants clear audio of classroom discussions, so they feel part of the lesson rather than listening from a distance."}]},{"id":"desk","title":"Teacher's station","duration":15.63,"cues":[{"start":0.3,"end":8.06,"text":"In the front corner is the teacher's station: a compact desktop PC on a dedicated table, with a monitor on an adjustable arm."},{"start":8.41,"end":14.73,"text":"It promotes digital tools over pen and paper, and supports efficient, technology-driven teaching."}]},{"id":"control","title":"Control panel","duration":23.33,"cues":[{"start":0.3,"end":3.82,"text":"Beside the teaching wall is the central control panel."},{"start":4.17,"end":11.57,"text":"From this one touch screen, the tutor can adjust the lighting, the smart blinds, and the overall classroom conditions."},{"start":11.92,"end":16.56,"text":"With a single tap, the lights dim and the blinds close for a presentation."},{"start":16.91,"end":22.43,"text":"Central control makes it easy to switch teaching strategies in the middle of a lesson."}]},{"id":"side","title":"Side display walls","duration":19.3,"cues":[{"start":0.3,"end":2.33,"text":"Now turn to the side walls."},{"start":2.68,"end":8.48,"text":"Each one has a pair of interactive display panels, with a writable glass board between them."},{"start":8.83,"end":18.4,"text":"During group work, each pod can use its nearest screen as a digital blackboard, share a laptop screen to present, or bring remote classmates in over Zoom."}]},{"id":"webcam","title":"HD webcams","duration":14.08,"cues":[{"start":0.3,"end":4.3,"text":"Mounted with the display panels are high-definition webcams."},{"start":4.65,"end":13.18,"text":"They provide clear visuals for online and hybrid classes, so remote participants can see the classroom and engage with it effectively."}]},{"id":"blinds","title":"Smart blinds","duration":13.91,"cues":[{"start":0.3,"end":5.66,"text":"Along the window wall, smart blinds adjust automatically to control natural light."},{"start":6.01,"end":13.01,"text":"They reduce glare on the screens and keep the room comfortable, without anyone needing to get up and pull a cord."}]},{"id":"fans","title":"Ceiling fans","duration":13.21,"cues":[{"start":0.3,"end":5.44,"text":"Overhead, ceiling fans support hybrid cooling alongside the air-conditioning."},{"start":5.79,"end":12.31,"text":"They improve air circulation and help maintain a comfortable learning environment throughout the day."}]},{"id":"summary","title":"Bringing it together","duration":22.99,"cues":[{"start":0.3,"end":2.34,"text":"So that's TR 321."},{"start":2.69,"end":13.61,"text":"Flexible furniture, interactive screens on every wall, and smart audio, video and room controls all work together, so every learner can take part fully, in the room or online."},{"start":13.96,"end":19.74,"text":"Switch to Explore mode to walk around, and select any numbered marker to revisit a feature."},{"start":20.09,"end":22.09,"text":"Thanks for joining the tour."}]}];
+// Sentence start times the camera keyframes below were authored against; live narration is mapped onto them.
+const TIMING_REF = {"intro":{"duration":23.69,"starts":[0.3,6.41,18.11]},"layout":{"duration":22.19,"starts":[0.3,2.43,5.62,14.81,17.97]},"seating":{"duration":22.01,"starts":[0.3,4.03,10.26,13.29,17.65]},"front":{"duration":19.4,"starts":[0.3,6.2,10.85]},"camera":{"duration":18.55,"starts":[0.3,3.97,10.32,15.51]},"mic":{"duration":19.2,"starts":[0.3,3.47,7.23]},"desk":{"duration":15.31,"starts":[0.3,8.38]},"control":{"duration":21.42,"starts":[0.3,3.63,11.36,15.87]},"side":{"duration":18.48,"starts":[0.3,2.4,8.09]},"webcam":{"duration":12.82,"starts":[0.3,4.07]},"blinds":{"duration":12.61,"starts":[0.3,5.72]},"fans":{"duration":11.0,"starts":[0.3,5.11]},"summary":{"duration":22.44,"starts":[0.3,2.58,14.32,19.93]}};
+const $ = (id) => document.getElementById(id);
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const UP = V(0, 1, 0);
+const D2R = Math.PI / 180;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const smooth = (t) => t * t * (3 - 2 * t);
+const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+const pad2 = (n) => String(n).padStart(2, '0');
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Room shell measured from the 360° photo (metres). x across (windows on -x), z front (-z, teaching wall) to back (+z, doors).
+const ROOM = { w: 6.73, d: 10.75, h: 2.85 };
+const HX = ROOM.w / 2, HZ = ROOM.d / 2, H = ROOM.h;
+const PANO = V(0.075, 1.32, -0.495); // where the original 360° tour photo was taken (middle of the room)
+// 360° photo spots. Middle is the original tour photo (cube faces); Front is a newer panorama stitched from
+// the camera's dual-fisheye file, its position solved from where the displays sit in the photo.
+// To add a spot (e.g. Back), stitch it the same way and add an entry here.
+const SPOTS = [
+  { id: 'front', label: 'Front', pos: V(0.2, 1.28, -3.65), kind: 'eq', src: 'pano/front.jpg' },
+  { id: 'middle', label: 'Middle', pos: PANO, kind: 'cube' },
+];
+const SPOT = Object.fromEntries(SPOTS.map((sp) => [sp.id, sp]));
+
+// Hotspots from the original tour: ath = degrees right of the front wall, atv = degrees below the horizon.
+const HOTSPOTS = [
+  { id: 'seating', photo: 'seating-pod', title: 'Flexible Seating Arrangement', ath: -135.7, atv: 13.8, chapter: 'seating', action: 'layout',
+    text: 'The classroom features customisable seating arrangements using flexible, modern furniture. This allows the space to adapt easily for lectures, group work, or collaborative learning.' },
+  { id: 'camera', photo: 'tracking-camera', pos: [0.2, 2.06, -5.3], title: 'AI-Enhanced Tracking Cameras', ath: -3.3, atv: -10.1, chapter: 'camera',
+    text: 'AI-powered tools, such as automated camera tracking and voice tracking, help provide a smooth and dynamic learning experience. They automatically focus on speakers, zoom, and track movement in real time. Ideal for hybrid learning classes.' },
+  { id: 'mic', photo: 'ceiling-mic', pos: [0.3, 2.78, -3.05], title: 'Ceiling Microphone', ath: -5.1, atv: -30.5, chapter: 'mic', action: 'mic',
+    text: "The ceiling microphone is placed to capture all angles of the classroom and amplify the teacher's voice. On-site students can hear the lesson, and remote participants get clear audio of classroom discussions, so they feel more integrated into the learning experience." },
+  { id: 'desk', photo: 'desktop-pc', title: 'Desktop PC & Table', ath: -42.0, atv: -0.3, chapter: 'desk',
+    text: "A compact desktop PC and dedicated teacher's table promote digitalisation over pen and paper. This setup supports efficient, technology-driven teaching." },
+  { id: 'control', photo: 'control-panel', pos: [-1.95, 1.45, -5.3], title: 'Control Panel', ath: -23.7, atv: -3.1, chapter: 'control', action: 'present',
+    text: 'A central control panel lets users adjust lighting, smart blinds, and overall classroom conditions. This keeps the room comfortable and the learning environment effective at all times.' },
+  { id: 'displays', photo: 'display-panel', title: 'Interactive Display Panels', ath: 101.0, atv: -3.2, chapter: 'side',
+    text: 'Interactive displays can be used as digital blackboards for writing and annotation. They also support screen sharing for presentations and enable hybrid learning through Zoom.' },
+  { id: 'webcam', photo: 'hd-webcam', title: 'High-Definition Webcams', ath: 69.3, atv: 9.6, chapter: 'webcam',
+    text: 'High-definition webcams provide clear visuals for online and hybrid learning classes. They ensure remote participants can see and engage with the classroom effectively.' },
+  { id: 'blinds', photo: 'smart-blinds', title: 'Smart Blinds', ath: -142.3, atv: -14.0, chapter: 'blinds',
+    text: 'Smart blinds automatically adjust to control natural light. They reduce glare and create a comfortable learning environment.' },
+  { id: 'fans', photo: 'ceiling-fan', title: 'Ceiling Fans', ath: 79.7, atv: -37.3, chapter: 'fans',
+    text: 'Ceiling fans support hybrid cooling. They improve air circulation and help maintain a comfortable learning environment throughout the day.' },
+];
+const HS_BY_CHAPTER = { seating: 'seating', camera: 'camera', mic: 'mic', desk: 'desk', control: 'control', side: 'displays', webcam: 'webcam', blinds: 'blinds', fans: 'fans' };
+
+// Camera keyframes per chapter, in authored seconds. Photo keys look around from the 360° spot
+// ({ath, atv, fov}, angles unwrapped so pans go the intended way); dollhouse keys fly outside ({p, t}).
+const SHOTS = {
+  intro: [
+    { s: 0, p: [9, 11.5, 13.5], t: [0, 0.3, 0] }, { s: 9, p: [-10, 10, 10], t: [0, 0.3, 0] },
+    { s: 17, p: [-5, 6.5, 11], t: [0, 0.6, 0] }, { s: 21, p: [0.07, 2.3, 4.2], t: [0.07, 1.4, -5] },
+    { s: 23.6, ath: 0, atv: 4, fov: 100 } ],
+  layout: [
+    { s: 0, ath: 180, atv: 4, fov: 95 }, { s: 5, ath: 178, atv: 2, fov: 78 }, { s: 8.5, ath: 360, atv: 3, fov: 95 },
+    { s: 11, ath: 270, atv: 1, fov: 95 }, { s: 14.5, ath: 450, atv: 1, fov: 95 }, { s: 18.5, ath: 540, atv: 22, fov: 105 }, { s: 22, ath: 545, atv: 22, fov: 105 } ],
+  seating: [
+    { s: 0, ath: -136, atv: 14, fov: 85 }, { s: 6.5, ath: -50, atv: 18, fov: 85 },
+    { s: 10, p: [5.2, 7.2, 7.6], t: [0, 0.2, -0.4] }, { s: 15, p: [1.5, 8.6, 8.4], t: [0, 0.2, -0.6] }, { s: 19.6, p: [-3.8, 7.6, 7.8], t: [0, 0.2, -0.4] },
+    { s: 22, spot: 'front', ath: 0, atv: 3, fov: 100 } ],
+  front: [
+    { s: 0, spot: 'front', ath: 0, atv: 3, fov: 100 }, { s: 6, spot: 'front', ath: -22, atv: -1.5, fov: 58 },
+    { s: 10.5, spot: 'front', ath: 22, atv: -1.5, fov: 58 }, { s: 17, spot: 'front', ath: 1, atv: 2, fov: 95 } ],
+  camera: [
+    { s: 0, spot: 'front', ath: 1, atv: -16, fov: 72 }, { s: 7, spot: 'front', ath: 1, atv: -21.5, fov: 28 },
+    { s: 11, spot: 'front', ath: 1, atv: -10, fov: 78 }, { s: 18, spot: 'front', ath: 1, atv: -10, fov: 78 } ],
+  mic: [
+    { s: 0, spot: 'front', ath: 60, atv: -35, fov: 92 }, { s: 7, spot: 'front', ath: 168, atv: -68, fov: 62 },
+    { s: 13, spot: 'front', ath: 175, atv: -12, fov: 100 }, { s: 19, spot: 'front', ath: 178, atv: -12, fov: 100 } ],
+  desk: [
+    { s: 0, spot: 'front', ath: -74, atv: 4, fov: 72 }, { s: 8.5, spot: 'front', ath: -83, atv: 6, fov: 44 }, { s: 15, spot: 'front', ath: -83, atv: 6, fov: 44 } ],
+  control: [
+    { s: 0, spot: 'front', ath: -49, atv: 0, fov: 46 }, { s: 9.5, spot: 'front', ath: -49, atv: 0, fov: 26 },
+    { s: 12, spot: 'front', ath: -30, atv: 2, fov: 105 }, { s: 21, spot: 'front', ath: -26, atv: 2, fov: 105 } ],
+  side: [
+    { s: 0, ath: 92, atv: 0, fov: 100 }, { s: 7, ath: 92, atv: -1, fov: 95 }, { s: 10, ath: 101, atv: -3, fov: 55 }, { s: 14, ath: -92, atv: -1, fov: 98 }, { s: 18, ath: -92, atv: -1, fov: 98 } ],
+  webcam: [
+    { s: 0, ath: 69, atv: 8, fov: 62 }, { s: 8, ath: 69.3, atv: 9.6, fov: 30 }, { s: 12.5, ath: 69.3, atv: 9.6, fov: 30 } ],
+  blinds: [
+    { s: 0, ath: -142, atv: -10, fov: 72 }, { s: 6, ath: -142, atv: -14, fov: 48 }, { s: 9, ath: -118, atv: -6, fov: 78 }, { s: 12.5, ath: -118, atv: -6, fov: 78 } ],
+  fans: [
+    { s: 0, ath: 80, atv: -35, fov: 72 }, { s: 5, ath: 80, atv: -37, fov: 56 }, { s: 8.5, ath: 145, atv: -30, fov: 72 }, { s: 11, ath: 145, atv: -30, fov: 72 } ],
+  summary: [
+    { s: 0, ath: 0, atv: 4, fov: 100 }, { s: 3, ath: 0, atv: 4, fov: 100 },
+    { s: 9.5, p: [-2.5, 5.5, 10], t: [0, 0.6, 0] }, { s: 16, p: [-10, 11, 8], t: [0, 0.4, 0] }, { s: 22.4, p: [-12, 12, -6], t: [0, 0.4, 0] } ],
+};
+// Close-up photos shown beside the 360° view while the narration covers that feature (authored seconds).
+const STOPS = {
+  seating: [{ from: 1.2, to: 6.2, src: 'seating-pod', label: 'Mobile tables and chairs on castors' }],
+  camera: [{ from: 3.8, to: 10.2, src: 'tracking-camera', label: 'AI tracking camera' }],
+  mic: [{ from: 3.3, to: 7.1, src: 'ceiling-mic', label: 'Ceiling microphone' }, { from: 7.4, to: 14.5, src: 'ceiling-speaker', label: 'Ceiling speaker' }],
+  desk: [{ from: 2.5, to: 8.1, src: 'desktop-pc', label: "Teacher's desktop PC" }, { from: 8.4, to: 14.6, src: 'teacher-table', label: "Mobile teacher's table" }],
+  control: [{ from: 3.6, to: 11.1, src: 'control-panel', label: 'Room control panel' }],
+  side: [{ from: 8.1, to: 17.4, src: 'display-panel', label: 'Interactive display panel' }],
+  webcam: [{ from: 4.0, to: 11.8, src: 'hd-webcam', label: 'HD webcam' }],
+  blinds: [{ from: 5.6, to: 11.8, src: 'smart-blinds', label: 'Smart blinds' }],
+  fans: [{ from: 5.0, to: 10.4, src: 'ceiling-fan', label: 'Ceiling fan' }],
+  summary: [{ from: 2.6, to: 9.0, src: 'room-overview', label: 'TR 321' }],
+};
+// warm the cache so a close-up never pops in half-loaded
+Object.values(STOPS).flat().forEach((st) => { const im = new Image(); im.src = `photos/${st.src}.jpg`; });
+let curStop = null;
+function setPhotoStop(st) {
+  if (st === curStop) return;
+  curStop = st;
+  const fig = document.getElementById('photostop');
+  fig.classList.remove('is-on');
+  if (!st) return;
+  document.getElementById('photostopImg').src = `photos/${st.src}.jpg`;
+  document.getElementById('photostopLabel').textContent = st.label;
+  void fig.offsetWidth; // restart the slow zoom
+  fig.classList.add('is-on');
+}
+// Room effects the tour drives, as a function of authored time.
+const FX = {
+  seating: (t) => ({ layout: t > 13.3 && t < 17.7 ? 1 : 0 }),
+  mic: () => ({ mic: 1 }),
+  control: (t) => ({ dim: t > 11.6 && t < 19.2 ? 1 : 0 }),
+};
+
+// Long sentences become shorter caption lines, timed by character count.
+function chunkCue(c) {
+  if (c.text.length <= 92) return [c];
+  const pieces = c.text.split(/(?<=[,:;])\s+/);
+  const lines = [];
+  let cur = '';
+  for (const p of pieces) {
+    if (cur && (cur + ' ' + p).length > 84) { lines.push(cur); cur = p; } else cur = cur ? cur + ' ' + p : p;
+  }
+  if (cur) lines.push(cur);
+  const total = lines.reduce((a, l) => a + l.length, 0);
+  let t = c.start;
+  return lines.map((l) => { const d = (c.end - c.start) * (l.length / total); const o = { start: t, end: t + d, text: l }; t += d; return o; });
+}
+// Piecewise-linear map from narration time to authored time, anchored at each sentence start.
+function refMapper(c) {
+  const ref = TIMING_REF[c.id];
+  if (!ref || ref.starts.length !== c.cues.length) { const k = ref ? ref.duration / c.duration : 1; return (t) => t * k; }
+  const live = [0, ...c.cues.map((q) => q.start), c.duration], auth = [0, ...ref.starts, ref.duration];
+  return (t) => {
+    let i = 0; while (i < live.length - 2 && t > live[i + 1]) i++;
+    const f = (t - live[i]) / Math.max(1e-3, live[i + 1] - live[i]);
+    return auth[i] + f * (auth[i + 1] - auth[i]);
+  };
+}
+const CH = CUES.map((c) => ({ ...c, caps: c.cues.flatMap(chunkCue), shots: SHOTS[c.id], fx: FX[c.id], ref: refMapper(c) }));
+let acc = 0;
+for (const c of CH) { c.offset = acc; acc += c.duration; }
+const TOTAL = acc;
+$('metaDur').textContent = `${Math.round(TOTAL / 60)} min`;
+
+/* ---------------------------------------------------------------- renderer */
+const canvas = $('stage');
+const isSmall = Math.min(innerWidth, innerHeight) < 600;
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+} catch (e) {
+  $('glErr').hidden = false;
+  $('startTour').querySelector('span').textContent = '3D unavailable';
+  throw e;
+}
+renderer.setPixelRatio(Math.min(devicePixelRatio, isSmall ? 2 : 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(70, 1, 0.02, 200);
+function syncSceneBg() {
+  const c = getComputedStyle(document.documentElement).getPropertyValue('--stage').trim() || '#d9dfe3';
+  scene.background = new THREE.Color(c);
+}
+syncSceneBg();
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', syncSceneBg);
+new MutationObserver(syncSceneBg).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+/* ---------------------------------------------------------------- 360° photo layer */
+// The panorama is drawn over the 3D model as a sky-sphere around the camera. At the spot where the
+// photo was taken it is the room exactly; as the camera moves away it fades out and the model takes over.
+const faceTex = {};
+const photoMat = new THREE.ShaderMaterial({
+  glslVersion: THREE.GLSL3,
+  uniforms: {
+    tF: { value: null }, tB: { value: null }, tL: { value: null }, tR: { value: null }, tU: { value: null }, tD: { value: null },
+    dim: { value: 0 }, size: { value: 1936 }, opacity: { value: 1 }, tE: { value: null }, useEq: { value: 0 }, eqW: { value: 4096 },
+  },
+  vertexShader: `
+    out vec3 vDir;
+    void main() {
+      vec4 w = modelMatrix * vec4(position, 1.0);
+      vDir = w.xyz - cameraPosition;
+      gl_Position = projectionMatrix * viewMatrix * w;
+    }`,
+  fragmentShader: `
+    precision highp float;
+    uniform sampler2D tF, tB, tL, tR, tU, tD;
+    uniform float dim; uniform float size; uniform float opacity;
+    uniform sampler2D tE; uniform float useEq; uniform float eqW;
+    in vec3 vDir;
+    out vec4 outColor;
+    vec3 face(vec3 d, float lod) {
+      vec3 a = abs(d);
+      if (a.z >= a.x && a.z >= a.y) {
+        if (d.z < 0.0) return textureLod(tF, vec2(d.x / -d.z, d.y / -d.z) * 0.5 + 0.5, lod).rgb;
+        return textureLod(tB, vec2(-d.x / d.z, d.y / d.z) * 0.5 + 0.5, lod).rgb;
+      }
+      if (a.x >= a.y) {
+        if (d.x > 0.0) return textureLod(tR, vec2(d.z / d.x, d.y / d.x) * 0.5 + 0.5, lod).rgb;
+        return textureLod(tL, vec2(d.z / d.x, d.y / -d.x) * 0.5 + 0.5, lod).rgb;
+      }
+      if (d.y > 0.0) return textureLod(tU, vec2(d.x / d.y, d.z / d.y) * 0.5 + 0.5, lod).rgb;
+      return textureLod(tD, vec2(d.x / -d.y, d.z / d.y) * 0.5 + 0.5, lod).rgb;
+    }
+    void main() {
+      vec3 d = normalize(vDir);
+      float dd = max(length(dFdx(d)), length(dFdy(d)));
+      vec3 col;
+      if (useEq > 0.5) { // equirectangular: centre column faces the teaching wall, right is +x
+        float lod = max(0.0, log2(max(dd * eqW / 6.2831853, 1e-6)));
+        float lon = atan(d.x, -d.z), lat = asin(clamp(d.y, -1.0, 1.0));
+        col = textureLod(tE, vec2(0.5 + lon / 6.2831853, 0.5 + lat / 3.1415927), lod).rgb;
+        // straight down is the camera's own body: continue the surrounding floor over it instead
+        float cap = smoothstep(-1.15, -1.27, lat); // from about 66° to 73° below the horizon
+        if (cap > 0.0) col = mix(col, textureLod(tE, vec2(0.5 + lon / 6.2831853, 0.5 - 1.15 / 3.1415927), lod + 3.0).rgb, cap);
+      } else {
+        // mip level from the screen-space change of the look-up direction (seam-free across cube faces)
+        vec3 a = abs(d); float ma = max(a.x, max(a.y, a.z));
+        float lod = max(0.0, log2(max(dd / ma * size * 0.5, 1e-6)));
+        col = face(d, lod);
+      }
+      outColor = vec4(col * (1.0 - 0.55 * dim), opacity);
+    }`,
+  transparent: true, depthTest: false, depthWrite: false, side: THREE.BackSide,
+});
+const photoSphere = new THREE.Mesh(new THREE.SphereGeometry(30, 64, 32), photoMat);
+photoSphere.renderOrder = 10; photoSphere.frustumCulled = false; scene.add(photoSphere);
+function loadFaces(onProgress) {
+  const loader = new THREE.TextureLoader();
+  const names = { tF: 'f', tB: 'b', tL: 'l', tR: 'r', tU: 'u', tD: 'd' };
+  let done = 0;
+  const total = 6 + SPOTS.filter((sp) => sp.kind === 'eq').length;
+  const eqs = SPOTS.filter((sp) => sp.kind === 'eq').map((sp) => new Promise((res, rej) => {
+    loader.load(sp.src, (t) => {
+      t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter; t.magFilter = THREE.LinearFilter;
+      t.wrapS = THREE.RepeatWrapping; t.wrapT = THREE.ClampToEdgeWrapping; t.colorSpace = THREE.NoColorSpace;
+      sp.tex = t; done++; onProgress(done / total); res();
+    }, undefined, rej);
+  }));
+  return Promise.all([...eqs, ...Object.entries(names).map(([u, n]) => new Promise((res, rej) => {
+    loader.load(`pano/${n}.jpg`, (t) => {
+      t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter; t.magFilter = THREE.LinearFilter;
+      t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping; t.colorSpace = THREE.NoColorSpace; // raw photo bytes in, raw out
+      photoMat.uniforms[u].value = t; faceTex[n] = t; done++; onProgress(done / total); res();
+    }, undefined, rej);
+  }))]);
+}
+
+/* ---------------------------------------------------------------- 3D model */
+// Built to the room's measured size, with furniture where the photo shows it.
+const model = new THREE.Group(); scene.add(model);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const maxAniso = renderer.capabilities.getMaxAnisotropy();
+{
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+}
+const hemi = new THREE.HemisphereLight(0xffffff, 0x8b9094, 0.75); model.add(hemi);
+const sun = new THREE.DirectionalLight(0xffffff, 1.3);
+sun.position.set(2, 12, 3); sun.castShadow = true;
+sun.shadow.mapSize.set(isSmall ? 1024 : 2048, isSmall ? 1024 : 2048);
+Object.assign(sun.shadow.camera, { left: -6, right: 6, top: 7, bottom: -7, near: 1, far: 30 });
+sun.shadow.bias = -0.0008; sun.shadow.normalBias = 0.05;
+model.add(sun);
+
+function rng(seed) { return () => { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function canvasTex(w, h, draw, repeat) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso;
+  if (repeat) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(repeat[0], repeat[1]); }
+  t.userData.canvas = c; t.userData.draw = draw;
+  return t;
+}
+const floorTex = canvasTex(512, 512, (g, w, h) => {
+  g.fillStyle = '#a9a9a6'; g.fillRect(0, 0, w, h);
+  const r = rng(7); // soft mottling only: fine speckle shimmers (moiré) at dollhouse distance
+  g.filter = 'blur(6px)';
+  for (let i = 0; i < 220; i++) { g.fillStyle = r() > 0.5 ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.025)'; g.beginPath(); g.arc(r() * w, r() * h, 10 + r() * 30, 0, Math.PI * 2); g.fill(); }
+}, [ROOM.w / 2, ROOM.d / 2]);
+const ceilTex = canvasTex(256, 256, (g, w, h) => {
+  g.fillStyle = '#f1f2f1'; g.fillRect(0, 0, w, h);
+  g.fillStyle = '#d3d6d6'; g.fillRect(0, 0, w, 2); g.fillRect(0, 128, w, 2); g.fillRect(0, 0, 2, h); g.fillRect(128, 0, 2, h);
+}, [ROOM.w / 1.2, ROOM.d / 1.2]);
+const woodTex = canvasTex(256, 512, (g, w, h) => {
+  g.fillStyle = '#dcd5ca'; g.fillRect(0, 0, w, h);
+  const r = rng(11);
+  for (let i = 0; i < 140; i++) {
+    const x = r() * w; g.strokeStyle = `rgba(150,128,102,${0.03 + r() * 0.05})`; g.lineWidth = 0.6 + r() * 1.4;
+    g.beginPath(); g.moveTo(x, 0); for (let y = 0; y <= h; y += 32) g.lineTo(x + Math.sin(y * 0.02 + i) * 2.5, y); g.stroke();
+  }
+}, [4, 1]);
+function screenTex(kind) {
+  return canvasTex(1024, 576, (g, w, h) => {
+    if (kind === 'slide') {
+      const gr = g.createLinearGradient(0, 0, w, h); gr.addColorStop(0, '#1b4fd1'); gr.addColorStop(1, '#2468e8'); g.fillStyle = gr; g.fillRect(0, 0, w, h);
+      const r = rng(5); g.strokeStyle = 'rgba(255,255,255,0.08)'; g.lineWidth = 6;
+      for (let i = 0; i < 26; i++) { const x = r() * w, y = r() * h, s = 40 + r() * 120; g.strokeRect(x, y, s, s * 0.6); }
+      g.fillStyle = '#ffffff'; g.beginPath(); g.ellipse(w * 0.22, -h * 0.28, w * 0.42, h * 0.55, 0, 0, Math.PI * 2); g.fill();
+      g.fillStyle = '#f2c230'; g.beginPath(); g.arc(w * 0.95, -h * 0.02, 150, 0, Math.PI * 2); g.fill();
+      g.lineWidth = 26; g.strokeStyle = '#e5484d'; g.beginPath(); g.arc(0, h, 110, -Math.PI / 2, 0); g.stroke();
+      g.strokeStyle = '#183aa6'; g.beginPath(); g.arc(0, h, 70, -Math.PI / 2, 0); g.stroke();
+      g.fillStyle = '#ffffff'; g.textAlign = 'center';
+      g.font = '700 50px Arial, sans-serif'; g.fillText('Introduction to the', w / 2, h * 0.5); g.fillText('TR 321 Smart Classroom', w / 2, h * 0.5 + 60);
+    } else if (kind === 'welcome') {
+      g.fillStyle = '#1e2229'; g.fillRect(0, 0, w, h);
+      const cols = ['#e5484d', '#f2c230', '#3fb950', '#2f81f7', '#a371f7', '#f778ba', '#ffa657'];
+      g.font = '900 128px "Arial Black", Arial, sans-serif'; g.textBaseline = 'middle';
+      let x = 140;
+      [...'WELCOME'].forEach((ch, i) => { g.save(); g.translate(x, h * 0.45); g.rotate((i % 2 ? 1 : -1) * 0.07); g.lineWidth = 10; g.strokeStyle = '#0b0d10'; g.strokeText(ch, 0, 0); g.fillStyle = cols[i]; g.fillText(ch, 0, 0); g.restore(); x += g.measureText(ch).width + 6; });
+      g.fillStyle = 'rgba(255,255,255,0.75)'; for (let i = 0; i < 12; i++) { g.beginPath(); g.arc(310 + i * 36, h - 34, 9, 0, Math.PI * 2); g.fill(); }
+    } else {
+      const gr = g.createLinearGradient(0, 0, w, h); gr.addColorStop(0, '#26355f'); gr.addColorStop(1, '#141c38'); g.fillStyle = gr; g.fillRect(0, 0, w, h);
+      g.fillStyle = 'rgba(255,255,255,0.7)'; for (let i = 0; i < 12; i++) g.fillRect(w / 2 - 240 + i * 40, h - 36, 22, 22);
+    }
+  });
+}
+const tex = { slide: screenTex('slide'), welcome: screenTex('welcome'), desktop: screenTex('desktop') };
+const exitTex = canvasTex(128, 52, (g, w, h) => { g.fillStyle = '#17a34a'; g.fillRect(0, 0, w, h); g.fillStyle = '#fff'; g.font = '700 30px Arial, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('EXIT', w / 2, h / 2 + 1); });
+const blindTex = canvasTex(32, 64, (g, w, h) => { for (let y = 0; y < h; y += 8) { const gr = g.createLinearGradient(0, y, 0, y + 8); gr.addColorStop(0, '#f2ede4'); gr.addColorStop(0.8, '#dcd4c6'); gr.addColorStop(1, '#bfb6a6'); g.fillStyle = gr; g.fillRect(0, y, w, 8); } }, [1, 5]);
+
+const M = (color, o = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.82, metalness: 0, envMapIntensity: 0.55, ...o });
+const mats = {
+  wall: M(0xe9ebec, { roughness: 0.95 }), floor: M(0xffffff, { map: floorTex, roughness: 0.98 }), ceil: M(0xffffff, { map: ceilTex, roughness: 0.95 }),
+  wood: M(0xffffff, { map: woodTex, roughness: 0.7 }), glass: M(0xcfe5e1, { roughness: 0.18, metalness: 0.05, envMapIntensity: 1.1, transparent: true, opacity: 0.9 }),
+  cabinet: M(0xeeefee, { roughness: 0.55 }), dark: M(0x1d2024, { roughness: 0.45, metalness: 0.2 }), grey: M(0x5b6064, { roughness: 0.5, metalness: 0.3 }),
+  white: M(0xf5f6f6, { roughness: 0.4 }), frame: M(0xd7dad9, { roughness: 0.5 }), door: M(0xc99659, { roughness: 0.6 }), slat: M(0x2e2a28, { roughness: 0.7 }),
+  void: M(0x17191b, { roughness: 1 }),
+  light: new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xfff6e8, emissiveIntensity: 1.6 }),
+  cove: new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffe2b8, emissiveIntensity: 1.3 }),
+  furn: new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.55, envMapIntensity: 0.6 }),
+  blind: M(0xffffff, { map: blindTex, roughness: 0.9, emissive: 0x6d675d, emissiveIntensity: 0.45, side: THREE.DoubleSide }),
+  window: new THREE.MeshBasicMaterial({ color: 0xf3f6f4, toneMapped: false }),
+};
+function box(parent, w, h, d, mat, x, y, z, cast = false) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x, y, z);
+  if (cast) m.castShadow = true;
+  parent.add(m); return m;
+}
+function plane(parent, w, h, mat, x, y, z, ry = 0, rx = 0) {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat); m.position.set(x, y, z); m.rotation.set(rx, ry, 0, 'YXZ'); parent.add(m); return m;
+}
+const screenMat = (t) => new THREE.MeshBasicMaterial({ map: t, toneMapped: false, color: 0xe6e6e6 });
+function display(parent, w, h, t, pos, ry) {
+  const g = new THREE.Group(); g.position.copy(pos); g.rotation.y = ry; parent.add(g);
+  box(g, w + 0.05, h + 0.05, 0.06, M(0x15171a, { roughness: 0.35, metalness: 0.25 }), 0, 0, 0.03);
+  plane(g, w, h, screenMat(t), 0, 0, 0.0605);
+  return g;
+}
+
+/* shell */
+const floorMesh = plane(model, ROOM.w, ROOM.d, mats.floor, 0, 0, 0, 0, -Math.PI / 2); floorMesh.receiveShadow = true;
+box(model, ROOM.w + 0.3, 0.25, ROOM.d + 0.3, M(0x3a3f43), 0, -0.15, 0); // top sits 2.5 cm under the floor so the two never z-fight
+const capMat = M(0x30353a);
+const walls = [];
+function makeWall(w, pos, ry) {
+  const group = new THREE.Group(); model.add(group);
+  const p = plane(group, w, H, mats.wall, pos.x, pos.y, pos.z, ry); p.receiveShadow = true;
+  const n = V(Math.sin(ry), 0, Math.cos(ry));
+  // wall-top edge, hidden along with its wall in the dollhouse
+  const cap = box(group, w + 0.3, 0.05, 0.15, capMat, pos.x - n.x * 0.075, H + 0.025, pos.z - n.z * 0.075); cap.rotation.y = ry;
+  const wall = { group, n, p: pos.clone() };
+  walls.push(wall); return wall;
+}
+const wFront = makeWall(ROOM.w, V(0, H / 2, -HZ), 0);
+const wBack = makeWall(ROOM.w, V(0, H / 2, HZ), Math.PI);
+const wLeft = makeWall(ROOM.d, V(-HX, H / 2, 0), Math.PI / 2);
+const wRight = makeWall(ROOM.d, V(HX, H / 2, 0), -Math.PI / 2);
+
+/* Hand-built wall fittings. Once the 360° photo loads, the parts the photo shows head-on are swapped
+   for the photo itself (see applyPhotoWalls), so the walls carry the room's real screens, glass and doors. */
+const procParts = []; // superseded by photo surfaces
+/* front teaching wall: dual displays over a credenza, glass panels each side, control panel, tracking camera */
+{
+  const g = wFront.group, z = -HZ, pf = new THREE.Group(); g.add(pf); procParts.push(pf);
+  box(g, 4.9, 2.4, 0.04, mats.wood, 0.2, 1.2, z + 0.02);
+  box(g, 0.75, 2.4, 0.03, mats.glass, -2.6, 1.2, z + 0.02); box(pf, 0.75, 2.4, 0.03, mats.glass, 3.0, 1.2, z + 0.02);
+  box(g, 4.25, 0.62, 0.45, mats.cabinet, 0.195, 0.31, z + 0.245, true);
+  const groove = M(0xbcc0c0);
+  for (let i = 1; i < 10; i++) box(g, 0.006, 0.52, 0.004, groove, -1.93 + i * 0.425, 0.33, z + 0.47);
+  display(pf, 1.84, 1.08, tex.slide, V(-0.72, 1.32, z + 0.05), 0);
+  display(pf, 1.84, 1.08, tex.welcome, V(1.15, 1.32, z + 0.05), 0);
+  box(pf, 0.25, 0.17, 0.02, M(0x1a1d20, { roughness: 0.3 }), -2.05, 1.31, z + 0.05);
+  plane(pf, 0.22, 0.14, new THREE.MeshBasicMaterial({ color: 0x2a6f86, toneMapped: false }), -2.05, 1.31, z + 0.061);
+  const cam = new THREE.Group(); cam.position.set(0.2, 1.92, z + 0.13); pf.add(cam);
+  box(cam, 0.2, 0.02, 0.16, mats.dark, 0, 0, 0);
+  box(cam, 0.14, 0.11, 0.12, M(0x2a2d31, { roughness: 0.4 }), 0, 0.1, 0);
+  const lens = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.05, 20), mats.dark); lens.rotation.x = Math.PI / 2; lens.position.set(0, 0.1, 0.08); cam.add(lens);
+  box(pf, ROOM.w - 0.1, 0.015, 0.03, mats.cove, 0, 2.4, z + 0.06);
+}
+/* teacher's desk by the front-left corner */
+{
+  const g = new THREE.Group(); g.position.set(-2.85, 0, -4.75); g.rotation.y = Math.PI / 2; wLeft.group.add(g);
+  box(g, 1.1, 0.03, 0.6, M(0xf4f5f4, { roughness: 0.4 }), 0, 0.76, 0, true);
+  for (const [x, zz] of [[-0.5, -0.26], [0.5, -0.26], [-0.5, 0.26], [0.5, 0.26]]) box(g, 0.04, 0.75, 0.04, mats.grey, x, 0.375, zz, true);
+  box(g, 0.42, 0.015, 0.13, M(0xd9dcdd), 0, 0.783, 0.08);
+  const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.5, 10), mats.grey); pole.position.set(0, 1.0, -0.25); g.add(pole);
+  box(g, 0.58, 0.35, 0.03, mats.dark, 0, 1.13, -0.17, true);
+  plane(g, 0.54, 0.31, screenMat(tex.desktop), 0, 1.13, -0.1545);
+  const c = new THREE.Group(); c.position.set(0.05, 0, 0.6); c.rotation.y = Math.PI; g.add(c);
+  const blk = M(0x34383d, { roughness: 0.7 });
+  box(c, 0.5, 0.07, 0.48, blk, 0, 0.5, 0, true); box(c, 0.46, 0.5, 0.05, blk, 0, 0.82, -0.25, true);
+  const lift = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.4, 10), mats.grey); lift.position.y = 0.25; c.add(lift);
+}
+/* side walls: timber panel with two displays and a writable glass board, display shelves with webcams */
+for (const [wall, sign] of [[wLeft, -1], [wRight, 1]]) {
+  const g = wall.group, x = sign * HX, inn = -sign, ry = -sign * Math.PI / 2, ps = new THREE.Group(); g.add(ps); procParts.push(ps);
+  box(g, 0.04, 2.35, 5.25, mats.wood, x + inn * 0.02, 1.175, -0.48);
+  box(ps, 0.03, 2.25, 1.38, mats.glass, x + inn * 0.05, 1.18, -0.51);
+  for (const [zc, t] of [[-2.19, tex.slide], [1.18, sign < 0 ? tex.slide : tex.desktop]]) {
+    display(ps, 1.5, 0.92, t, V(x + inn * 0.045, 1.27, zc), ry);
+    box(ps, 0.13, 0.03, 1.9, M(0xe2e4e3, { roughness: 0.5 }), x + inn * 0.1, 0.76, zc, true);
+    box(ps, 0.05, 0.045, 0.28, mats.dark, x + inn * 0.11, 0.8, zc);
+  }
+  box(ps, 0.03, 0.015, 5.2, mats.cove, x + inn * 0.06, 2.38, -0.48);
+}
+/* windows with smart blinds on the left wall, front and back of the display panel */
+for (const [zc, w] of [[-4.2, 1.9], [3.7, 2.2]]) {
+  const g = wLeft.group, x = -HX, y0 = 0.85, y1 = 2.5, h = y1 - y0;
+  plane(g, w, h, mats.window, x + 0.004, (y0 + y1) / 2, zc, Math.PI / 2);
+  for (const dz of [-w / 2, w / 2]) box(g, 0.06, h, 0.05, mats.frame, x + 0.03, (y0 + y1) / 2, zc + dz);
+  box(g, 0.16, 0.03, w + 0.06, mats.frame, x + 0.08, y0 - 0.015, zc);
+  box(g, 0.1, 0.1, w + 0.04, M(0xe8e6e1), x + 0.07, y1 + 0.03, zc);
+  const bh = h * 0.55; plane(g, w - 0.06, bh, mats.blind, x + 0.09, y1 - bh / 2, zc, Math.PI / 2);
+}
+/* back wall: two exit doors and a clock */
+{
+  const g = wBack.group, z = HZ, pb = new THREE.Group(); g.add(pb); procParts.push(pb);
+  for (const xs of [-2.8, 2.8]) {
+    box(pb, 1.05, 2.35, 0.05, mats.door, xs, 1.175, z - 0.03);
+    box(pb, 0.05, 2.4, 0.07, mats.frame, xs - 0.55, 1.2, z - 0.035); box(pb, 0.05, 2.4, 0.07, mats.frame, xs + 0.55, 1.2, z - 0.035); box(pb, 1.15, 0.05, 0.07, mats.frame, xs, 2.4, z - 0.035);
+    box(pb, 0.14, 0.022, 0.03, M(0xb8bcbf, { metalness: 0.8, roughness: 0.25 }), xs + (xs < 0 ? 0.4 : -0.4), 1.05, z - 0.07);
+    box(pb, 0.34, 0.14, 0.05, M(0xf0f0f0), xs, 2.6, z - 0.025);
+    plane(pb, 0.3, 0.12, screenMat(exitTex), xs, 2.6, z - 0.051, Math.PI);
+  }
+  box(pb, 0.36, 0.14, 0.04, mats.dark, 0, 2.5, z - 0.02);
+  plane(pb, 0.32, 0.11, new THREE.MeshBasicMaterial({ color: 0xff3b26, toneMapped: false }), 0, 2.5, z - 0.041, Math.PI);
+}
+/* Photo surfaces: each wall seen head-on from the camera spot is an undistorted image of that wall, so a
+   rectangle on the wall maps to a rectangle on that cube face: pixel = 968 ± 968 · offset / distance. */
+const photoBasics = []; // unlit photo materials, dimmed with the room
+function faceCrop(face, d, h0, h1, v0, v1) {
+  const img = faceTex[face].image, k = img.width / 1936;
+  const sx = (968 + (968 * h0) / d) * k, sw = ((968 * (h1 - h0)) / d) * k;
+  const sy = (968 - (968 * v1) / d) * k, sh = ((968 * (v1 - v0)) / d) * k;
+  const c = document.createElement('canvas'); c.width = Math.max(2, Math.round(sw)); c.height = Math.max(2, Math.round(sh));
+  c.getContext('2d').drawImage(img, sx, sy, sw, sh, 0, 0, c.width, c.height);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso; t.userData.canvas = c;
+  return t;
+}
+function avgColor(t, fx0, fy0, fx1, fy1) { // average of a sub-rectangle (fractions) of a crop texture
+  const c = t.userData.canvas, g = c.getContext('2d');
+  const x = Math.floor(fx0 * c.width), y = Math.floor(fy0 * c.height), w = Math.max(1, Math.floor((fx1 - fx0) * c.width)), h = Math.max(1, Math.floor((fy1 - fy0) * c.height));
+  const d = g.getImageData(x, y, w, h).data; let r = 0, gg = 0, b = 0;
+  for (let i = 0; i < d.length; i += 4) { r += d[i]; gg += d[i + 1]; b += d[i + 2]; }
+  const n = d.length / 4; return new THREE.Color().setRGB(r / n / 255, gg / n / 255, b / n / 255, THREE.SRGBColorSpace);
+}
+function photoPlane(parent, t, w, h, x, y, z, ry) {
+  const m = new THREE.MeshBasicMaterial({ map: t, toneMapped: false }); photoBasics.push(m);
+  return plane(parent, w, h, m, x, y, z, ry);
+}
+function applyPhotoWalls() {
+  const P = PANO;
+  // front: from the glass panel by the control panel to the right-hand corner, 0.62–2.6 m
+  const dF = P.z + HZ, xF0 = -2.25, xF1 = HX;
+  photoPlane(wFront.group, faceCrop('f', dF, xF0 - P.x, xF1 - P.x, 0.62 - P.y, 2.6 - P.y), xF1 - xF0, 1.98, (xF0 + xF1) / 2, 1.61, -HZ + 0.047, 0);
+  // side display walls: the timber panel, 0.62–2.35 m (below that, chairs are in the photo)
+  const z0 = -3.1, z1 = 2.13, dR = HX - P.x, dL = HX + P.x;
+  photoPlane(wRight.group, faceCrop('r', dR, z0 - P.z, z1 - P.z, 0.62 - P.y, 2.35 - P.y), z1 - z0, 1.73, HX - 0.046, 1.485, (z0 + z1) / 2, -Math.PI / 2);
+  const tL = faceCrop('l', dL, -(z1 - P.z), -(z0 - P.z), 0.62 - P.y, 2.35 - P.y);
+  photoPlane(wLeft.group, tL, z1 - z0, 1.73, -HX + 0.046, 1.485, (z0 + z1) / 2, Math.PI / 2);
+  // back wall with both doors and exit signs, 0.75 m up to the ceiling
+  const dB = HZ - P.z, tB = faceCrop('b', dB, -(HX - P.x), HX + P.x, 0.75 - P.y, H - P.y);
+  photoPlane(wBack.group, tB, ROOM.w, H - 0.75, 0, (0.75 + H) / 2, HZ - 0.06, Math.PI);
+  for (const part of procParts) part.visible = false;
+  // colours sampled from the photo for the plain surfaces, so the model matches it
+  const wallC = avgColor(tB, 0.4, 0.35, 0.6, 0.6), doorC = avgColor(tB, 0.02, 0.5, 0.12, 0.9), woodC = avgColor(tL, 0.01, 0.1, 0.05, 0.3);
+  mats.wall = new THREE.MeshBasicMaterial({ color: wallC, toneMapped: false }); photoBasics.push(mats.wall);
+  for (const wl of walls) wl.group.children[0].material = mats.wall;
+  const woodM = new THREE.MeshBasicMaterial({ color: woodC, toneMapped: false }); photoBasics.push(woodM);
+  const glassM = new THREE.MeshBasicMaterial({ color: avgColor(tL, 0.47, 0.25, 0.53, 0.6), toneMapped: false }); photoBasics.push(glassM);
+  model.traverse((o) => { if (o.isMesh && o.material === mats.glass) o.material = glassM; });
+  model.traverse((o) => { if (o.isMesh && o.material === mats.wood) o.material = woodM; });
+  const doorM = new THREE.MeshBasicMaterial({ color: doorC, toneMapped: false }); photoBasics.push(doorM);
+  for (const xs of [-2.8, 2.8]) plane(wBack.group, 1.05, 0.75, doorM, xs, 0.375, HZ - 0.059, Math.PI);
+  // floor: a clean patch of the real floor, mirrored so the tiling doesn't show
+  const fx0 = 0.25, fx1 = 0.85, fz0 = 0.1, fz1 = 0.7, dD = P.y; // metres from the camera spot
+  const tFloor = faceCrop('d', dD, fx0, fx1, -fz1, -fz0);
+  tFloor.wrapS = tFloor.wrapT = THREE.MirroredRepeatWrapping; tFloor.repeat.set(ROOM.w / (fx1 - fx0), ROOM.d / (fz1 - fz0));
+  mats.floor.map = tFloor; mats.floor.color.set(0xffffff); mats.floor.needsUpdate = true;
+  for (const m of photoBasics) m.userData.base = m.color.clone();
+}
+/* ceiling: tiles, slatted feature over the teaching zone, linear pendants, fans, microphone */
+const ceil = new THREE.Group(); model.add(ceil);
+plane(ceil, ROOM.w, ROOM.d, mats.ceil, 0, H, 0, 0, Math.PI / 2);
+{
+  const zA = -HZ, zB = -3.1, depth = zB - zA, zc = (zA + zB) / 2;
+  plane(ceil, ROOM.w, depth, mats.void, 0, 2.78, zc, 0, Math.PI / 2);
+  const n = Math.floor(ROOM.w / 0.13);
+  const slats = new THREE.InstancedMesh(new THREE.BoxGeometry(0.035, 0.11, depth), mats.slat, n);
+  const m4 = new THREE.Matrix4();
+  for (let i = 0; i < n; i++) { m4.makeTranslation(-HX + 0.07 + i * 0.13, 2.71, zc); slats.setMatrixAt(i, m4); }
+  ceil.add(slats);
+  box(ceil, ROOM.w, 0.13, 0.05, mats.white, 0, 2.79, zB);
+  const dl = new THREE.CylinderGeometry(0.035, 0.035, 0.01, 14);
+  for (const x of [-2.4, -1.2, 0, 1.2, 2.4]) for (const zz of [-4.8, -3.8]) { const d = new THREE.Mesh(dl, mats.light); d.position.set(x + 0.065, 2.652, zz); ceil.add(d); }
+}
+for (const z of [-2.2, -0.5, 1.6, 3.8]) for (const x of [-1.7, 1.7]) {
+  box(ceil, 2.0, 0.045, 0.07, mats.dark, x, 2.42, z);
+  box(ceil, 1.96, 0.01, 0.05, mats.light, x, 2.394, z);
+  for (const dx of [-0.8, 0.8]) { const w = new THREE.Mesh(new THREE.CylinderGeometry(0.003, 0.003, 0.43, 4), mats.dark); w.position.set(x + dx, 2.64, z); ceil.add(w); }
+}
+const fans = [];
+const fanMat = M(0xcfd3d6, { roughness: 0.45 });
+for (const [x, z] of [[-1.75, -1.3], [1.75, -1.3], [-1.75, 2.7], [1.75, 2.7]]) {
+  const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.22, 8), fanMat); rod.position.set(x, H - 0.11, z); ceil.add(rod);
+  const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.07, 0.08, 20), fanMat); hub.position.set(x, 2.6, z); ceil.add(hub);
+  const rot = new THREE.Group(); rot.position.set(x, 2.61, z); ceil.add(rot);
+  for (let i = 0; i < 3; i++) { const a = (i / 3) * Math.PI * 2; const b = box(rot, 0.6, 0.012, 0.11, fanMat, Math.cos(a) * 0.38, 0, -Math.sin(a) * 0.38); b.rotation.set(0.12, a, 0, 'YXZ'); }
+  fans.push(rot);
+}
+const micDisc = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.025, 40), M(0xc8cbcd, { roughness: 0.35, metalness: 0.4 }));
+micDisc.position.set(0.3, H - 0.013, -3.05); ceil.add(micDisc);
+
+/* furniture: mobile tables and chairs, merged per piece with vertex colours */
+function colored(geo, color, x, y, z, rx = 0, ry = 0, rz = 0) {
+  geo.applyMatrix4(new THREE.Matrix4().compose(V(x, y, z), new THREE.Quaternion().setFromEuler(new THREE.Euler(rx, ry, rz)), V(1, 1, 1)));
+  const c = new THREE.Color(color), n = geo.attributes.position.count, arr = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) { arr[i * 3] = c.r; arr[i * 3 + 1] = c.g; arr[i * 3 + 2] = c.b; }
+  geo.setAttribute('color', new THREE.BufferAttribute(arr, 3));
+  return geo;
+}
+const Bx = (w, h, d) => new THREE.BoxGeometry(w, h, d);
+const chairGeo = (() => {
+  const white = 0xf2f3f3, seat = 0x4a8fa3, mesh = 0xe1e5e7, dark = 0x2a2d30, p = [];
+  p.push(colored(Bx(0.46, 0.05, 0.43), seat, 0, 0.475, 0.02));
+  p.push(colored(Bx(0.48, 0.03, 0.46), white, 0, 0.44, 0.02));
+  for (const sx of [-1, 1]) {
+    p.push(colored(Bx(0.03, 0.44, 0.03), white, sx * 0.21, 0.22, 0.19, -0.1));
+    p.push(colored(Bx(0.03, 0.46, 0.03), white, sx * 0.21, 0.23, -0.19, 0.14));
+    p.push(colored(new THREE.SphereGeometry(0.026, 8, 6), dark, sx * 0.21, 0.026, 0.215));
+    p.push(colored(new THREE.SphereGeometry(0.026, 8, 6), dark, sx * 0.21, 0.026, -0.255));
+    p.push(colored(Bx(0.03, 0.03, 0.34), white, sx * 0.23, 0.66, -0.01));
+    p.push(colored(Bx(0.03, 0.2, 0.03), white, sx * 0.23, 0.56, 0.15));
+  }
+  p.push(colored(Bx(0.47, 0.42, 0.03), white, 0, 0.8, -0.23, -0.13));
+  p.push(colored(Bx(0.39, 0.34, 0.036), mesh, 0, 0.8, -0.226, -0.13));
+  return mergeGeometries(p);
+})();
+const tableGeo = (() => {
+  const p = [];
+  p.push(colored(Bx(1.6, 0.026, 0.8), 0xf6f7f7, 0, 0.74, 0));
+  p.push(colored(Bx(1.5, 0.05, 0.03), 0x9da2a6, 0, 0.7, 0.33)); p.push(colored(Bx(1.5, 0.05, 0.03), 0x9da2a6, 0, 0.7, -0.33));
+  for (const [x, z] of [[-0.72, -0.32], [0.72, -0.32], [-0.72, 0.32], [0.72, 0.32]]) {
+    p.push(colored(new THREE.CylinderGeometry(0.02, 0.02, 0.7, 8), 0x53575b, x, 0.38, z));
+    p.push(colored(new THREE.SphereGeometry(0.03, 8, 6), 0x2a2d30, x, 0.03, z));
+  }
+  p.push(colored(Bx(0.22, 0.006, 0.07), 0xb5babe, 0.3, 0.755, 0.3));
+  return mergeGeometries(p);
+})();
+// group pods where the photo shows them, and a lecture-row layout for the same pieces
+// spaced so no two pieces touch (≥17 cm between groups); three chairs on each long side, as in the room photos
+const PODS = [[-1.6, -2.7], [1.85, -2.7], [-1.8, 1.75], [1.9, 1.75], [0.05, 3.85]];
+const podT = [], podC = [];
+for (const [cx, cz] of PODS) {
+  podT.push({ x: cx, z: cz - 0.4, r: 0 }, { x: cx, z: cz + 0.4, r: Math.PI });
+  for (const dx of [-0.54, 0, 0.54]) podC.push({ x: cx + dx, z: cz - 1.1, r: 0 }, { x: cx + dx, z: cz + 1.1, r: Math.PI });
+}
+const rowT = [], rowC = [];
+for (const z of [-3.7, -2.1, -0.5, 1.1, 2.7]) for (const x of [-1.55, 1.55]) {
+  rowT.push({ x, z, r: 0 });
+  for (const dx of [-0.54, 0, 0.54]) rowC.push({ x: x + dx, z: z + 0.7, r: Math.PI });
+}
+function match(from, to) { // greedy nearest pairing so each piece travels a short way
+  const pairs = [];
+  from.forEach((a, i) => to.forEach((b, j) => pairs.push([Math.hypot(a.x - b.x, a.z - b.z), i, j])));
+  pairs.sort((p, q) => p[0] - q[0]);
+  const out = new Array(from.length), usedA = new Set(), usedB = new Set();
+  for (const [, i, j] of pairs) { if (usedA.has(i) || usedB.has(j)) continue; out[i] = to[j]; usedA.add(i); usedB.add(j); }
+  return out;
+}
+const furniture = [];
+function addPieces(geo, A, Bs) {
+  const mB = match(A, Bs);
+  A.forEach((a, i) => {
+    const m = new THREE.Mesh(geo, mats.furn); m.castShadow = true; m.receiveShadow = true; model.add(m);
+    furniture.push({ mesh: m, a, b: mB[i], delay: 0, table: geo === tableGeo });
+  });
+}
+addPieces(tableGeo, podT, rowT);
+addPieces(chairGeo, podC, rowC);
+furniture.sort((p, q) => p.a.z - q.a.z).forEach((f, i, arr) => { f.delay = (i / arr.length) * 0.35; });
+const lerpAngle = (a, b, t) => { let d = ((b - a + Math.PI) % (Math.PI * 2)) - Math.PI; if (d < -Math.PI) d += Math.PI * 2; return a + d * t; };
+function setLayout(k) {
+  for (const f of furniture) {
+    const t = smooth(clamp((k - f.delay) / 0.65, 0, 1));
+    f.mesh.position.set(f.a.x + (f.b.x - f.a.x) * t, 0, f.a.z + (f.b.z - f.a.z) * t);
+    f.mesh.rotation.y = lerpAngle(f.a.r, f.b.r, t);
+  }
+}
+setLayout(0);
+const envMats = [];
+model.traverse((o) => { for (const m of o.material ? [].concat(o.material) : []) if (m.isMeshStandardMaterial && !envMats.includes(m)) { m.userData.env = m.envMapIntensity; envMats.push(m); } });
+
+// microphone pickup rings, drawn over the photo in the mic chapter
+const MIC = V(0.3, H - 0.02, -3.05); // located from both photos
+const rings = [0, 1, 2].map(() => {
+  const r = new THREE.Mesh(new THREE.TorusGeometry(1, 0.008, 6, 72), new THREE.MeshBasicMaterial({ color: 0x3fc3e0, transparent: true, opacity: 0, depthWrite: false, depthTest: false, toneMapped: false }));
+  r.rotation.x = Math.PI / 2; r.position.copy(MIC); r.visible = false; r.renderOrder = 20; scene.add(r); return r;
+});
+
+/* hotspot 3D points: the photo direction, carried out to the room shell or a table top */
+// table tops as the photo shows them, so markers that point at a table land on it
+const PIN_BOXES = [[-1.635, -2.955], [1.785, -2.955], [-1.775, 2.085], [1.925, 2.085], [0.075, 3.44]].map(([cx, cz]) => [[cx - 0.8, 0.7, cz - 0.8], [cx + 0.8, 0.75, cz + 0.8]]);
+function dirOf(ath, atv) { const a = ath * D2R, v = atv * D2R; return V(Math.cos(v) * Math.sin(a), -Math.sin(v), -Math.cos(v) * Math.cos(a)); }
+function toShell(dir) {
+  let t = Infinity;
+  for (const [axis, lim] of [['x', -HX], ['x', HX], ['y', 0], ['y', H], ['z', -HZ], ['z', HZ]]) {
+    const dv = dir[axis]; if (Math.abs(dv) < 1e-6) continue;
+    const tt = (lim - PANO[axis]) / dv; if (tt > 0 && tt < t) t = tt;
+  }
+  for (const [mn, mx] of PIN_BOXES) {
+    const inv = V(1 / dir.x, 1 / dir.y, 1 / dir.z);
+    const t0 = V(...mn).sub(PANO).multiply(inv), t1 = V(...mx).sub(PANO).multiply(inv);
+    const tn = Math.max(Math.min(t0.x, t1.x), Math.min(t0.y, t1.y), Math.min(t0.z, t1.z));
+    const tf = Math.min(Math.max(t0.x, t1.x), Math.max(t0.y, t1.y), Math.max(t0.z, t1.z));
+    if (tf > tn && tn > 0 && tn < t) t = tn;
+  }
+  return PANO.clone().addScaledVector(dir, t * 0.97);
+}
+
+/* ---------------------------------------------------------------- room state */
+const DEFAULTS = { dim: 0, mic: 0, layout: 0 };
+const state = { dim: 0, mic: 0, layout: 0 };
+const exploreFx = { ...DEFAULTS };
+const moveTo = (v, t, step) => (Math.abs(t - v) <= step ? t : v + Math.sign(t - v) * step);
+let fanAngle = 0;
+function updateRoom(dt, time, target) {
+  state.dim = moveTo(state.dim, target.dim, dt / 1.4);
+  state.mic = moveTo(state.mic, target.mic, dt * 1.5);
+  state.layout = moveTo(state.layout, target.layout, dt / 2.8);
+  photoMat.uniforms.dim.value = state.dim;
+  for (const m of photoBasics) if (m.userData.base) m.color.copy(m.userData.base).multiplyScalar(1 - 0.55 * state.dim);
+  setLayout(state.layout);
+  const lit = 1 - state.dim;
+  hemi.intensity = 0.75 * (0.35 + 0.65 * lit); sun.intensity = 1.3 * (0.3 + 0.7 * lit);
+  mats.light.emissiveIntensity = 1.6 * (0.12 + 0.88 * lit); mats.cove.emissiveIntensity = 1.3 * (0.2 + 0.8 * lit);
+  for (const m of envMats) m.envMapIntensity = m.userData.env * (0.3 + 0.7 * lit);
+  fanAngle += dt * 3; for (const f of fans) f.rotation.y = fanAngle;
+  rings.forEach((r, i) => {
+    const ph = (time * 0.45 + i / 3) % 1;
+    r.visible = state.mic > 0.01;
+    r.scale.setScalar(0.25 + ph * 2.2); r.position.y = MIC.y - ph * 0.8;
+    r.material.opacity = (1 - ph) * 0.75 * state.mic;
+  });
+}
+
+/* ---------------------------------------------------------------- camera */
+const controls = new OrbitControls(camera, canvas);
+controls.enabled = false; controls.enableDamping = true; controls.enablePan = false;
+controls.minDistance = 4; controls.maxDistance = 30; controls.maxPolarAngle = 1.42; controls.target.set(0, 0.4, 0);
+
+const tmpM = new THREE.Matrix4();
+function quatFor(p, t) { tmpM.lookAt(p, t, UP); return new THREE.Quaternion().setFromRotationMatrix(tmpM); }
+function quatAt(ath, atv) { return new THREE.Quaternion().setFromEuler(new THREE.Euler(-atv * D2R, -ath * D2R, 0, 'YXZ')); }
+// fov is authored as horizontal for landscape screens; portrait screens get a wider vertical view so subjects stay framed
+function vfov(f) { const a = camera.aspect; return a >= 1 ? 2 * Math.atan(Math.tan((f * D2R) / 2) / a) / D2R : Math.min(115, f * 1.5); }
+const HOUSE_VFOV = () => (camera.aspect >= 1 ? 50 : 62);
+const isPhotoKey = (k) => k.ath !== undefined || k.look !== undefined;
+function photoAngles(k) { // a photo key as angles from its spot (look: a point in the room to face)
+  const sp = SPOT[k.spot || 'middle'];
+  if (!k.look) return { ath: k.ath, atv: k.atv, fov: k.fov, spot: sp };
+  const d = V(...k.look).sub(sp.pos);
+  return { ath: Math.atan2(d.x, -d.z) / D2R, atv: -Math.atan2(d.y, Math.hypot(d.x, d.z)) / D2R, fov: k.fov, spot: sp };
+}
+function keyPose(k) {
+  if (isPhotoKey(k)) { const A = photoAngles(k); return { p: A.spot.pos.clone(), q: quatAt(A.ath, A.atv), f: vfov(A.fov), photo: A }; }
+  const t = V(...k.t), p = V(...k.p);
+  // portrait screens are narrow: pull dollhouse shots back so the whole room stays in frame
+  if (camera.aspect < 1 && p.distanceTo(PANO) > 3) p.sub(t).multiplyScalar(1 + 0.75 * (1 - camera.aspect)).add(t);
+  return { p, q: quatFor(p, t), f: HOUSE_VFOV() };
+}
+function shotAt(shots, s) {
+  let i = 0;
+  while (i < shots.length - 1 && s > shots[i + 1].s) i++;
+  const a = shots[i], b = shots[Math.min(i + 1, shots.length - 1)];
+  const k = b === a || b.s === a.s ? 1 : smooth(clamp((s - a.s) / (b.s - a.s), 0, 1));
+  if (isPhotoKey(a) && isPhotoKey(b) && (a.spot || 'middle') === (b.spot || 'middle')) { // pan within one photo: interpolate the angles
+    const A = photoAngles(a), B = photoAngles(b);
+    let bAth = B.ath; if (a.look || b.look) { while (bAth - A.ath > 180) bAth -= 360; while (bAth - A.ath < -180) bAth += 360; }
+    const ath = A.ath + (bAth - A.ath) * k, atv = A.atv + (B.atv - A.atv) * k, fov = A.fov + (B.fov - A.fov) * k;
+    return { p: A.spot.pos.clone(), q: quatAt(ath, atv), f: vfov(fov), photo: { ath, atv, fov, spot: A.spot } };
+  }
+  const A = keyPose(a), B = keyPose(b);
+  return { p: A.p.lerp(B.p, k), q: A.q.slerp(B.q, k), f: A.f + (B.f - A.f) * k, photo: k >= 1 ? B.photo : null };
+}
+function level(q, p) { const f = V(0, 0, -1).applyQuaternion(q); if (Math.abs(f.y) > 0.999) return q; return quatFor(p, p.clone().add(f)); }
+// A short blend whenever the camera's driver changes (new chapter, seek, mode switch).
+const blend = { active: false, fromP: V(), fromQ: new THREE.Quaternion(), fromF: 60, start: 0, dur: 1.5 };
+function startBlend(dur) {
+  blend.active = true; blend.fromP.copy(camera.position); blend.fromQ.copy(camera.quaternion); blend.fromF = camera.fov;
+  blend.start = performance.now() / 1000; blend.dur = dur;
+}
+function applyPose(p, q, f, now) {
+  if (blend.active) {
+    const k = clamp((now - blend.start) / blend.dur, 0, 1), e = smooth(k);
+    const bp = blend.fromP.clone().lerp(p, e);
+    camera.position.copy(bp); camera.quaternion.copy(level(blend.fromQ.clone().slerp(q, e), bp)); camera.fov = blend.fromF + (f - blend.fromF) * e;
+    if (k >= 1) blend.active = false;
+  } else { camera.position.copy(p); camera.quaternion.copy(q); camera.fov = f; }
+  camera.updateProjectionMatrix();
+}
+const look = { yaw: 0, pitch: 0, held: false }; // the viewer's glance offset during the tour (degrees)
+// explore photo view
+const pv = { ath: 0, atv: 4, fov: 95 };
+
+/* ---------------------------------------------------------------- photo spots */
+const isTouch = matchMedia('(pointer: coarse)').matches;
+let curSpot = SPOT.middle; // the spot the explorer is standing at
+function nearestSpot(p) {
+  let best = SPOTS[0], bd = Infinity;
+  for (const sp of SPOTS) { const d = p.distanceTo(sp.pos); if (d < bd) { bd = d; best = sp; } }
+  return [best, bd];
+}
+let shownSpot = null;
+function showSpotPhoto(sp) { // point the photo layer at a spot's panorama
+  if (sp === shownSpot) return; shownSpot = sp;
+  photoMat.uniforms.useEq.value = sp.kind === 'eq' ? 1 : 0;
+  if (sp.kind === 'eq' && sp.tex) { photoMat.uniforms.tE.value = sp.tex; photoMat.uniforms.eqW.value = sp.tex.image.width; }
+}
+
+/* ---------------------------------------------------------------- tour engine */
+const ui = { mode: 'intro', view: 'photo' };
+const tour = { idx: 0, t: 0, playing: false, started: false, audioOK: true, pending: false, muted: false, cc: true };
+const audios = [];
+// Narration is fetched up front as blobs: blob URLs are always seekable, whatever the host supports.
+const blobs = [];
+CH.reduce((p, c, i) => p.then(() => fetch(`audio/${c.id}.mp3`).then((r) => (r.ok ? r.blob() : null)).then((b) => {
+  if (!b) return;
+  blobs[i] = URL.createObjectURL(b);
+  const a = audios[i];
+  if (a && a.paused && i !== tour.idx) a.src = blobs[i];
+}).catch(() => {})), Promise.resolve());
+function audioFor(i) {
+  if (!audios[i]) { const a = new Audio(blobs[i] || `audio/${CH[i].id}.mp3`); a.preload = 'auto'; a.addEventListener('ended', () => { if (i === tour.idx && ui.mode === 'tour') nextChapter(true); }); audios[i] = a; }
+  if (blobs[i] && audios[i].src !== blobs[i] && audios[i].paused) audios[i].src = blobs[i];
+  return audios[i];
+}
+function playAudio() {
+  const a = audioFor(tour.idx); a.muted = tour.muted;
+  if (Math.abs(a.currentTime - tour.t) > 0.25) { try { a.currentTime = tour.t; } catch (e) { /* not seekable yet */ } }
+  const pr = a.play();
+  tour.pending = !!pr;
+  if (pr) pr.then(() => { tour.audioOK = true; tour.pending = false; }).catch(() => { tour.audioOK = false; tour.pending = false; });
+}
+function pauseAudio() { audios.forEach((a) => a && a.pause()); }
+function loadChapter(i, at = 0) {
+  pauseAudio();
+  tour.idx = clamp(i, 0, CH.length - 1); tour.t = at;
+  const a = audioFor(tour.idx); try { a.currentTime = at; } catch (e) { /* metadata pending */ }
+  if (tour.idx + 1 < CH.length) audioFor(tour.idx + 1);
+  const target = shotAt(CH[tour.idx].shots, CH[tour.idx].ref(at)).p;
+  startBlend(clamp(camera.position.distanceTo(target) / 5, 1.1, 2.6));
+  look.yaw = look.pitch = 0;
+  if (tour.playing) playAudio();
+  renderChapterUI();
+}
+function nextChapter(auto) {
+  if (tour.idx >= CH.length - 1) { if (auto) endTour(); return; }
+  loadChapter(tour.idx + 1);
+}
+function prevChapter() { loadChapter(tour.t > 3 ? tour.idx : tour.idx - 1); }
+function setPlaying(on) {
+  tour.playing = on;
+  if (on) playAudio(); else pauseAudio();
+  $('icoPlay').toggleAttribute('hidden', on); $('icoPause').toggleAttribute('hidden', !on);
+  $('btnPlay').setAttribute('aria-label', on ? 'Pause' : 'Play');
+}
+function endTour() { setPlaying(false); tour.t = CH[tour.idx].duration; $('endcard').hidden = false; $('endExplore').focus(); }
+function tickTour(dt) {
+  if (!tour.playing) return;
+  const a = audios[tour.idx];
+  // follow the narration clock; fall back to a timer if audio can't play
+  if (tour.audioOK && a && !a.paused && !a.ended) tour.t = a.currentTime;
+  else if (!tour.audioOK) tour.t += dt;
+  else if (!tour.pending && a && a.paused && !a.ended) playAudio();
+  if (!tour.audioOK && tour.t >= CH[tour.idx].duration) nextChapter(true);
+}
+
+/* ---------------------------------------------------------------- UI */
+const track = $('track'), chlist = $('chlist');
+CH.forEach((c, i) => {
+  const b = document.createElement('button'); b.type = 'button'; b.style.flexGrow = c.duration;
+  b.setAttribute('aria-label', `Chapter ${i + 1}: ${c.title}`); b.innerHTML = '<span class="fill"></span>';
+  b.addEventListener('click', (e) => { const r = b.getBoundingClientRect(); const f = e.detail ? clamp((e.clientX - r.left) / r.width, 0, 0.98) : 0; seek(i, f * c.duration); });
+  track.appendChild(b);
+  const li = document.createElement('li');
+  li.innerHTML = `<button type="button"><span class="n">${pad2(i + 1)}</span><span class="t"></span><span class="d">${fmt(c.duration)}</span><span class="tx"></span></button>`;
+  li.querySelector('.t').textContent = c.title; li.querySelector('.tx').textContent = c.cues.map((q) => q.text).join(' ');
+  li.querySelector('button').addEventListener('click', () => seek(i, 0));
+  chlist.appendChild(li);
+});
+function seek(i, t) {
+  if (ui.mode !== 'tour') setMode('tour', { keepPaused: true });
+  $('endcard').hidden = true;
+  loadChapter(i, t);
+  if (!tour.playing) setPlaying(true);
+}
+function renderChapterUI() {
+  const c = CH[tour.idx];
+  $('chapNo').textContent = `${pad2(tour.idx + 1)}/${CH.length}`;
+  $('chapTitle').textContent = c.title;
+  [...chlist.children].forEach((li, i) => li.classList.toggle('is-current', i === tour.idx));
+  [...track.children].forEach((b, i) => b.classList.toggle('is-current', i === tour.idx));
+  const cur = chlist.children[tour.idx]; if (!$('chapters').hidden && cur) cur.scrollIntoView({ block: 'nearest' });
+  renderPinStates();
+}
+let lastCap = '';
+function renderProgress() {
+  const c = CH[tour.idx];
+  [...track.children].forEach((b, i) => { b.firstChild.style.width = i < tour.idx ? '100%' : i > tour.idx ? '0%' : `${clamp(tour.t / c.duration, 0, 1) * 100}%`; });
+  $('clock').textContent = `${fmt(c.offset + Math.min(tour.t, c.duration))} / ${fmt(TOTAL)}`;
+  let cap = '';
+  if (tour.cc && ui.mode === 'tour' && tour.started) { const q = c.caps.find((q) => tour.t >= q.start - 0.1 && tour.t <= q.end + 0.3); cap = q ? q.text : ''; }
+  if (cap !== lastCap) { $('caption').textContent = cap; lastCap = cap; }
+}
+// remember the photo view direction so Explore picks up where the tour was looking
+function capturePhotoView() {
+  const f = V(0, 0, -1).applyQuaternion(camera.quaternion);
+  pv.ath = Math.atan2(f.x, -f.z) / D2R; pv.atv = -Math.asin(clamp(f.y, -1, 1)) / D2R;
+  const a = camera.aspect; pv.fov = clamp(a >= 1 ? 2 * Math.atan(Math.tan((camera.fov * D2R) / 2) * a) / D2R : camera.fov / 1.5, 30, 110);
+}
+function setMode(mode, opts = {}) {
+  const prevMode = ui.mode;
+  ui.mode = mode;
+  $('modeTour').setAttribute('aria-pressed', String(mode === 'tour'));
+  $('modeExplore').setAttribute('aria-pressed', String(mode === 'explore'));
+  $('player').hidden = mode !== 'tour';
+  $('explorebar').hidden = mode !== 'explore';
+  $('intro').hidden = true;
+  if (mode === 'tour') {
+    controls.enabled = false;
+    tour.started = true;
+    if (prevMode !== 'tour') { loadChapter(tour.idx, tour.t >= CH[tour.idx].duration ? 0 : tour.t); }
+    if (!opts.keepPaused) setPlaying(true);
+  } else if (mode === 'explore') {
+    setPlaying(false);
+    Object.assign(exploreFx, DEFAULTS);
+    const [sp, d] = nearestSpot(camera.position);
+    if (d < 0.05) { curSpot = sp; capturePhotoView(); }
+    setView(opts.view || 'photo');
+  }
+  renderPinStates(); renderProgress(); resize();
+}
+const houseGoal = V(9, 11.5, 13.5);
+let houseIntro = false;
+function setView(v) {
+  ui.view = v;
+  renderSpotBtns();
+  $('hint').textContent = v === 'photo' ? 'Drag to look around. Pinch or scroll to zoom. Tap a floor marker to move.'
+    : 'Drag to orbit. Pinch or scroll to zoom. Tap a floor marker to step inside.';
+  startBlend(v === 'photo' ? 1.8 : 1.6);
+  controls.enabled = false;
+  if (v === 'house') {
+    const from = camera.position.clone().sub(PANO).setY(0);
+    const dir = from.lengthSq() > 1 ? from.normalize() : V(0, 0, 1).applyQuaternion(camera.quaternion).setY(0).normalize().negate();
+    if (!isFinite(dir.x) || dir.lengthSq() < 0.5) dir.set(0.55, 0, 0.83);
+    houseGoal.copy(dir.multiplyScalar(14.5)).setY(11.5); houseIntro = true;
+  }
+  renderPinStates();
+}
+
+/* spot buttons in the explore bar, and floor markers you can tap to move between photos */
+function goSpot(sp) {
+  if (ui.view === 'photo' && sp === curSpot) return;
+  curSpot = sp; $('info').hidden = true;
+  if (ui.view !== 'photo') setView('photo'); else { startBlend(clamp(camera.position.distanceTo(sp.pos) / 2, 1.0, 2.2)); renderSpotBtns(); }
+}
+const spotBtns = SPOTS.map((sp) => {
+  const b = document.createElement('button'); b.type = 'button'; b.textContent = sp.label; b.setAttribute('aria-pressed', 'false');
+  b.addEventListener('click', () => goSpot(sp)); $('spotBtns').appendChild(b); return b;
+});
+function renderSpotBtns() { SPOTS.forEach((sp, i) => spotBtns[i].setAttribute('aria-pressed', String(ui.view === 'photo' && sp === curSpot))); }
+const spotPins = SPOTS.map((sp) => {
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'spotpin';
+  b.innerHTML = '<span class="disc"></span><span class="tag"></span>'; b.querySelector('.tag').textContent = `Go to ${sp.label}`;
+  b.setAttribute('aria-label', `Move to the ${sp.label} photo spot`);
+  b.addEventListener('click', (e) => { e.stopPropagation(); goSpot(sp); });
+  $('pins').appendChild(b); return { el: b, sp, v: V(sp.pos.x, 0.01, sp.pos.z) };
+});
+
+/* pins */
+const pinsEl = $('pins');
+const pins = HOTSPOTS.map((h, i) => {
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'pin';
+  b.innerHTML = `${i + 1}<span class="lbl"></span>`; b.querySelector('.lbl').textContent = h.title;
+  b.setAttribute('aria-label', `${i + 1}. ${h.title}`);
+  b.addEventListener('click', (e) => { e.stopPropagation(); openInfo(i); });
+  pinsEl.appendChild(b);
+  return { el: b, h, v: h.pos ? V(...h.pos) : toShell(dirOf(h.ath, h.atv)) };
+});
+function renderPinStates() {
+  const featured = ui.mode === 'tour' && tour.started ? HS_BY_CHAPTER[CH[tour.idx].id] : null;
+  pins.forEach((p) => { p.el.classList.toggle('is-featured', p.h.id === featured); p.el.classList.toggle('is-muted', ui.mode === 'tour' && p.h.id !== featured); });
+}
+const proj = V(), tmpV = V();
+function placePins() {
+  const w = canvas.clientWidth, h = canvas.clientHeight, show = ui.mode !== 'intro';
+  for (const p of pins) {
+    proj.copy(p.v).project(camera);
+    const behind = proj.z > 1 || proj.z < -1;
+    const wallHidden = walls.some((wl) => !wl.group.visible && Math.abs(wl.n.dot(tmpV.subVectors(p.v, wl.p))) < 0.3);
+    const ceilHidden = !ceil.visible && p.v.y > H - 0.3;
+    const vis = show && !behind && !wallHidden && !ceilHidden && Math.abs(proj.x) < 1.05 && Math.abs(proj.y) < 1.05;
+    p.el.style.display = vis ? '' : 'none';
+    if (vis) p.el.style.transform = `translate(${((proj.x + 1) / 2) * w}px, ${((1 - proj.y) / 2) * h}px)`;
+  }
+}
+
+function placeSpotPins() {
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  for (const sp of spotPins) {
+    const show = ui.mode === 'explore' && !(ui.view === 'photo' && sp.sp === curSpot) && !blend.active;
+    proj.copy(sp.v).project(camera);
+    const vis = show && proj.z < 1 && proj.z > -1 && Math.abs(proj.x) < 1.05 && Math.abs(proj.y) < 1.05;
+    sp.el.style.display = vis ? '' : 'none';
+    if (vis) { const sc = clamp(2.6 / camera.position.distanceTo(sp.v), 0.55, 1.25); sp.el.style.transform = `translate(${((proj.x + 1) / 2) * w}px, ${((1 - proj.y) / 2) * h + 9}px) translate(-50%, -100%) scale(${sc})`; }
+  }
+}
+
+/* info sheet */
+let infoIdx = -1;
+const ACTIONS = {
+  layout: { on: 'Back to group pods', off: 'Switch to lecture rows', key: 'layout' },
+  mic: { on: 'Hide pickup pattern', off: 'Show pickup pattern', key: 'mic' },
+  present: { on: 'Restore lights', off: 'Presentation mode (dim lights)', key: 'dim' },
+};
+function openInfo(i) {
+  infoIdx = i; const h = HOTSPOTS[i];
+  $('chapters').hidden = true; $('btnChapters').setAttribute('aria-pressed', 'false');
+  $('infoNo').textContent = `Feature ${i + 1} of ${HOTSPOTS.length}`;
+  $('infoTitle').textContent = h.title; $('infoText').textContent = h.text;
+  const im = $('infoImg'); im.hidden = !h.photo; if (h.photo) { im.src = `photos/${h.photo}.jpg`; im.alt = `Close-up: ${h.title}`; }
+  if (ui.mode === 'tour') setPlaying(false);
+  else if (ui.view === 'photo') { // turn to face it from where you stand
+    const d = pins[i].v.clone().sub(curSpot.pos);
+    pv.ath = Math.atan2(d.x, -d.z) / D2R; pv.atv = -Math.atan2(d.y, Math.hypot(d.x, d.z)) / D2R; pv.fov = 60; startBlend(1.0);
+  }
+  renderInfoAction();
+  $('info').hidden = false;
+}
+function renderInfoAction() {
+  const h = HOTSPOTS[infoIdx], btn = $('infoAction');
+  const a = h && ACTIONS[h.action];
+  btn.hidden = !a || ui.mode !== 'explore';
+  if (a) btn.textContent = exploreFx[a.key] ? a.on : a.off;
+}
+$('infoAction').addEventListener('click', () => {
+  const a = ACTIONS[HOTSPOTS[infoIdx].action]; exploreFx[a.key] = exploreFx[a.key] ? 0 : 1; renderInfoAction();
+});
+$('infoPlay').addEventListener('click', () => { const id = HOTSPOTS[infoIdx].chapter; $('info').hidden = true; seek(CH.findIndex((c) => c.id === id), 0); });
+document.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', () => {
+  const id = b.dataset.close; $(id).hidden = true; if (id === 'chapters') $('btnChapters').setAttribute('aria-pressed', 'false');
+}));
+
+/* buttons */
+$('btnPlay').addEventListener('click', () => { $('endcard').hidden = true; if (!tour.playing && tour.t >= CH[tour.idx].duration && tour.idx === CH.length - 1) { loadChapter(0); } setPlaying(!tour.playing); });
+$('btnNext').addEventListener('click', () => nextChapter(false));
+$('btnPrev').addEventListener('click', prevChapter);
+$('btnCC').addEventListener('click', () => { tour.cc = !tour.cc; $('btnCC').setAttribute('aria-pressed', String(tour.cc)); renderProgress(); });
+$('btnMute').addEventListener('click', () => {
+  tour.muted = !tour.muted; audios.forEach((a) => a && (a.muted = tour.muted));
+  $('btnMute').setAttribute('aria-pressed', String(tour.muted)); $('btnMute').setAttribute('aria-label', tour.muted ? 'Unmute narration' : 'Mute narration');
+  $('icoVol').toggleAttribute('hidden', tour.muted); $('icoMute').toggleAttribute('hidden', !tour.muted);
+});
+$('btnChapters').addEventListener('click', () => {
+  const open = $('chapters').hidden; $('chapters').hidden = !open; $('info').hidden = true;
+  $('btnChapters').setAttribute('aria-pressed', String(open));
+  if (open) { const cur = chlist.children[tour.idx]; cur && cur.scrollIntoView({ block: 'nearest' }); }
+});
+const fsOK = !!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen);
+if (!fsOK) $('btnFull').hidden = true;
+$('btnFull').addEventListener('click', () => {
+  const el = $('app');
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  else (el.requestFullscreen ? el.requestFullscreen() : Promise.resolve(el.webkitRequestFullscreen && el.webkitRequestFullscreen())).catch(() => {});
+});
+$('modeTour').addEventListener('click', () => { if (ui.mode !== 'tour') { $('info').hidden = true; setMode('tour'); } });
+$('modeExplore').addEventListener('click', () => { if (ui.mode !== 'explore') setMode('explore'); });
+$('viewHouse').addEventListener('click', () => ui.view !== 'house' && setView('house'));
+$('btnReset').addEventListener('click', () => {
+  if (ui.view === 'photo') { pv.ath = 0; pv.atv = 4; pv.fov = 95; startBlend(1.0); }
+  else { houseGoal.set(9, 11.5, 13.5); houseIntro = true; controls.enabled = false; startBlend(1.4); }
+});
+$('startTour').addEventListener('click', () => { tour.idx = 0; tour.t = 0; setMode('tour'); });
+$('startExplore').addEventListener('click', () => { curSpot = SPOT.middle; setMode('explore', { view: 'photo' }); });
+$('endExplore').addEventListener('click', () => { $('endcard').hidden = true; setMode('explore', { view: 'photo' }); });
+$('endReplay').addEventListener('click', () => { $('endcard').hidden = true; seek(0, 0); });
+
+/* pointer: glance during the tour; look and pinch-zoom in the photo view */
+const pointers = new Map();
+let pinch = 0;
+let tap = null;
+canvas.addEventListener('pointerdown', (e) => {
+  if (ui.mode === 'explore' && ui.view === 'house') return;
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  tap = pointers.size === 1 ? { x: e.clientX, y: e.clientY, t: performance.now(), moved: 0 } : null;
+  canvas.setPointerCapture(e.pointerId); canvas.classList.add('is-dragging');
+  if (ui.mode === 'tour') look.held = true;
+  if (pointers.size === 2) { const [a, b] = [...pointers.values()]; pinch = Math.hypot(a.x - b.x, a.y - b.y); }
+});
+canvas.addEventListener('pointermove', (e) => {
+  const prev = pointers.get(e.pointerId); if (!prev) return;
+  const dx = e.clientX - prev.x, dy = e.clientY - prev.y; prev.x = e.clientX; prev.y = e.clientY;
+  if (tap) tap.moved += Math.abs(dx) + Math.abs(dy);
+  if (pointers.size === 2) {
+    const [a, b] = [...pointers.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y);
+    if (pinch && ui.mode === 'explore') pv.fov = clamp(pv.fov * (pinch / d), 30, 110);
+    pinch = d; return;
+  }
+  const fovNow = ui.mode === 'explore' ? pv.fov : 80;
+  const k = (fovNow / canvas.clientHeight) * (camera.aspect >= 1 ? 0.75 : 0.5); // grab the photo: it moves with the finger
+  if (ui.mode === 'tour') { look.yaw = clamp(look.yaw - dx * k, -120, 120); look.pitch = clamp(look.pitch - dy * k, -50, 50); }
+  else if (ui.mode === 'explore' && ui.view === 'photo') { pv.ath -= dx * k; pv.atv = clamp(pv.atv - dy * k, -85, 85); }
+});
+
+function endDrag(e) {
+  tap = null;
+  pointers.delete(e.pointerId); if (pointers.size < 2) pinch = 0; if (!pointers.size) { canvas.classList.remove('is-dragging'); look.held = false; } }
+canvas.addEventListener('pointerup', endDrag);
+canvas.addEventListener('pointercancel', endDrag);
+canvas.addEventListener('wheel', (e) => {
+  if (ui.mode === 'explore' && ui.view === 'photo') { e.preventDefault(); pv.fov = clamp(pv.fov * Math.exp(e.deltaY * 0.001), 30, 110); }
+}, { passive: false });
+
+addEventListener('keydown', (e) => {
+  const tag = e.target.tagName;
+  if (e.key === 'Escape') { $('info').hidden = true; $('chapters').hidden = true; $('btnChapters').setAttribute('aria-pressed', 'false'); return; }
+  if (ui.mode === 'tour') {
+    if (e.key === ' ' && tag !== 'BUTTON') { e.preventDefault(); $('btnPlay').click(); }
+    else if (e.key === 'ArrowRight') nextChapter(false);
+    else if (e.key === 'ArrowLeft') prevChapter();
+    else if (e.key.toLowerCase() === 'c') $('btnCC').click();
+    else if (e.key.toLowerCase() === 'm') $('btnMute').click();
+  } else if (ui.mode === 'explore' && ui.view === 'photo') {
+    const step = { arrowleft: [-8, 0], arrowright: [8, 0], arrowup: [0, -6], arrowdown: [0, 6] }[e.key.toLowerCase()];
+    if (step) { e.preventDefault(); pv.ath += step[0]; pv.atv = clamp(pv.atv + step[1], -85, 85); }
+    if (e.key === '+' || e.key === '=') pv.fov = clamp(pv.fov / 1.15, 30, 110);
+    if (e.key === '-') pv.fov = clamp(pv.fov * 1.15, 30, 110);
+  }
+});
+
+
+/* ---------------------------------------------------------------- loop */
+function resize() {
+  const w = canvas.clientWidth, h = canvas.clientHeight; if (!w || !h) return;
+  renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(canvas); resize();
+
+const clock = new THREE.Clock();
+let introAngle = 0.6, ready = false, photoGate = 1;
+function frame() {
+  const dt = Math.min(clock.getDelta(), 0.05), time = clock.elapsedTime, now = performance.now() / 1000;
+  let target = DEFAULTS;
+  if (ui.mode === 'intro') {
+    introAngle += dt * (reduceMotion ? 0 : 0.05);
+    const p = V(Math.sin(introAngle) * 15.5, 11, Math.cos(introAngle) * 15.5);
+    applyPose(p, quatFor(p, V(0, 0.2, 0)), HOUSE_VFOV(), now);
+  } else if (ui.mode === 'tour') {
+    tickTour(dt);
+    const c = CH[tour.idx];
+    if (!look.held && tour.playing) { const d = Math.min(1, dt * 1.2); look.yaw -= look.yaw * d; look.pitch -= look.pitch * d; }
+    const rt = c.ref(tour.t);
+    let pose = shotAt(c.shots, rt);
+    if (pose.photo && (look.yaw || look.pitch)) pose = { ...pose, q: quatAt(pose.photo.ath + look.yaw, clamp(pose.photo.atv + look.pitch, -85, 85)) };
+    applyPose(pose.p, pose.q, pose.f, now);
+    target = { ...DEFAULTS, ...(c.fx ? c.fx(rt) : {}) };
+    setPhotoStop($('info').hidden && $('chapters').hidden ? (STOPS[c.id] || []).find((st) => rt >= st.from && rt <= st.to) || null : null);
+    renderProgress();
+  } else {
+    setPhotoStop(null);
+    target = exploreFx;
+    if (ui.view === 'photo') applyPose(curSpot.pos, quatAt(pv.ath, pv.atv), vfov(pv.fov), now);
+    else if (houseIntro) {
+      applyPose(houseGoal, quatFor(houseGoal, controls.target), HOUSE_VFOV(), now);
+      if (!blend.active) { houseIntro = false; controls.enabled = true; controls.update(); }
+    } else { camera.fov = HOUSE_VFOV(); camera.updateProjectionMatrix(); controls.update(); }
+  }
+  updateRoom(dt, time, target);
+  // the photo covers the model at the spot it was taken, and fades as the camera moves away
+  // (the nearest spot's panorama; the 3D model shows between spots and in the dollhouse)
+  photoGate = moveTo(photoGate, ui.mode === 'tour' || (ui.mode === 'explore' && ui.view === 'photo') ? 1 : 0, dt * 2.2);
+  const [nearSp, nearD] = nearestSpot(camera.position); showSpotPhoto(nearSp);
+  const photoK = smooth(photoGate) * (1 - smooth(clamp((nearD - 0.02) / 0.9, 0, 1)));
+  photoMat.uniforms.opacity.value = photoK; photoSphere.visible = photoK > 0.001; photoSphere.position.copy(camera.position);
+  model.visible = photoK < 0.999; renderer.shadowMap.autoUpdate = model.visible;
+  // dollhouse: hide walls between the camera and the room, and the ceiling from above
+  for (const wl of walls) wl.group.visible = wl.n.dot(tmpV.subVectors(camera.position, wl.p)) > -0.02;
+  ceil.visible = camera.position.y < H - 0.02;
+  placePins(); placeSpotPins();
+  if (ready) renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+const st = $('startTour'), stLabel = st.querySelector('span');
+loadFaces((f) => { stLabel.textContent = `Loading the room… ${Math.round(f * 100)}%`; }).then(() => {
+  try { applyPhotoWalls(); } catch (e) { console.warn('photo walls', e); }
+  ready = true; st.disabled = false; stLabel.textContent = 'Start guided tour'; $('startExplore').disabled = false;
+}).catch(() => { stLabel.textContent = 'Photo failed to load'; $('glErr').textContent = "The room's photo didn't load. Check your connection and reload the page."; $('glErr').hidden = false; });
+audioFor(0);
+if (location.hostname === 'localhost') window.__dbg = { seek, setMode, setView, tour, state, camera, openInfo, pv, sun, scene, model, renderer, goSpot, SPOT };
+</script>
