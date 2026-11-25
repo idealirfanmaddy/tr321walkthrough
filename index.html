@@ -169,6 +169,49 @@ button { font: inherit; color: inherit; }
 .photostop figcaption .eyebrow { color: #8fd6e8; font-size: 10.5px; padding: 3px 7px; }
 .info-img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 10px; margin: 2px 0 4px; background: var(--line); }
 .hero { display: block; width: 100%; aspect-ratio: 16 / 7; object-fit: cover; border-radius: 12px; margin-bottom: 2px; background: var(--line); }
+.ppin { width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 10px; background: #f2c230; color: #1b1503; border-color: #fff;
+  font-family: var(--f-display); font-weight: 700; font-size: 15px; }
+.ppin .lbl { opacity: 1; }
+.ppin .lbl { font-size: 13px; padding: 4px 9px; }
+.ppin.lbl-r .lbl { left: calc(100% + 8px); bottom: auto; top: 50%; transform: translateY(-50%); }
+.ppin.lbl-l .lbl { left: auto; right: calc(100% + 8px); bottom: auto; top: 50%; transform: translateY(-50%); }
+.ppin.lbl-b .lbl { bottom: auto; top: calc(100% + 8px); }
+.ppin.lbl-off .lbl { opacity: 0; }
+.ppin.lbl-off:hover .lbl, .ppin.lbl-off:focus-visible .lbl { opacity: 1; z-index: 3; }
+.ppin:hover { box-shadow: 0 0 0 5px rgba(242, 194, 48, 0.35), 0 2px 10px rgba(0, 0, 0, 0.3); }
+.steps { display: flex; gap: 6px; overflow-x: auto; padding: 2px 4px 4px; scrollbar-width: none; }
+.steps button { all: unset; box-sizing: border-box; display: inline-flex; gap: 6px; align-items: center; padding: 5px 11px; border-radius: 999px; border: 1px solid var(--line);
+  font-size: 13px; font-weight: 700; white-space: nowrap; cursor: pointer; color: var(--muted); }
+.steps button .n { font-family: var(--f-mono); font-size: 12px; }
+.steps button:focus-visible { outline: 2px solid var(--accent); }
+.steps button.is-done { color: var(--ink); }
+.steps button.is-current { background: var(--signal); color: #1b1503; border-color: transparent; }
+.scbadge { position: absolute; z-index: 5; left: 50%; top: calc(66px + env(safe-area-inset-top, 0px)); transform: translateX(-50%); background: var(--cap-bg); color: var(--cap-fg);
+  font-family: var(--f-display); font-weight: 700; font-size: 17px; padding: 7px 16px; border-radius: 999px; white-space: nowrap; pointer-events: none; }
+.pip { position: absolute; z-index: 4; right: var(--gutter-r); top: calc(68px + env(safe-area-inset-top, 0px)); width: min(40vw, 380px); margin: 0; border-radius: 12px; overflow: hidden;
+  background: #0b0f12; border: 1px solid rgba(255, 255, 255, 0.14); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35); opacity: 0; transform: translateY(10px); transition: opacity 0.5s, transform 0.5s; pointer-events: none; }
+.pip.is-on { opacity: 1; transform: none; }
+.pip .pip-h { color: #8fd6e8; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; padding: 8px 10px 6px; }
+.pip canvas { display: block; width: 100%; height: auto; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 10px; }
+.chip { font-size: 12.5px; padding: 3px 9px; border-radius: 999px; background: var(--accent-soft); color: var(--ink); }
+.pc-aff { font-size: 13px; color: var(--muted); margin: 0 0 6px; white-space: pre-line; }
+.tryit { background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; margin: 0 0 14px; line-height: 1.5; }
+.tryit b { display: block; font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--accent); margin-bottom: 3px; }
+.plist .tg { grid-column: 2 / 4; font-family: var(--f-mono); font-size: 11px; color: var(--accent); letter-spacing: 0.04em; }
+.plistmore { padding: 0 16px 14px; }
+.plistmore h3 { font-family: var(--f-display); font-size: 15px; margin: 8px 0 6px; }
+.plistmore details { border-top: 1px solid var(--line); padding: 8px 0; }
+.plistmore summary { cursor: pointer; font-weight: 700; }
+.plistmore summary .tg { display: block; font-family: var(--f-mono); font-size: 11px; color: var(--accent); font-weight: 400; margin-top: 2px; }
+.plistmore details p { margin: 6px 0 0; line-height: 1.5; color: var(--muted); font-size: 14px; }
+.plistmore details p.feat { color: var(--ink); font-size: 13px; }
+.plist-ref { font-size: 12.5px; color: var(--muted); margin: 0; padding: 0 16px 16px; line-height: 1.5; }
+@media (max-width: 640px) {
+  .pip { left: var(--gutter-l); right: var(--gutter-r); width: auto; top: calc(64px + env(safe-area-inset-top, 0px)); }
+  .scbadge { top: auto; bottom: calc(232px + env(safe-area-inset-bottom, 0px)); font-size: 15px; }
+}
+@media (max-width: 440px) { .brand { display: none; } .seg button { padding: 7px 8px; } }
 @media (max-width: 640px) {
   .photostop { left: var(--gutter-l); right: var(--gutter-r); width: auto; top: calc(64px + env(safe-area-inset-top, 0px)); }
   .brand-name { display: none; }
@@ -191,6 +234,8 @@ button { font: inherit; color: inherit; }
 <div id="app">
   <canvas id="stage" aria-label="3D model of the TR 321 smart classroom"></canvas>
   <div id="pins" aria-label="Feature markers"></div>
+  <div class="scbadge" id="scBadge" hidden></div>
+  <figure class="pip" id="pip" aria-hidden="true"><figcaption class="pip-h">What remote learners see · quad view</figcaption><canvas id="pipCanvas" width="400" height="250"></canvas></figure>
   <figure class="photostop" id="photostop" aria-hidden="true"><img id="photostopImg" alt=""><figcaption><span class="eyebrow">Close-up</span><span id="photostopLabel"></span></figcaption></figure>
 
   <div class="topbar">
@@ -199,6 +244,7 @@ button { font: inherit; color: inherit; }
     <div class="seg glass" role="group" aria-label="Mode">
       <button id="modeTour" aria-pressed="true" type="button"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span class="lbltext">Guided tour</span><span class="lbltext-short">Tour</span></button>
       <button id="modeExplore" aria-pressed="false" type="button"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z" fill="currentColor"/></svg><span class="lbltext">Explore</span><span class="lbltext-short">Explore</span></button>
+      <button id="modePeda" aria-pressed="false" type="button"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg><span class="lbltext">Pedagogy</span><span class="lbltext-short">Pedagogy</span></button>
     </div>
     <button class="iconbtn glass" id="btnChapters" type="button" aria-label="Chapters and transcript" aria-pressed="false" aria-controls="chapters">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1" fill="currentColor"/><circle cx="4.5" cy="12" r="1" fill="currentColor"/><circle cx="4.5" cy="18" r="1" fill="currentColor"/></svg>
@@ -213,6 +259,26 @@ button { font: inherit; color: inherit; }
     <ol class="chlist" id="chlist"></ol>
   </aside>
 
+  <aside class="sheet glass plist" id="plist" hidden aria-label="Pedagogies in this room">
+    <header><h2>Pedagogies in this room</h2><button class="iconbtn" type="button" data-close="plist" aria-label="Close list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
+    <div style="overflow-y:auto;min-height:0">
+      <ol class="chlist" id="plistItems"></ol>
+      <div class="plistmore" id="plistMore"><h3>Related pedagogies and affordances</h3></div>
+      <p class="plist-ref">Features are categorised by pedagogical and technical affordance using the PST model: Wang, Q. (2024). <i>Designing technology-mediated learning environments: Perspectives, processes, and applications.</i> Springer. doi.org/10.1007/978-981-96-0680-1</p>
+    </div>
+  </aside>
+
+  <aside class="sheet glass" id="pcard" hidden aria-label="Affordance details">
+    <header><div style="flex:1;min-width:0"><div class="eyebrow" id="pcTag">Technical</div><h2 id="pcTitle">Affordance</h2></div>
+      <button class="iconbtn" type="button" data-close="pcard" aria-label="Close details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
+    <div class="body">
+      <p class="pc-aff" id="pcAff" hidden></p>
+      <div class="chips" id="pcFeat"></div>
+      <p class="info-text" id="pcHow"></p>
+      <p class="tryit"><b>Try it in your module</b><span id="pcTry"></span></p>
+      <div class="btnrow"><button class="btn primary" type="button" id="pcPlay"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span id="pcPlayLbl">Play scenario</span></button></div>
+    </div>
+  </aside>
   <aside class="sheet glass" id="info" hidden aria-label="Feature details">
     <header><div style="flex:1;min-width:0"><div class="eyebrow" id="infoNo">Feature 1 of 9</div><h2 id="infoTitle">Feature</h2></div>
       <button class="iconbtn" type="button" data-close="info" aria-label="Close feature details"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
@@ -240,6 +306,21 @@ button { font: inherit; color: inherit; }
       </div>
       <div class="track" id="track" role="group" aria-label="Tour progress"></div>
     </div>
+    <div class="player glass" id="scenebar" hidden>
+      <div class="player-row">
+        <button class="iconbtn" id="scPrev" type="button" aria-label="Previous step"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9.5 12z"/></svg></button>
+        <button class="iconbtn playbtn" id="scPlay" type="button" aria-label="Pause"><svg id="scIcoPlay" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" hidden><path d="M8 5.5v13l10.5-6.5z"/></svg><svg id="scIcoPause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></button>
+        <button class="iconbtn" id="scNext" type="button" aria-label="Next step"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 5h2v14h-2zM4 5v14l10.5-7z"/></svg></button>
+        <div class="nowplaying"><span class="chapno" id="scTag">Pedagogy</span><span class="chaptitle" id="scTitle">Scenario</span></div>
+        <span class="spacer-sm" aria-hidden="true"></span>
+        <button class="iconbtn" id="scClose" type="button" aria-label="Close scenario"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="steps" id="scSteps" role="group" aria-label="Scenario steps"></div>
+    </div>
+    <div class="explorebar glass" id="pedabar" hidden>
+      <span class="hint">Tap a lettered marker to see how the room supports that pedagogy.</span>
+      <button class="btn" type="button" id="pedaList">All pedagogies</button>
+    </div>
     <div class="explorebar glass" id="explorebar" hidden>
       <div class="seg" role="group" aria-label="Explore view">
         <span id="spotBtns" class="seg-inline"></span>
@@ -259,10 +340,11 @@ button { font: inherit; color: inherit; }
       <ul class="features" aria-label="Features covered">
         <li>Flexible seating</li><li>Interactive displays</li><li>AI tracking camera</li><li>Ceiling microphone</li><li>Teacher's station</li><li>Control panel</li><li>HD webcams</li><li>Smart blinds</li><li>Ceiling fans</li>
       </ul>
-      <div class="meta"><span>13 chapters</span><span id="metaDur">4 min</span><span>Narrated, with captions</span><span>Real 360° photo</span></div>
+      <div class="meta"><span>13 chapters</span><span id="metaDur">4 min</span><span>Narrated, with captions</span><span>Real 360° photo</span><span>8 pedagogy scenarios</span></div>
       <div class="btnrow">
         <button class="btn primary" type="button" id="startTour" disabled><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span>Loading the room…</span></button>
         <button class="btn" type="button" id="startExplore" disabled>Explore on my own</button>
+        <button class="btn" type="button" id="startPeda" disabled>Pedagogy lens</button>
       </div>
       <p class="err" id="glErr" hidden>This device couldn't start 3D graphics. Try a recent version of Chrome, Safari, Edge or Firefox.</p>
     </div>
@@ -900,7 +982,7 @@ function addPieces(geo, A, Bs) {
   const mB = match(A, Bs);
   A.forEach((a, i) => {
     const m = new THREE.Mesh(geo, mats.furn); m.castShadow = true; m.receiveShadow = true; model.add(m);
-    furniture.push({ mesh: m, a, b: mB[i], delay: 0, table: geo === tableGeo });
+    furniture.push({ mesh: m, a, b: mB[i], delay: 0, table: geo === tableGeo, idx: i });
   });
 }
 addPieces(tableGeo, podT, rowT);
@@ -952,6 +1034,8 @@ function applyModels(gltf) {
   const mic = make('CeilingMic', false); if (mic) { ceil.remove(micDisc); mic.position.set(MIC.x, H, MIC.z); ceil.add(mic); }
   for (const [x, z] of [[-1.3, -4.1], [1.6, -4.1], [-1.6, 0.6], [1.7, 0.6], [0.0, 4.6]]) { const sp = make('CeilingSpeaker', false); if (sp) { sp.position.set(x, H, z); ceil.add(sp); } }
   const ptz = make('PTZCamera'); if (ptz) { ptz.position.set(0.2, 1.82, -HZ + 0.12); wFront.group.add(ptz); }
+  // the tracking camera that does most of the work: centre of the back wall under the clock, facing the room
+  const ptzBack = make('PTZCamera'); if (ptzBack) { ptzBack.position.set(BACK_EYE.x, BACK_EYE.y - 0.15, BACK_EYE.z + 0.06); ptzBack.rotation.y = Math.PI; wBack.group.add(ptzBack); }
   for (const [wall, sign] of [[wLeft, -1], [wRight, 1]]) for (const zc of [-2.19, 1.18]) {
     const wc = make('Webcam'); if (!wc) continue;
     wc.position.set(sign * (HX - 0.075), 0.76, zc); wc.rotation.y = -sign * Math.PI / 2; wall.group.add(wc);
@@ -1004,7 +1088,10 @@ function updateRoom(dt, time, target) {
   state.layout = moveTo(state.layout, target.layout, dt / 2.8);
   photoMat.uniforms.dim.value = state.dim;
   for (const m of photoBasics) if (m.userData.base) m.color.copy(m.userData.base).multiplyScalar(1 - 0.55 * state.dim);
-  setLayout(state.layout);
+  // the pedagogy scenarios drive the furniture themselves; afterwards it rolls back to pods before the tour takes over
+  if (ui.mode === 'peda' || ui.mode === 'scene') { /* driven in sceneFrame / pedaFrame */ }
+  else if (layoutCtl.to !== 0 || layoutCtl.k < 1) driveLayout(dt, 0);
+  else setLayout(state.layout);
   const lit = 1 - state.dim;
   hemi.intensity = 0.75 * (0.35 + 0.65 * lit); sun.intensity = 1.3 * (0.3 + 0.7 * lit);
   mats.light.emissiveIntensity = 1.6 * (0.12 + 0.88 * lit); mats.cove.emissiveIntensity = 1.3 * (0.2 + 0.8 * lit);
@@ -1198,9 +1285,20 @@ function setMode(mode, opts = {}) {
   ui.mode = mode;
   $('modeTour').setAttribute('aria-pressed', String(mode === 'tour'));
   $('modeExplore').setAttribute('aria-pressed', String(mode === 'explore'));
+  $('modePeda').setAttribute('aria-pressed', String(mode === 'peda' || mode === 'scene'));
   $('player').hidden = mode !== 'tour';
   $('explorebar').hidden = mode !== 'explore';
+  $('pedabar').hidden = mode !== 'peda';
+  $('scenebar').hidden = mode !== 'scene';
   $('intro').hidden = true;
+  if (prevMode === 'scene' && mode !== 'scene') scenePlay(false);
+  if (mode !== 'peda' && mode !== 'scene') { clearStage(); $('pcard').hidden = true; $('plist').hidden = true; }
+  if (mode !== 'scene') { $('caption').textContent = ''; lastScCap = ''; $('pip').classList.remove('is-on'); $('scBadge').hidden = true; lastBadge = ''; }
+  if (mode === 'peda' || mode === 'scene') {
+    setPlaying(false); prefetchPeda(); $('info').hidden = true; $('chapters').hidden = true;
+    Object.assign(exploreFx, DEFAULTS); controls.enabled = false;
+    if (mode === 'peda') { startBlend(1.6); houseGoal.set(6.2, 8.4, 9.6); controls.target.set(0, 0.4, 0); houseIntro = true; }
+  }
   if (mode === 'tour') {
     controls.enabled = false;
     tour.started = true;
@@ -1268,7 +1366,7 @@ function renderPinStates() {
 }
 const proj = V(), tmpV = V();
 function placePins() {
-  const w = canvas.clientWidth, h = canvas.clientHeight, show = ui.mode !== 'intro';
+  const w = canvas.clientWidth, h = canvas.clientHeight, show = ui.mode === 'tour' || ui.mode === 'explore';
   for (const p of pins) {
     proj.copy(p.v).project(camera);
     const behind = proj.z > 1 || proj.z < -1;
@@ -1276,7 +1374,23 @@ function placePins() {
     const ceilHidden = !ceil.visible && p.v.y > H - 0.3;
     const vis = show && !behind && !wallHidden && !ceilHidden && Math.abs(proj.x) < 1.05 && Math.abs(proj.y) < 1.05;
     p.el.style.display = vis ? '' : 'none';
-    if (vis) p.el.style.transform = `translate(${((proj.x + 1) / 2) * w}px, ${((1 - proj.y) / 2) * h}px)`;
+    p.sx = ((proj.x + 1) / 2) * w; p.sy = ((1 - proj.y) / 2) * h; p.vis = vis;
+    if (vis) p.el.style.transform = `translate(${p.sx}px, ${p.sy}px)`;
+  }
+  // Label decluttering: keep a label only if it doesn't overlap a label or marker already kept (front-most first).
+  // Hidden labels still show on hover or keyboard focus.
+  const kept = [], order = pPins.filter((p) => p.vis).sort((a, b) => b.sy - a.sy);
+  for (const p of order) kept.push([p.sx - 19, p.sy - 19, p.sx + 19, p.sy + 19]);
+  const hit = (r) => kept.some((k) => r[0] < k[2] && r[2] > k[0] && r[1] < k[3] && r[3] > k[1]);
+  for (const p of order) {
+    const lbl = p.el.querySelector('.lbl'); p.lw = p.lw || lbl.offsetWidth || 160; p.lh = p.lh || lbl.offsetHeight || 26;
+    const { sx: x, sy: y, lw, lh } = p;
+    const cands = { r: [x + 23, y - lh / 2, x + 27 + lw, y + lh / 2], l: [x - 27 - lw, y - lh / 2, x - 23, y + lh / 2],
+      t: [x - lw / 2, y - 27 - lh, x + lw / 2, y - 23], b: [x - lw / 2, y + 23, x + lw / 2, y + 27 + lh] };
+    const side = ['r', 'l', 't', 'b'].find((k) => !hit(cands[k]) && cands[k][0] > 4 && cands[k][2] < w - 4);
+    p.el.classList.toggle('lbl-off', !side);
+    for (const k of ['r', 'l', 't', 'b']) p.el.classList.toggle('lbl-' + k, (side || 't') === k);
+    if (side) kept.push(cands[side]);
   }
 }
 
@@ -1398,7 +1512,7 @@ canvas.addEventListener('wheel', (e) => {
 
 addEventListener('keydown', (e) => {
   const tag = e.target.tagName;
-  if (e.key === 'Escape') { $('info').hidden = true; $('chapters').hidden = true; $('btnChapters').setAttribute('aria-pressed', 'false'); return; }
+  if (e.key === 'Escape') { $('info').hidden = true; $('pcard').hidden = true; $('plist').hidden = true; $('chapters').hidden = true; $('btnChapters').setAttribute('aria-pressed', 'false'); return; }
   if (ui.mode === 'tour') {
     if (e.key === ' ' && tag !== 'BUTTON') { e.preventDefault(); $('btnPlay').click(); }
     else if (e.key === 'ArrowRight') nextChapter(false);
@@ -1412,6 +1526,631 @@ addEventListener('keydown', (e) => {
     if (e.key === '-') pv.fov = clamp(pv.fov * 1.15, 30, 110);
   }
 });
+
+
+/* ---------------------------------------------------------------- pedagogy lens */
+// Eight pedagogies from "Pedagogical affordances of the renovated NIE tutorial rooms" (PST model, Wang 2024),
+// each with a narrated scenario played out in the 3D room. Screen content is placeholder.
+const PEDA_CUES = [{"id":"collab","title":"Collaborative learning","duration":29.46,"cues":[{"start":0.3,"end":8.25,"text":"Collaborative learning starts in small groups, with each group gathered around its own huddle space and interactive display."},{"start":8.6,"end":15.66,"text":"Members brainstorm, sketch and build an artefact together on the shared screen, so everyone's ideas are visible."},{"start":16.01,"end":22.61,"text":"The tutor moves between groups, listening in and prompting, while each group keeps ownership of its work."},{"start":22.96,"end":28.56,"text":"When the work is ready, a group shares it to the main display, and presents it to the class."}]},{"id":"config","title":"Inquiry- and project-based learning","duration":36.83,"cues":[{"start":0.3,"end":9.58,"text":"Inquiry and project-based learning moves through cycles, and because every table and chair is on castors, the room can change shape to follow them."},{"start":9.93,"end":15.41,"text":"Rows suit the launch, when the tutor frames the problem or project brief for everyone."},{"start":15.76,"end":22.45,"text":"Pods support investigation and creation, with each group close to its own screen, ready to share findings."},{"start":22.8,"end":29.43,"text":"A U-shape opens the room for presenting and discussing what groups found, so everyone can see one another."},{"start":29.78,"end":35.93,"text":"And spaced rows give students room to work on their own, for individual reflection or assessment."}]},{"id":"microteach","title":"Microteaching and peer teaching","duration":29.66,"cues":[{"start":0.3,"end":8.53,"text":"In microteaching, a student teacher teaches a short lesson segment to a small group of peers, while the classroom camera records it."},{"start":8.88,"end":15.92,"text":"Peers take on the role of learners, answering questions and joining in the activity, so the practice feels real."},{"start":16.27,"end":21.8,"text":"The tutor and other classmates observe with a focus, noting what helps the lesson work."},{"start":22.15,"end":28.76,"text":"Then roles rotate, so in peer teaching, every student teacher gets to teach, to learn and to give feedback."}]},{"id":"reflect","title":"Reflective practice","duration":26.96,"cues":[{"start":0.3,"end":6.87,"text":"Reflective practice turns a lesson into something a student teacher can look back on, not just remember."},{"start":7.22,"end":14.04,"text":"The recorded lesson plays back on one of the displays, so they see their teaching the way their learners did."},{"start":14.39,"end":20.13,"text":"Peers and the tutor add time-stamped feedback, pointing to specific moments in the lesson."},{"start":20.48,"end":26.06,"text":"The student teacher then reviews the evidence, and sets a clear goal for the next lesson."}]},{"id":"differentiate","title":"Differentiated learning","duration":24.06,"cues":[{"start":0.3,"end":5.77,"text":"With several independent displays, the tutor can run different tasks at the same time."},{"start":6.12,"end":11.79,"text":"Each screen carries its own instructions and resources, matched to what that group needs."},{"start":12.14,"end":17.16,"text":"Groups can rotate between stations, or stay with the task that suits them best."},{"start":17.51,"end":23.16,"text":"And the tutor can send extra support to one screen, without stopping the rest of the class."}]},{"id":"hybrid","title":"Flipped and blended learning","duration":36.48,"cues":[{"start":0.3,"end":10.34,"text":"Blended learning mixes in-person and online participation, and in hybrid mode, remote learners join through Zoom or Teams and appear on the classroom displays."},{"start":10.69,"end":16.6,"text":"The AI camera follows the tutor around the room, so remote students always see who is teaching."},{"start":16.95,"end":24.63,"text":"Ceiling microphones pick up voices from anywhere, including group discussions, so remote learners hear their peers too."},{"start":24.98,"end":35.58,"text":"And the quad view shows the tutor, the whiteboard, the shared screen and the class at once, while recordings let tutors flip the lesson and keep class time for discussion."}]},{"id":"presets","title":"Modelling technology-enabled pedagogy","duration":32.82,"cues":[{"start":0.3,"end":7.79,"text":"Tutors can model technology-enabled pedagogy, because the central control panel has a preset for each way of teaching."},{"start":8.14,"end":13.07,"text":"Present mode dims the lights, and puts the tutor's slides on the main displays."},{"start":13.42,"end":16.82,"text":"Group mode sends a workspace to every huddle screen."},{"start":17.17,"end":23.17,"text":"Hybrid mode turns on the cameras and microphones, and brings remote learners onto the displays."},{"start":23.52,"end":31.92,"text":"One tap changes the whole room, so student teachers see smooth, technology-enabled practice they can carry into their own classrooms."}]},{"id":"compare","title":"Learning through comparison and critique","duration":28.9,"cues":[{"start":0.3,"end":6.98,"text":"Learning through comparison and critique begins when groups tackle the same problem in different ways."},{"start":7.33,"end":13.69,"text":"The tutor brings two groups' work onto the main displays, side by side, so the whole class can see both."},{"start":14.04,"end":20.46,"text":"Students compare the approaches, asking what each one does well, and where its reasoning breaks down."},{"start":20.81,"end":28.0,"text":"They then critique, question and give feedback, and discuss alternative solutions before refining their own work."}]}];
+const PEDA = [
+  { id: 'collab', short: 'Collaborative learning', tag: 'Pedagogical', marker: [-1.9, 1.5, 1.2],
+    affordances: ['Huddle spaces and interactive displays'], also: [],
+    features: ['displays', 'control'],
+    how: 'Students work in groups around their own huddle space and interactive display, brainstorming, sketching and developing artefacts together, then present their work digitally to the class. The shared screen keeps everyone\'s contributions visible.',
+    tryIt: 'Give each group one shared screen and one artefact to build, such as a concept map or a lesson plan, and ask every member to add something before the group presents.',
+    steps: ['Groups gather', 'Build together', 'Tutor circulates', 'Share to the class'] },
+  { id: 'config', short: 'Inquiry & project-based learning', tag: 'Pedagogical', marker: [0.05, 1.0, 0.2],
+    affordances: ['Flexible teaching configurations'], also: [],
+    features: ['seating'],
+    how: 'Inquiry and project work runs in cycles of investigating, creating, sharing and discussing. Movable furniture lets the room follow the cycle: rows to launch the question, pods for investigation and making, a U-shape to present and discuss findings, and spaced rows for individual work or assessment.',
+    tryIt: 'Plan the layout with the phases of the project: rows for a ten-minute launch, pods for the investigation, a U-shape for groups to present what they found.',
+    steps: ['On castors', 'Rows: launch the inquiry', 'Pods: investigate and create', 'U-shape: share and discuss', 'Spaced rows: individual work'] },
+  { id: 'microteach', short: 'Microteaching & peer teaching', tag: 'Pedagogical', marker: [-0.5, 1.35, -3.3],
+    affordances: ['Classroom recording and playback'], also: [],
+    features: ['camera', 'displays'],
+    how: 'Student teachers teach short lesson segments to their peers, who take the role of learners, while the camera records. Roles rotate, so every student teacher teaches, learns from peers and gives feedback.',
+    tryIt: 'Run five-minute microteaching rounds, with each observer given one focus, such as questioning or pacing, to watch for.',
+    steps: ['Teach and record', 'Peers as learners', 'Focused observation', 'Roles rotate'] },
+  { id: 'reflect', short: 'Reflective practice', tag: 'Pedagogical', marker: [1.9, 1.5, 1.9],
+    affordances: ['Classroom recording and playback'], also: [],
+    features: ['camera', 'displays'],
+    how: 'Recorded teaching gives student teachers evidence to review rather than memories to rely on. Played back on a display with time-stamped peer and tutor feedback, it supports self-review and reflection on practice.',
+    tryIt: "Play back two minutes of each student teacher's recorded lesson, and ask them to name one moment to keep and one to change.",
+    steps: ['Look back', 'Play it back', 'Time-stamped feedback', 'Set a goal'] },
+  { id: 'differentiate', short: 'Differentiated learning', tag: 'Pedagogical', marker: [1.9, 1.5, -1.9],
+    affordances: ['Multiple independent displays and huddle spaces'], also: [],
+    features: ['displays'],
+    how: 'With multiple independent displays and huddle spaces, the tutor can assign different instructions, resources or activities to different screens, enabling differentiated tasks or parallel learning activities.',
+    tryIt: 'Set up three stations with tasks at different levels of challenge, and let groups choose or rotate every ten minutes.',
+    steps: ['Parallel tasks', 'Matched resources', 'Rotate stations', 'Targeted support'] },
+  { id: 'hybrid', short: 'Flipped & blended learning', tag: 'Pedagogical', marker: [-0.6, 2.45, -5.0],
+    affordances: ['Supporting hybrid and HyFlex teaching', 'Accessibility of classroom content'], also: [],
+    features: ['camera', 'mic', 'displays', 'webcam'],
+    how: 'Blended learning combines in-person and online participation. AI cameras, the audio system, Zoom or Teams support and the interactive displays let remote learners follow the class, and recording lets tutors prepare self-paced lectures so face-to-face time goes to discussion, application, clarification and problem-solving.',
+    tryIt: 'Record the lecture input ahead of the session, then start class in hybrid mode and check the quad view once, so remote students can see both the board and the room.',
+    steps: ['Remote learners join', 'Camera follows the tutor', 'Mics pick up the room', 'Quad view and recording'] },
+  { id: 'presets', short: 'Modelling technology-enabled pedagogy', tag: 'Pedagogical', marker: [-2.2, 1.6, -5.0],
+    affordances: ['Transition between teaching modes'], also: [],
+    features: ['control'],
+    how: 'Because NIE prepares student teachers, tutors can model technology-enabled practice, so student teachers experience these approaches as learners before using them in their own teaching. Centralised presets for face-to-face and hybrid modes make the transitions between presentation, group activity, sharing and hybrid teaching smooth enough to be worth copying.',
+    tryIt: 'Switch presets as the lesson changes phase, and say out loud why you are doing it, so student teachers see the thinking behind the technology.',
+    steps: ['One panel, many modes', 'Present', 'Group', 'Hybrid', 'Seconds, not minutes'] },
+  { id: 'compare', short: 'Comparison & critique', tag: 'Pedagogical', marker: [2.3, 2.25, -4.4],
+    affordances: ['Group-to-whole-class sharing', 'Multiple displays shown together'], also: [],
+    features: ['displays', 'control'],
+    how: 'Outputs from two or more groups can be shown on the main displays at once. Students compare approaches, critique reasoning, give peer feedback and discuss alternative solutions, moving from small-group thinking to whole-class meaning-making.',
+    tryIt: 'Put two contrasting answers side by side and have the class judge which reasoning holds up, then let each group refine its own work.',
+    steps: ['Different approaches', 'Side by side', 'Compare', 'Critique and refine'] },
+];
+const MORE_AFFORDANCES = [];
+const PCH = PEDA.map((p) => { const c = PEDA_CUES.find((q) => q.id === p.id); return { ...p, ...c, caps: c.cues.flatMap(chunkCue) }; });
+
+/* --- extra furniture layouts: U-shape (index 2) and assessment rows (index 3) */
+const uT = [], uC = [], exT = [], exC = [], exSpare = [];
+// U-shape: tables form the U, chairs sit on the OUTSIDE so every student faces into the open centre (and each other).
+// Chair forward = (sin r, cos r): left arm faces +x, right arm faces -x, the base faces -z (towards the front).
+for (const sx of [-1, 1]) for (const z of [-3.3, -1.7, -0.1, 1.5]) {
+  uT.push({ x: sx * 1.65, z, r: Math.PI / 2 });
+  for (const dz of [-0.54, 0, 0.54]) uC.push({ x: sx * 2.35, z: z + dz, r: sx < 0 ? Math.PI / 2 : -Math.PI / 2 });
+}
+for (const x of [-0.8, 0.8]) { uT.push({ x, z: 2.95, r: 0 }); for (const dx of [-0.54, 0, 0.54]) uC.push({ x: x + dx, z: 3.65, r: Math.PI }); }
+uC.length = 30; // 8×3 on the arms + 2×3 along the base = 30
+for (const z of [-3.7, -2.1, -0.5, 1.1, 2.7]) for (const x of [-1.55, 1.55]) {
+  exT.push({ x, z, r: 0 });
+  for (const dx of [-0.55, 0.55]) exC.push({ x: x + dx, z: z + 0.7, r: Math.PI });
+}
+for (let i = 0; i < 10; i++) exSpare.push({ x: -2.6 + i * 0.578, z: 4.95, r: Math.PI });
+const SEATED = new Set([0, 1, 4, 5]); // which chair in each pod has a student (by position in the pod)
+{
+  const tables = furniture.filter((f) => f.table).sort((p, q) => p.idx - q.idx);
+  const chairs = furniture.filter((f) => !f.table).sort((p, q) => p.idx - q.idx);
+  const mU = match(tables.map((f) => f.a), uT), mE = match(tables.map((f) => f.a), exT);
+  tables.forEach((f, i) => { f.L = [f.a, f.b, mU[i], mE[i]]; });
+  const mCU = match(chairs.map((f) => f.a), uC);
+  const sat = chairs.filter((f) => SEATED.has(f.idx % 6)), empty = chairs.filter((f) => !SEATED.has(f.idx % 6));
+  const mS = match(sat.map((f) => f.a), exC), mF = match(empty.map((f) => f.a), exSpare);
+  chairs.forEach((f, i) => { f.L = [f.a, f.b, mCU[i], null]; });
+  sat.forEach((f, i) => { f.L[3] = mS[i]; }); empty.forEach((f, i) => { f.L[3] = mF[i]; });
+}
+const layoutCtl = { from: 0, to: 0, k: 1, active: false };
+function setLayoutPair(a, b, k) {
+  for (const f of furniture) {
+    const P = f.L[a], Q = f.L[b], t = smooth(clamp((k - f.delay) / 0.65, 0, 1));
+    f.mesh.position.set(P.x + (Q.x - P.x) * t, 0, P.z + (Q.z - P.z) * t);
+    f.mesh.rotation.y = lerpAngle(P.r, Q.r, t);
+  }
+}
+function driveLayout(dt, want) {
+  if (want !== layoutCtl.to) { layoutCtl.from = layoutCtl.k > 0.5 ? layoutCtl.to : layoutCtl.from; layoutCtl.to = want; layoutCtl.k = 0; }
+  layoutCtl.k = Math.min(1, layoutCtl.k + dt / 2.6);
+  setLayoutPair(layoutCtl.from, layoutCtl.to, layoutCtl.k);
+}
+
+/* --- mannequin figures: faceless, jointed, posed in code */
+const skinMat = new THREE.MeshStandardMaterial({ color: 0xe3dad1, roughness: 0.7 });
+const capsule = (r, len) => new THREE.CapsuleGeometry(r, len, 6, 12);
+function makeFigure(color) {
+  const m = new THREE.MeshStandardMaterial({ color, roughness: 0.62 });
+  const legM = new THREE.MeshStandardMaterial({ color: new THREE.Color(color).multiplyScalar(0.55), roughness: 0.7 });
+  const part = (parent, geo, mat, x, y, z, sx = 1, sy = 1, sz = 1) => { const o = new THREE.Mesh(geo, mat); o.position.set(x, y, z); o.scale.set(sx, sy, sz); o.castShadow = true; parent.add(o); return o; };
+  const joint = (parent, x, y, z) => { const g = new THREE.Group(); g.position.set(x, y, z); parent.add(g); return g; };
+  const root = new THREE.Group();
+  const hips = joint(root, 0, 0.92, 0);
+  part(hips, new THREE.SphereGeometry(0.13, 16, 12), legM, 0, 0.02, 0, 1.15, 0.7, 0.85);
+  const spine = joint(hips, 0, 0.06, 0);
+  part(spine, capsule(0.13, 0.28), m, 0, 0.25, 0, 1.15, 1, 0.72);
+  const head = joint(spine, 0, 0.52, 0);
+  part(head, new THREE.CylinderGeometry(0.04, 0.045, 0.07, 10), skinMat, 0, 0.0, 0);
+  part(head, new THREE.SphereGeometry(0.105, 20, 16), skinMat, 0, 0.12, 0.005, 0.92, 1.08, 1);
+  const J = { root, hips, spine, head };
+  for (const s of [-1, 1]) {
+    const k = s < 0 ? 'L' : 'R';
+    const ua = joint(spine, s * 0.2, 0.43, 0); part(ua, capsule(0.045, 0.2), m, 0, -0.14, 0);
+    const fa = joint(ua, 0, -0.29, 0); part(fa, capsule(0.04, 0.18), skinMat, 0, -0.12, 0); part(fa, new THREE.SphereGeometry(0.045, 10, 8), skinMat, 0, -0.27, 0.01);
+    const th = joint(hips, s * 0.09, -0.02, 0); part(th, capsule(0.065, 0.32), legM, 0, -0.21, 0);
+    const sh = joint(th, 0, -0.43, 0); part(sh, capsule(0.055, 0.32), legM, 0, -0.21, 0); part(sh, new THREE.BoxGeometry(0.09, 0.06, 0.21), legM, 0, -0.44, 0.05);
+    J['ua' + k] = ua; J['fa' + k] = fa; J['th' + k] = th; J['sh' + k] = sh;
+  }
+  root.visible = false; model.add(root);
+  return J;
+}
+function poseFigure(J, mode, phase = 0, gesture = 0) {
+  const sitting = mode === 'sit';
+  J.hips.position.y = sitting ? 0.55 : 0.92 + (mode === 'walk' ? Math.abs(Math.sin(phase)) * 0.02 : 0);
+  J.spine.rotation.x = sitting ? 0.12 : 0;
+  for (const k of ['L', 'R']) {
+    const s = k === 'L' ? 1 : -1, sw = mode === 'walk' ? Math.sin(phase) * s : 0;
+    J['th' + k].rotation.x = sitting ? -Math.PI / 2 : sw * 0.45;
+    J['sh' + k].rotation.x = sitting ? Math.PI / 2 - 0.05 : (mode === 'walk' ? Math.max(0, -Math.sin(phase) * s) * 0.6 : 0);
+    J['ua' + k].rotation.set(sitting ? -0.55 : -sw * 0.35, 0, (k === 'L' ? 1 : -1) * 0.07);
+    J['fa' + k].rotation.x = sitting ? -0.95 : -0.15;
+  }
+  if (gesture > 0) { J.uaR.rotation.x = -1.35 * gesture; J.uaR.rotation.z = -0.25 * gesture; J.faR.rotation.x = -0.25 * gesture; }
+}
+const STUDENT_COLORS = [0x7f9bb0, 0x8fa89a, 0xa89b8a, 0x9a8fb0, 0x7fa6a8];
+const seatedChairs = furniture.filter((f) => !f.table && SEATED.has(f.idx % 6)).sort((p, q) => p.idx - q.idx);
+const seated = seatedChairs.map((f, i) => ({ J: makeFigure(STUDENT_COLORS[i % STUDENT_COLORS.length]), f }));
+const tutor = makeFigure(0xe07a5f), trainee = makeFigure(0xe9b44c);
+const crowd = Array.from({ length: 12 }, (_, i) => makeFigure(STUDENT_COLORS[(i + 2) % STUDENT_COLORS.length]));
+const tmpQ = new THREE.Vector3();
+function placeSeated(on) {
+  for (const s of seated) {
+    s.J.root.visible = on; if (!on) continue;
+    const ch = s.f.mesh; tmpQ.set(0, 0, -0.06).applyAxisAngle(UP, ch.rotation.y);
+    s.J.root.position.set(ch.position.x + tmpQ.x, 0, ch.position.z + tmpQ.z); s.J.root.rotation.y = ch.rotation.y;
+    poseFigure(s.J, 'sit');
+  }
+}
+function placeStanding(J, spec, time) {
+  J.root.visible = !!spec; if (!spec) return;
+  J.root.position.set(spec.x, 0, spec.z);
+  J.root.rotation.y = spec.face ?? 0;
+  poseFigure(J, spec.walk ? 'walk' : 'stand', spec.walk ? time * 7 : 0, spec.gesture || 0);
+}
+const faceTo = (x, z, tx, tz) => Math.atan2(tx - x, tz - z);
+
+/* --- drawable overlays on the displays and the control panel */
+// Rects measured from the photo textures (where each real display appears on the photo-matched wall), so the overlay
+// plus its black bezel hides the photographed screen completely.
+const SCREEN_DEF = {
+  FL: { x: -0.735, y: 1.325, z: -HZ + 0.068, w: 1.78, h: 1.0, ry: 0, parent: () => wFront.group },
+  FR: { x: 1.125, y: 1.325, z: -HZ + 0.068, w: 1.78, h: 1.0, ry: 0, parent: () => wFront.group },
+  LF: { x: -HX + 0.065, y: 1.28, z: -2.364, w: 1.62, h: 0.97, ry: Math.PI / 2, parent: () => wLeft.group },
+  LB: { x: -HX + 0.065, y: 1.327, z: 1.21, w: 1.57, h: 0.955, ry: Math.PI / 2, parent: () => wLeft.group },
+  RF: { x: HX - 0.065, y: 1.24, z: -2.19, w: 1.47, h: 0.88, ry: -Math.PI / 2, parent: () => wRight.group },
+  RB: { x: HX - 0.065, y: 1.29, z: 1.185, w: 1.5, h: 0.9, ry: -Math.PI / 2, parent: () => wRight.group },
+  CP: { x: -2.05, y: 1.31, z: -HZ + 0.068, w: 0.3, h: 0.19, ry: 0, parent: () => wFront.group, cw: 384, ch: 240, bezel: 0.025 },
+};
+const screens = {};
+const bezelMat = new THREE.MeshBasicMaterial({ color: 0x0b0d10, toneMapped: false });
+for (const [id, d] of Object.entries(SCREEN_DEF)) {
+  const c = document.createElement('canvas'); c.width = d.cw || 768; c.height = d.ch || 432;
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso;
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(d.w, d.h), new THREE.MeshBasicMaterial({ map: t, toneMapped: false }));
+  const bz = d.bezel ?? 0.07; // opaque black frame a little larger than the photographed display, so none of it peeks out
+  const bezel = new THREE.Mesh(new THREE.PlaneGeometry(d.w + bz, d.h + bz), bezelMat); bezel.position.z = -0.006; m.add(bezel);
+  m.position.set(d.x, d.y, d.z); m.rotation.y = d.ry; m.visible = false; d.parent().add(m);
+  screens[id] = { c, g: c.getContext('2d'), t, m, spec: null };
+}
+const GROUP_COLORS = ['#2f81f7', '#e5484d', '#3fb950', '#f2a33a', '#a371f7'];
+const TASK = { A: ['#1d7c94', 'Task A · Core'], B: ['#e07a5f', 'Task B · Applied'], C: ['#d9a514', 'Task C · Stretch'], D: ['#7a5cc7', 'Task D · Extension'] };
+function rr(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+function lines(g, x, y, w, n, gap = 26, color = 'rgba(30,40,50,0.35)') { const r = rng(n * 13 + x); g.fillStyle = color; for (let i = 0; i < n; i++) rr(g, x, y + i * gap, w * (0.55 + r() * 0.45), 9, 4), g.fill(); }
+function drawScreen(id, spec) {
+  const S = screens[id]; if (S.spec === spec) return; S.spec = spec; S.m.visible = !!spec; if (!spec) return;
+  const g = S.g, W = S.c.width, Hh = S.c.height, [kind, a, b] = spec.split(':');
+  g.save(); g.clearRect(0, 0, W, Hh);
+  if (kind === 'slide' || kind === 'teach') {
+    const gr = g.createLinearGradient(0, 0, W, Hh); gr.addColorStop(0, '#1b4fd1'); gr.addColorStop(1, '#2468e8'); g.fillStyle = gr; g.fillRect(0, 0, W, Hh);
+    g.fillStyle = '#fff'; g.font = '700 40px Arial, sans-serif';
+    g.fillText(kind === 'teach' ? 'Fractions: parts of a whole' : (a === '2' ? 'Share your thinking' : 'Lesson: assessment for learning'), 48, 92);
+    lines(g, 48, 150, 520, 5, 40, 'rgba(255,255,255,0.75)');
+    g.fillStyle = '#f2c230'; g.beginPath(); g.arc(W - 70, 70, 120, Math.PI / 2, Math.PI); g.lineTo(W - 70, 70); g.fill();
+    if (kind === 'teach') { g.fillStyle = 'rgba(255,255,255,0.9)'; g.beginPath(); g.arc(W - 170, Hh - 130, 80, 0, Math.PI * 1.5); g.lineTo(W - 170, Hh - 130); g.fill(); }
+  } else if (kind === 'board' || kind === 'work') {
+    const n = +a, col = GROUP_COLORS[(n - 1) % 5];
+    g.fillStyle = '#fbfbf8'; g.fillRect(0, 0, W, Hh); g.fillStyle = col; g.fillRect(0, 0, W, 62);
+    g.fillStyle = '#fff'; g.font = '700 34px Arial, sans-serif'; g.fillText(kind === 'work' ? `Group ${n} workspace` : `Group ${n}`, 28, 43);
+    if (kind === 'board') {
+      const r = rng(n * 31), notes = ['#ffe27a', '#ffb3c7', '#9fe3d5', '#c8b6ff'];
+      for (let i = 0; i < 7; i++) {
+        const x = 34 + (i % 4) * 182 + r() * 14, y = 92 + Math.floor(i / 4) * 160 + r() * 12;
+        g.fillStyle = notes[(i + n) % 4]; g.fillRect(x, y, 150, 128); lines(g, x + 14, y + 24, 110, 3, 28);
+      }
+      g.strokeStyle = col; g.lineWidth = 5; g.beginPath(); g.moveTo(110, 230); g.lineTo(260, 260); g.stroke();
+    } else { g.fillStyle = 'rgba(30,40,50,0.18)'; g.font = '600 26px Arial, sans-serif'; g.fillText('Tap to start · pens · sticky notes · share', 28, Hh - 40); }
+  } else if (kind === 'zoom') {
+    g.fillStyle = '#16181c'; g.fillRect(0, 0, W, Hh);
+    const names = ['Aisha', 'Ben', 'Chen', 'Divya', 'Ethan', 'Farah'], tiles = ['#2b5d73', '#5a4a7a', '#7a5a3a', '#2f6b4f', '#6b2f45', '#3d4a6b'];
+    for (let i = 0; i < 6; i++) {
+      const x = 18 + (i % 3) * 248, y = 18 + Math.floor(i / 3) * 200;
+      g.fillStyle = '#23262c'; g.fillRect(x, y, 236, 188);
+      g.fillStyle = tiles[i]; g.beginPath(); g.arc(x + 118, y + 86, 44, 0, Math.PI * 2); g.fill();
+      g.fillStyle = '#fff'; g.font = '700 36px Arial, sans-serif'; g.textAlign = 'center'; g.fillText(names[i][0], x + 118, y + 99);
+      g.textAlign = 'left'; g.font = '400 18px Arial, sans-serif'; g.fillText(names[i], x + 10, y + 178);
+    }
+  } else if (kind === 'task') {
+    const [col, label] = TASK[a];
+    g.fillStyle = '#fbfbf8'; g.fillRect(0, 0, W, Hh); g.fillStyle = col; g.fillRect(0, 0, W, 70);
+    g.fillStyle = '#fff'; g.font = '700 36px Arial, sans-serif'; g.fillText(label, 28, 48);
+    g.fillStyle = '#1b2733'; g.font = '700 24px Arial, sans-serif'; g.fillText('Instructions', 28, 118); lines(g, 28, 136, 360, 4, 30);
+    g.fillText('Resources', 420, 118); for (let i = 0; i < 3; i++) { g.fillStyle = col + '33'; rr(g, 420, 136 + i * 62, 310, 48, 8); g.fill(); g.fillStyle = col; g.fillRect(432, 148 + i * 62, 24, 24); }
+    if (b === 'hint') {
+      g.fillStyle = 'rgba(0,0,0,0.25)'; g.fillRect(0, 0, W, Hh);
+      g.fillStyle = '#fff6d6'; rr(g, 150, 110, 470, 220, 18); g.fill(); g.strokeStyle = '#d9a514'; g.lineWidth = 6; g.stroke();
+      g.fillStyle = '#7a5a00'; g.font = '700 32px Arial, sans-serif'; g.fillText('Hint from your tutor', 184, 170); lines(g, 184, 196, 380, 3, 34, 'rgba(122,90,0,0.5)');
+    }
+  } else if (kind === 'stations') {
+    g.fillStyle = '#10171c'; g.fillRect(0, 0, W, Hh); g.fillStyle = '#fff'; g.font = '700 38px Arial, sans-serif'; g.fillText('Stations · 10 min each', 40, 70);
+    ['A', 'B', 'C', 'D'].forEach((k, i) => { const [col, label] = TASK[k]; g.fillStyle = col; rr(g, 40 + (i % 2) * 350, 110 + Math.floor(i / 2) * 140, 320, 118, 14); g.fill(); g.fillStyle = '#fff'; g.font = '700 28px Arial, sans-serif'; g.fillText(label, 62 + (i % 2) * 350, 180 + Math.floor(i / 2) * 140); });
+  } else if (kind === 'video') {
+    const p = +a, n = +b;
+    g.fillStyle = '#0d1013'; g.fillRect(0, 0, W, Hh);
+    g.fillStyle = '#2a3440'; g.fillRect(24, 24, W - 48, Hh - 120);
+    g.fillStyle = '#e9b44c'; g.beginPath(); g.arc(W / 2 - 60, 150, 34, 0, Math.PI * 2); g.fill(); rr(g, W / 2 - 100, 190, 80, 110, 30); g.fill(); // the student teacher on screen
+    g.fillStyle = '#1b4fd1'; g.fillRect(W / 2 + 10, 90, 220, 140);
+    g.fillStyle = 'rgba(255,255,255,0.85)'; g.beginPath(); g.moveTo(W / 2 - 230, 120); g.lineTo(W / 2 - 230, 180); g.lineTo(W / 2 - 180, 150); g.fill();
+    g.fillStyle = '#3a4450'; rr(g, 40, Hh - 70, W - 80, 12, 6); g.fill(); g.fillStyle = '#e5484d'; rr(g, 40, Hh - 70, (W - 80) * p, 12, 6); g.fill();
+    g.fillStyle = '#fff'; g.font = '600 20px Arial, sans-serif'; g.fillText(`0${Math.floor(p * 5)}:${String(Math.floor((p * 300) % 60)).padStart(2, '0')} / 05:00`, 40, Hh - 26);
+    const notes = [[0.18, 'Clear hook'], [0.36, 'Check wait time'], [0.58, 'Good questioning'], [0.8, 'Summarise key idea']];
+    for (let i = 0; i < Math.min(n, 4); i++) {
+      const [at, txt] = notes[i], x = 40 + (W - 80) * at;
+      g.fillStyle = '#f2c230'; g.beginPath(); g.moveTo(x, Hh - 76); g.lineTo(x - 9, Hh - 92); g.lineTo(x + 9, Hh - 92); g.fill();
+      g.fillStyle = '#fff6d6'; rr(g, Math.min(x - 70, W - 200), 40 + i * 52, 170, 42, 8); g.fill();
+      g.fillStyle = '#5a4300'; g.font = '600 17px Arial, sans-serif'; g.fillText(txt, Math.min(x - 70, W - 200) + 10, 67 + i * 52);
+    }
+  } else if (kind === 'reflect') {
+    g.fillStyle = '#fbfbf8'; g.fillRect(0, 0, W, Hh); g.fillStyle = '#1d7c94'; g.fillRect(0, 0, W, 70);
+    g.fillStyle = '#fff'; g.font = '700 34px Arial, sans-serif'; g.fillText('Reflection on my lesson', 28, 47);
+    ['What went well', 'What I noticed in the footage', 'One thing to change next time'].forEach((t, i) => {
+      g.strokeStyle = '#1d7c94'; g.lineWidth = 4; g.strokeRect(36, 108 + i * 100, 30, 30);
+      if (i < 2) { g.beginPath(); g.moveTo(42, 124 + i * 100); g.lineTo(50, 132 + i * 100); g.lineTo(62, 112 + i * 100); g.stroke(); }
+      g.fillStyle = '#1b2733'; g.font = '700 24px Arial, sans-serif'; g.fillText(t, 84, 132 + i * 100); lines(g, 84, 148 + i * 100, 520, 1);
+    });
+  } else if (kind === 'cp') {
+    g.fillStyle = '#eef2f5'; g.fillRect(0, 0, W, Hh); g.fillStyle = '#1b2733'; g.font = '700 26px Arial, sans-serif'; g.fillText('TR321 · Presets', 18, 38);
+    ['present', 'group', 'hybrid'].forEach((k, i) => {
+      const on = a === k; g.fillStyle = on ? '#f2c230' : '#ffffff'; rr(g, 18 + i * 120, 70, 108, 130, 12); g.fill(); g.strokeStyle = on ? '#b38600' : '#c9d2d8'; g.lineWidth = 3; g.stroke();
+      g.fillStyle = '#1b2733'; g.font = '700 20px Arial, sans-serif'; g.textAlign = 'center'; g.fillText(k[0].toUpperCase() + k.slice(1), 72 + i * 120, 182); g.textAlign = 'left';
+      g.fillStyle = on ? '#1b2733' : '#7a8790'; g.beginPath(); g.arc(72 + i * 120, 125, 24, 0, Math.PI * 2); g.fill();
+    });
+  }
+  g.restore(); S.t.needsUpdate = true;
+}
+
+/* --- flow beams, tracking-camera cone, speech bubbles, REC badge */
+// flowing dashes: solid gold, so the path reads on white walls
+const beamTex = canvasTex(128, 8, (g, w, h) => { g.clearRect(0, 0, w, h); g.fillStyle = '#f5b301'; g.fillRect(0, 0, w * 0.62, h); g.fillStyle = '#fff3c4'; g.fillRect(w * 0.62, 0, w * 0.08, h); }, [14, 1]);
+const beams = [];
+function beam(id) {
+  let b = beams.find((x) => x.id === id); if (b) return b;
+  const t = beamTex.clone(); t.needsUpdate = true;
+  const m = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ map: t, transparent: true, alphaTest: 0.05, depthWrite: false, toneMapped: false, color: 0xffffff }));
+  m.renderOrder = 6; model.add(m); b = { id, m, key: '' }; beams.push(b); return b;
+}
+function setBeam(id, from, to, k, opacity = 1) {
+  const b = beam(id), key = from.join() + to.join();
+  if (b.key !== key) {
+    const A = V(...from), Bp = V(...to), mid = A.clone().lerp(Bp, 0.5); mid.y += 0.6 + A.distanceTo(Bp) * 0.12;
+    b.m.geometry.dispose(); b.m.geometry = new THREE.TubeGeometry(new THREE.QuadraticBezierCurve3(A, mid, Bp), 64, 0.04, 10, false); b.key = key;
+  }
+  const n = b.m.geometry.index.count; b.m.geometry.setDrawRange(0, Math.floor(n * clamp(k, 0, 1) / 6) * 6);
+  b.m.material.opacity = opacity; b.m.visible = opacity > 0.01 && k > 0.01;
+  b.m.material.map.offset.x -= 0.035;
+}
+const coneMat = new THREE.MeshBasicMaterial({ color: 0x8fd6e8, transparent: true, opacity: 0.16, depthWrite: false, side: THREE.DoubleSide, toneMapped: false, blending: THREE.AdditiveBlending });
+const camCone = new THREE.Mesh(new THREE.ConeGeometry(0.42, 1, 32, 1, true).translate(0, -0.5, 0).rotateX(-Math.PI / 2), coneMat);
+camCone.visible = false; model.add(camCone);
+const PTZ_EYE = V(0.2, 1.97, -HZ + 0.2);
+const BACK_EYE = V(0.075, 2.19, HZ - 0.2); // measured from the Middle photo: black camera centred on the back wall, under the clock, between the doors
+function setCamCone(target) {
+  camCone.visible = !!target; if (!target) return;
+  const T = V(target[0], target[1], target[2]); camCone.position.copy(BACK_EYE); camCone.lookAt(T);
+  camCone.scale.set(1, 1, BACK_EYE.distanceTo(T));
+}
+function spriteTex(draw, w = 256, h = 128) { const t = canvasTex(w, h, draw); return t; }
+const bubbleTex = spriteTex((g, w, h) => {
+  g.fillStyle = '#ffffff'; rr(g, 8, 8, w - 16, h - 40, 30); g.fill(); g.beginPath(); g.moveTo(70, h - 34); g.lineTo(56, h - 6); g.lineTo(104, h - 34); g.fill();
+  g.fillStyle = '#1d7c94'; for (let i = 0; i < 3; i++) { g.beginPath(); g.arc(w / 2 - 44 + i * 44, (h - 32) / 2 + 4, 13, 0, Math.PI * 2); g.fill(); }
+});
+const bubbles = Array.from({ length: 8 }, () => { const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: bubbleTex, transparent: true, depthWrite: false })); s.scale.set(0.36, 0.18, 1); s.visible = false; s.renderOrder = 7; model.add(s); return s; });
+const recCanvas = document.createElement('canvas'); recCanvas.width = 256; recCanvas.height = 80;
+const recTex = new THREE.CanvasTexture(recCanvas); recTex.colorSpace = THREE.SRGBColorSpace;
+const recSprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: recTex, transparent: true, depthWrite: false, toneMapped: false }));
+recSprite.scale.set(0.42, 0.13, 1); recSprite.position.set(0.2, 2.38, -HZ + 0.25); recSprite.visible = false; recSprite.renderOrder = 7; model.add(recSprite);
+let recShown = '';
+function drawRec(secs) {
+  const txt = `REC  ${String(Math.floor(secs / 60)).padStart(2, '0')}:${String(Math.floor(secs % 60)).padStart(2, '0')}`; if (txt === recShown) return; recShown = txt;
+  const g = recCanvas.getContext('2d'); g.clearRect(0, 0, 256, 80); g.fillStyle = 'rgba(10,12,14,0.85)'; rr(g, 4, 6, 248, 68, 34); g.fill();
+  g.fillStyle = '#ff3b30'; g.beginPath(); g.arc(44, 40, 14, 0, Math.PI * 2); g.fill(); g.fillStyle = '#fff'; g.font = '700 32px Arial, sans-serif'; g.fillText(txt, 70, 52); recTex.needsUpdate = true;
+}
+// quad view inset: what remote learners see
+{
+  const c = $('pipCanvas'), g = c.getContext('2d'), W = c.width, Hh = c.height, tw = W / 2, th = Hh / 2;
+  const tile = (x, y, title, draw) => { g.fillStyle = '#1a1f24'; g.fillRect(x + 2, y + 2, tw - 4, th - 4); g.save(); g.translate(x, y); draw(); g.restore(); g.fillStyle = 'rgba(0,0,0,0.55)'; g.fillRect(x + 6, y + th - 30, g.measureText(title).width + 16, 22); g.fillStyle = '#fff'; g.font = '600 13px Arial, sans-serif'; g.fillText(title, x + 14, y + th - 14); };
+  g.font = '600 13px Arial, sans-serif';
+  tile(0, 0, 'Tutor camera', () => { g.fillStyle = '#3a4552'; g.fillRect(4, 4, tw - 8, th - 8); g.fillStyle = '#e07a5f'; g.beginPath(); g.arc(tw / 2, th * 0.38, 22, 0, Math.PI * 2); g.fill(); rr(g, tw / 2 - 30, th * 0.55, 60, 70, 24); g.fill(); });
+  tile(tw, 0, 'Whiteboard', () => { g.fillStyle = '#fbfbf8'; g.fillRect(4, 4, tw - 8, th - 8); g.strokeStyle = '#2f81f7'; g.lineWidth = 3; g.beginPath(); g.moveTo(20, 60); g.bezierCurveTo(60, 20, 90, 100, 140, 50); g.stroke(); g.strokeStyle = '#e5484d'; g.beginPath(); g.arc(150, 90, 20, 0, 5); g.stroke(); });
+  tile(0, th, 'Shared screen', () => { g.fillStyle = '#1b4fd1'; g.fillRect(4, 4, tw - 8, th - 8); g.fillStyle = 'rgba(255,255,255,0.8)'; g.fillRect(18, 22, 110, 10); g.fillRect(18, 44, 140, 7); g.fillRect(18, 60, 120, 7); g.fillStyle = '#f2c230'; g.beginPath(); g.arc(tw - 20, 16, 34, Math.PI / 2, Math.PI); g.lineTo(tw - 20, 16); g.fill(); });
+  tile(tw, th, 'Classroom', () => { g.fillStyle = '#9aa3a8'; g.fillRect(4, 4, tw - 8, th - 8); [[40, 40], [130, 40], [40, 100], [130, 100]].forEach(([x, y], i) => { g.fillStyle = '#f4f5f4'; g.fillRect(x, y, 44, 34); g.fillStyle = ['#7f9bb0', '#8fa89a', '#a89b8a', '#9a8fb0'][i]; for (const [dx, dy] of [[-10, 6], [-10, 22], [48, 6], [48, 22]]) { g.beginPath(); g.arc(x + dx + 4, y + dy, 6, 0, 7); g.fill(); } }); });
+}
+
+/* --- the eight scenarios: everything is a function of narration position u (sentence index + fraction) */
+const seg = (u, a, b) => smooth(clamp((u - a) / (b - a), 0, 1));
+const on = (u, a, b) => u >= a && u < b;
+const Y_SIDE = 1.3, Y_FRONT = 1.32;
+const SC = {
+  collab: {
+    shots: [{ s: 0, p: [2.4, 3.3, 4.6], t: [-0.6, 0.8, -1.4] }, { s: 1, p: [0.6, 2.6, 3.4], t: [-3.0, 1.1, 0.9] }, { s: 2, p: [2.6, 3.6, 4.8], t: [0, 0.8, -0.8] },
+      { s: 3, p: [1.4, 2.9, 1.0], t: [-0.6, 1.3, -5.2] }, { s: 4, p: [1.5, 2.9, 1.2], t: [-0.6, 1.3, -5.2] }],
+    run(u, S, time) {
+      S.layout = 0; S.seated = true;
+      const w = u < 1.2 ? 'work' : 'board';
+      Object.assign(S.screens, { LF: `${w}:1`, LB: `${w}:2`, RF: `${w}:3`, RB: `${w}:4`, FL: u < 3.35 ? 'slide' : 'board:2', FR: 'slide:2' });
+      if (u >= 1.1 && u < 2.2) S.bubbles = [[3, 1.15], [8, 1.35], [13, 1.55], [18, 1.75]].filter(([, t0]) => u > t0).map(([i]) => i);
+      if (u >= 2 && u < 3) {
+        const ph = (u - 2) * 4.2, z = -1.0 - Math.cos(ph) * 2.6;
+        S.tutor = { x: 0.05, z, walk: true, face: Math.sin(ph) > 0 ? 0 : Math.PI };
+        if (u > 2.25) S.bubbles = [z < -1 ? 2 : 12];
+      } else S.tutor = { x: 0.2, z: -4.35, face: u >= 3 ? faceTo(0.2, -4.35, -3, 1.18) : 0, gesture: on(u, 3.0, 3.5) ? 1 : 0 };
+      S.beams.push({ id: 'c1', from: [-HX + 0.2, Y_SIDE + 0.45, 1.18], to: [-0.715, Y_FRONT + 0.55, -HZ + 0.2], k: seg(u, 3.0, 3.4), o: 1 - seg(u, 3.85, 4) });
+    },
+  },
+  compare: {
+    shots: [{ s: 0, p: [2.4, 3.3, 4.6], t: [-0.6, 0.8, -1.4] }, { s: 1, p: [1.4, 2.9, 1.0], t: [-0.2, 1.3, -5.2] }, { s: 2, p: [0.25, 1.95, -1.2], t: [0.2, 1.35, -5.3] },
+      { s: 3, p: [0.3, 3.4, 3.9], t: [0, 0.8, -1.8] }, { s: 4, p: [0.3, 3.4, 4.0], t: [0, 0.8, -1.8] }],
+    run(u, S) {
+      S.layout = 0; S.seated = true;
+      Object.assign(S.screens, { LF: 'board:1', LB: 'board:2', RF: 'board:3', RB: 'board:4', FL: u < 1.35 ? 'slide' : 'board:2', FR: u < 1.5 ? 'slide:2' : 'board:4' });
+      S.beams.push({ id: 'b1', from: [-HX + 0.2, Y_SIDE + 0.45, 1.18], to: [-0.715, Y_FRONT + 0.55, -HZ + 0.2], k: seg(u, 1.0, 1.4), o: 1 - seg(u, 1.9, 2.2) });
+      S.beams.push({ id: 'b2', from: [HX - 0.2, Y_SIDE + 0.45, 1.18], to: [1.125, Y_FRONT + 0.55, -HZ + 0.2], k: seg(u, 1.15, 1.55), o: 1 - seg(u, 2.0, 2.3) });
+      const g = on(u, 1.0, 1.6) || on(u, 2.1, 2.5) ? 1 : 0;
+      S.tutor = { x: 0.2, z: -4.35, face: g ? faceTo(0.2, -4.35, u < 2 ? -3 : 3, 1.18) : 0, gesture: g };
+      if (u >= 2) S.bubbles = [[2, 2.1], [11, 2.4], [7, 3.1], [16, 3.3], [5, 3.5]].filter(([, t0]) => u > t0).map(([i]) => i);
+    },
+  },
+  config: {
+    shots: [{ s: 0, p: [4.4, 8.6, 6.6], t: [0, 0, -0.3] }, { s: 2.5, p: [1.2, 9.4, 7.6], t: [0, 0, -0.4] }, { s: 5, p: [-4.4, 8.6, 6.6], t: [0, 0, -0.3] }],
+    run(u, S) {
+      S.seated = true;
+      S.layout = u < 1 ? 0 : u < 2 ? 1 : u < 3 ? 0 : u < 4 ? 2 : 3;
+      S.badge = u < 1 ? 'Everything on castors' : u < 2 ? 'Rows · launch the inquiry' : u < 3 ? 'Pods · investigate and create' : u < 4 ? 'U-shape · share and discuss' : 'Spaced rows · individual work';
+      Object.assign(S.screens, { FL: 'slide', FR: 'slide:2' });
+      if (u >= 2 && u < 3) Object.assign(S.screens, { LF: 'work:1', LB: 'work:2', RF: 'work:3', RB: 'work:4' });
+    },
+  },
+  hybrid: {
+    shots: [{ s: 0, p: [1.6, 3.1, 1.2], t: [0.7, 1.3, -5.3] }, { s: 1, p: [-1.3, 3.0, -0.4], t: [0.2, 1.2, -4.6] }, { s: 2, p: [0.6, 3.4, 3.9], t: [-1.3, 0.8, 1.6] },
+      { s: 3, p: [0.2, 3.2, 1.4], t: [0.2, 1.2, -4.8] }, { s: 4, p: [0.2, 3.2, 1.5], t: [0.2, 1.2, -4.8] }],
+    run(u, S, time) {
+      S.layout = 0; S.seated = true;
+      Object.assign(S.screens, { FL: 'slide', FR: u > 0.15 ? 'zoom' : 'slide:2', LF: 'board:1', LB: 'board:2', RF: 'board:3', RB: 'board:4' });
+      const walking = u >= 0.9 && u < 2.1, ph = time * 0.35, x = walking ? Math.sin(ph) * 1.6 : 0.4, dir = Math.cos(ph);
+      S.tutor = { x, z: -4.3, walk: walking, face: walking ? (dir > 0 ? Math.PI / 2 : -Math.PI / 2) : 0 };
+      if (u >= 0.95) S.cone = [x, 1.35, -4.3];
+      if (u >= 2 && u < 3) { S.mic = 1; S.bubbles = [5]; }
+      S.pip = u >= 2.95;
+    },
+  },
+  microteach: {
+    shots: [{ s: 0, p: [2.1, 3.0, 0.4], t: [-0.2, 1.2, -4.8] }, { s: 1, p: [0.3, 3.2, 0.8], t: [0, 1.0, -4.4] }, { s: 2, p: [-1.1, 3.0, -0.6], t: [1.6, 1.2, -3.8] },
+      { s: 3, p: [2.1, 3.0, 0.4], t: [-0.8, 1.1, -4.2] }, { s: 4, p: [2.2, 3.0, 0.5], t: [-0.8, 1.1, -4.2] }],
+    run(u, S, time) {
+      S.layout = 1; S.seated = true;
+      const teaching = u < 3;
+      if (teaching) {
+        const still = u >= 1 && u < 2, x = still ? 0.2 : Math.sin(time * 0.4) * 0.9;
+        S.trainee = still ? { x, z: -4.35, face: 0, gesture: on(u, 1.05, 1.5) ? 0.8 : 0 }
+          : { x, z: -4.35, walk: true, face: Math.cos(time * 0.4) > 0 ? Math.PI / 2 : -Math.PI / 2 };
+        S.cone = [x, 1.4, -4.35]; S.rec = Math.min(u, 3) / 3 * 290;
+      } else {
+        const k = seg(u, 3.0, 3.6);
+        S.trainee = { x: 0.2 - 2.5 * k, z: -4.35 + 0.75 * k, walk: k > 0 && k < 1, face: k < 1 ? -Math.PI / 2 : faceTo(-2.3, -3.6, 0.2, -4.35) };
+        S.badge = 'Roles rotate · next teacher up';
+      }
+      if (u >= 1.15 && u < 2) S.bubbles = [[1, 1.15], [9, 1.4], [14, 1.65]].filter(([, t0]) => u > t0).map(([i]) => i);
+      S.tutor = { x: 2.75, z: -3.2, face: faceTo(2.75, -3.2, 0, -5), gesture: u >= 3.2 && u < 3.7 ? 0.6 : 0 };
+      if (u >= 2 && u < 3) S.badge = 'Observers watch with a focus';
+      S.screens.FL = 'teach'; S.screens.FR = 'slide:2';
+    },
+  },
+  reflect: {
+    shots: [{ s: 0, p: [-1.1, 3.0, -0.6], t: [1.1, 1.3, -5.3] }, { s: 1, p: [0.8, 1.85, -1.5], t: [1.1, 1.3, -5.3] }, { s: 2, p: [0.8, 1.85, -1.5], t: [1.1, 1.3, -5.3] },
+      { s: 3, p: [0.3, 1.85, -1.3], t: [-0.6, 1.3, -5.3] }, { s: 4, p: [0.3, 1.85, -1.2], t: [-0.6, 1.3, -5.3] }],
+    run(u, S) {
+      S.layout = 1; S.seated = true;
+      S.trainee = { x: -2.3, z: -3.6, face: faceTo(-2.3, -3.6, 1.1, -5.3) };
+      S.tutor = { x: 2.75, z: -3.2, face: faceTo(2.75, -3.2, 0, -5) };
+      S.screens.FL = u < 3 ? 'teach' : 'reflect';
+      S.screens.FR = `video:${seg(u, 0.6, 3.6).toFixed(2)}:${u < 2 ? 0 : Math.min(4, 1 + Math.floor((u - 2) / 0.22))}`;
+      if (u >= 2.1 && u < 3) S.bubbles = [[1, 2.1], [9, 2.3], [14, 2.5]].filter(([, t0]) => u > t0).map(([i]) => i);
+    },
+  },
+  differentiate: {
+    shots: [{ s: 0, p: [0.2, 3.6, 4.4], t: [0, 0.9, -1.0] }, { s: 1, p: [-0.4, 2.9, -0.4], t: [-3.3, 1.3, -0.5] }, { s: 2, p: [0.1, 4.8, 3.7], t: [0, 0.4, -0.6] }, { s: 2.9, p: [-0.3, 4.9, 3.9], t: [0, 0.4, -0.6] },
+      { s: 3.35, p: [-1.4, 2.15, -3.0], t: [2.6, 1.3, 0.9] }, { s: 4, p: [-1.3, 2.15, -2.8], t: [2.6, 1.3, 0.9] }],
+    run(u, S, time) {
+      S.layout = 1; S.seated = false;
+      Object.assign(S.screens, { LF: 'task:A', LB: 'task:B', RB: u >= 3.05 ? 'task:C:hint' : 'task:C', RF: 'task:D', FL: 'stations', FR: 'slide' });
+      // four groups of three at the side displays; they rotate one station clockwise in the third sentence
+      const ST = [[-2.85, -2.19, -Math.PI / 2], [-2.85, 1.18, -Math.PI / 2], [2.85, 1.18, Math.PI / 2], [2.85, -2.19, Math.PI / 2]];
+      const k = seg(u, 2.05, 2.85), moving = k > 0 && k < 1;
+      S.crowd = [];
+      for (let gi = 0; gi < 4; gi++) for (let m = 0; m < 3; m++) {
+        const A = ST[gi], B = ST[(gi + 1) % 4], off = (m - 1) * 0.5;
+        const path = [[A[0], A[1] + off], [0.0 + off * 0.4, A[1] + off], [0.0 + off * 0.4, B[1] + off], [B[0], B[1] + off]];
+        const L = [0]; for (let i = 1; i < 4; i++) L.push(L[i - 1] + Math.hypot(path[i][0] - path[i - 1][0], path[i][1] - path[i - 1][1]));
+        let d = k * L[3], i = 1; while (i < 3 && d > L[i]) i++;
+        const f = (d - L[i - 1]) / Math.max(1e-6, L[i] - L[i - 1]), x = path[i - 1][0] + (path[i][0] - path[i - 1][0]) * f, z = path[i - 1][1] + (path[i][1] - path[i - 1][1]) * f;
+        const face = moving ? Math.atan2(path[i][0] - path[i - 1][0], path[i][1] - path[i - 1][1]) : (k >= 1 ? B[2] : A[2]);
+        S.crowd.push({ x, z, face, walk: moving });
+      }
+      S.tutor = { x: 0.3, z: -4.3, face: u >= 3 ? faceTo(0.3, -4.3, 3, 1.18) : 0, gesture: on(u, 3.0, 3.6) ? 1 : 0 };
+      S.beams.push({ id: 'hint', from: [0.3, 2.0, -4.3], to: [HX - 0.2, Y_SIDE + 0.45, 1.18], k: seg(u, 3.0, 3.4), o: 1 });
+    },
+  },
+  presets: {
+    shots: [{ s: 0, p: [-0.75, 1.7, -3.45], t: [-2.1, 1.25, -5.3] }, { s: 0.8, p: [-0.8, 1.7, -3.5], t: [-2.1, 1.25, -5.3] }, { s: 1, p: [1.0, 3.0, 0.4], t: [-0.3, 1.0, -4.6] }, { s: 2, p: [0.3, 3.5, 3.6], t: [0, 0.9, -1.2] },
+      { s: 3, p: [1.0, 1.95, -1.3], t: [0.4, 1.4, -5.3] }, { s: 4, p: [0.2, 4.0, 4.4], t: [0, 0.8, -1.5] }, { s: 5, p: [0.2, 4.0, 4.5], t: [0, 0.8, -1.5] }],
+    run(u, S) {
+      S.layout = 0; S.seated = true;
+      const mode = u < 1 ? 'none' : u < 2 ? 'present' : u < 3 ? 'group' : 'hybrid';
+      S.screens.CP = `cp:${mode}`;
+      S.tutor = { x: -2.5, z: -4.8, face: faceTo(-2.5, -4.8, -2.05, -5.3), gesture: [1.02, 2.02, 3.02].some((t0) => on(u, t0, t0 + 0.35)) ? 0.7 : 0 };
+      if (mode === 'present') { S.dim = 1; Object.assign(S.screens, { FL: 'slide', FR: 'slide:2' }); }
+      if (mode === 'group' || mode === 'hybrid') Object.assign(S.screens, { LF: 'work:1', LB: 'work:2', RF: 'work:3', RB: 'work:4', FL: 'slide:2' });
+      if (mode === 'hybrid') { S.screens.FR = 'zoom'; S.cone = [-2.5, 1.35, -4.8]; S.mic = 1; }
+      if (mode === 'none') Object.assign(S.screens, { FL: null, FR: null });
+    },
+  },
+};
+
+/* --- scenario player */
+const scenario = { i: -1, t: 0, playing: false, audio: null, ok: true, pending: false };
+const pAudio = {}, pBlobs = {};
+let pPrefetched = false;
+function prefetchPeda() {
+  if (pPrefetched) return; pPrefetched = true;
+  PCH.reduce((pr, c) => pr.then(() => fetch(`audio/peda_${c.id}.mp3`).then((r) => (r.ok ? r.blob() : null)).then((b) => { if (b) pBlobs[c.id] = URL.createObjectURL(b); }).catch(() => {})), Promise.resolve());
+}
+function sceneAudio(c) {
+  if (!pAudio[c.id]) { const a = new Audio(pBlobs[c.id] || `audio/peda_${c.id}.mp3`); a.preload = 'auto'; a.addEventListener('ended', () => { if (PCH[scenario.i] === c && ui.mode === 'scene') endScene(); }); pAudio[c.id] = a; }
+  const a = pAudio[c.id]; if (pBlobs[c.id] && a.src !== pBlobs[c.id] && a.paused) a.src = pBlobs[c.id];
+  return a;
+}
+function uOf(c, t) {
+  const st = c.cues.map((q) => q.start), n = st.length;
+  if (t < st[0]) return 0;
+  let i = 0; while (i < n - 1 && t >= st[i + 1]) i++;
+  const end = i < n - 1 ? st[i + 1] : c.duration;
+  return i + clamp((t - st[i]) / Math.max(0.1, end - st[i]), 0, 1);
+}
+function scenePlay(on) {
+  scenario.playing = on; const c = PCH[scenario.i]; if (!c) return;
+  const a = sceneAudio(c); a.muted = tour.muted;
+  if (on) { if (Math.abs(a.currentTime - scenario.t) > 0.25) { try { a.currentTime = scenario.t; } catch (e) { /* not seekable yet */ } } const pr = a.play(); scenario.pending = !!pr; if (pr) pr.then(() => { scenario.ok = true; scenario.pending = false; }).catch(() => { scenario.ok = false; scenario.pending = false; }); }
+  else a.pause();
+  $('scIcoPlay').toggleAttribute('hidden', on); $('scIcoPause').toggleAttribute('hidden', !on); $('scPlay').setAttribute('aria-label', on ? 'Pause' : 'Play');
+}
+function startScene(i, step = 0) {
+  pauseAudio(); Object.values(pAudio).forEach((a) => a.pause());
+  scenario.i = i; const c = PCH[i]; $('pcard').hidden = true; $('plist').hidden = true;
+  scenario.t = step > 0 ? c.cues[step].start - 0.05 : 0;
+  setMode('scene');
+  $('scTitle').textContent = c.title; $('scTag').textContent = c.tag;
+  const box = $('scSteps'); box.innerHTML = '';
+  c.steps.forEach((label, k) => { const b = document.createElement('button'); b.type = 'button'; b.innerHTML = `<span class="n">${k + 1}</span><span class="l"></span>`; b.querySelector('.l').textContent = label; b.addEventListener('click', () => seekStep(k)); box.appendChild(b); });
+  startBlend(1.6);
+  scenePlay(true);
+}
+function seekStep(k) { if (ui.mode !== 'scene') return; const c = PCH[scenario.i]; k = clamp(k, 0, c.cues.length - 1); scenario.t = Math.max(0, c.cues[k].start - 0.05); const a = sceneAudio(c); try { a.currentTime = scenario.t; } catch (e) { /* ignore */ } startBlend(1.0); if (!scenario.playing) scenePlay(true); }
+function endScene() { scenePlay(false); const i = scenario.i; setMode('peda'); openPCard(i, true); }
+function tickScene(dt) {
+  if (!scenario.playing) return;
+  const c = PCH[scenario.i], a = pAudio[c.id];
+  if (scenario.ok && a && !a.paused && !a.ended) scenario.t = a.currentTime;
+  else if (!scenario.ok) scenario.t += dt;
+  else if (!scenario.pending && a && a.paused && !a.ended) scenePlay(true);
+  if (!scenario.ok && scenario.t >= c.duration) endScene();
+}
+let lastScCap = '', lastBadge = '';
+function sceneFrame(dt, time, now) {
+  tickScene(dt);
+  const c = PCH[scenario.i], u = uOf(c, scenario.t), def = SC[c.id];
+  const pose = shotAt(def.shots, u); applyPose(pose.p, pose.q, pose.f, now);
+  const S = { layout: 0, seated: true, screens: {}, beams: [], tutor: null, trainee: null, crowd: null, bubbles: [], cone: null, rec: null, pip: false, dim: 0, mic: 0, badge: '' };
+  def.run(u, S, time);
+  applyStage(S, dt, time);
+  // captions, step chips
+  let cap = ''; if (tour.cc) { const q = c.caps.find((q) => scenario.t >= q.start - 0.1 && scenario.t <= q.end + 0.3); cap = q ? q.text : ''; }
+  if (cap !== lastScCap) { $('caption').textContent = cap; lastScCap = cap; }
+  [...$('scSteps').children].forEach((b, k) => { b.classList.toggle('is-current', Math.floor(u) === k); b.classList.toggle('is-done', k < Math.floor(u)); });
+  if (S.badge !== lastBadge) { $('scBadge').textContent = S.badge; $('scBadge').hidden = !S.badge; lastBadge = S.badge; }
+  return { dim: S.dim, mic: S.mic, layout: 0 };
+}
+function applyStage(S, dt, time) {
+  driveLayout(dt, S.layout);
+  placeSeated(S.seated);
+  for (const id of Object.keys(screens)) drawScreen(id, S.screens[id] || null);
+  const used = new Set();
+  for (const b of S.beams) { setBeam(b.id, b.from, b.to, b.k, b.o ?? 1); used.add(b.id); }
+  for (const b of beams) if (!used.has(b.id)) b.m.visible = false;
+  placeStanding(tutor, S.tutor, time); placeStanding(trainee, S.trainee, time);
+  crowd.forEach((J, k) => placeStanding(J, S.crowd ? S.crowd[k] : null, time + k * 0.3));
+  bubbles.forEach((sp, k) => {
+    const idx = S.bubbles[k], fig = idx !== undefined && seated[idx];
+    sp.visible = !!fig && S.seated; if (!sp.visible) return;
+    sp.position.set(fig.J.root.position.x, 1.42 + Math.sin(time * 3 + k) * 0.02, fig.J.root.position.z);
+  });
+  setCamCone(S.cone);
+  recSprite.visible = S.rec !== null; if (S.rec !== null) drawRec(S.rec);
+  $('pip').classList.toggle('is-on', !!S.pip);
+}
+function clearStage() {
+  for (const id of Object.keys(screens)) drawScreen(id, null);
+  for (const b of beams) b.m.visible = false;
+  [tutor, trainee, ...crowd].forEach((J) => { J.root.visible = false; });
+  placeSeated(false); bubbles.forEach((s) => { s.visible = false; }); camCone.visible = false; recSprite.visible = false;
+  $('pip').classList.remove('is-on'); $('scBadge').hidden = true; lastBadge = '';
+}
+// browsing the lens: the room is populated, no scenario playing
+function pedaFrame(dt, time) {
+  driveLayout(dt, 0); placeSeated(true);
+  placeStanding(tutor, { x: 0.2, z: -4.35, face: 0 }, time);
+  return { dim: 0, mic: 0, layout: 0 };
+}
+
+/* --- lens markers, cards and list */
+const pPins = PCH.map((c, i) => {
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'pin ppin';
+  b.innerHTML = `<span class="ico">${String.fromCharCode(65 + i)}</span><span class="lbl"></span>`; b.querySelector('.lbl').textContent = c.short;
+  b.setAttribute('aria-label', `${c.title}: open`);
+  b.addEventListener('click', (e) => { e.stopPropagation(); openPCard(i); });
+  $('pins').appendChild(b); return { el: b, v: V(...c.marker) };
+});
+function placePPins() {
+  const w = canvas.clientWidth, h = canvas.clientHeight, show = ui.mode === 'peda';
+  for (const p of pPins) {
+    proj.copy(p.v).project(camera);
+    const wallHidden = walls.some((wl) => !wl.group.visible && Math.abs(wl.n.dot(tmpV.subVectors(p.v, wl.p))) < 0.4);
+    const vis = show && proj.z < 1 && proj.z > -1 && !wallHidden && Math.abs(proj.x) < 1.05 && Math.abs(proj.y) < 1.05;
+    p.el.style.display = vis ? '' : 'none';
+    p.sx = ((proj.x + 1) / 2) * w; p.sy = ((1 - proj.y) / 2) * h; p.vis = vis;
+    if (vis) p.el.style.transform = `translate(${p.sx}px, ${p.sy}px)`;
+  }
+  // Label decluttering: keep a label only if it doesn't overlap a label or marker already kept (front-most first).
+  // Hidden labels still show on hover or keyboard focus.
+  const kept = [], order = pPins.filter((p) => p.vis).sort((a, b) => b.sy - a.sy);
+  for (const p of order) kept.push([p.sx - 19, p.sy - 19, p.sx + 19, p.sy + 19]);
+  const hit = (r) => kept.some((k) => r[0] < k[2] && r[2] > k[0] && r[1] < k[3] && r[3] > k[1]);
+  for (const p of order) {
+    const lbl = p.el.querySelector('.lbl'); p.lw = p.lw || lbl.offsetWidth || 160; p.lh = p.lh || lbl.offsetHeight || 26;
+    const { sx: x, sy: y, lw, lh } = p;
+    const cands = { r: [x + 23, y - lh / 2, x + 27 + lw, y + lh / 2], l: [x - 27 - lw, y - lh / 2, x - 23, y + lh / 2],
+      t: [x - lw / 2, y - 27 - lh, x + lw / 2, y - 23], b: [x - lw / 2, y + 23, x + lw / 2, y + 27 + lh] };
+    const side = ['r', 'l', 't', 'b'].find((k) => !hit(cands[k]) && cands[k][0] > 4 && cands[k][2] < w - 4);
+    p.el.classList.toggle('lbl-off', !side);
+    for (const k of ['r', 'l', 't', 'b']) p.el.classList.toggle('lbl-' + k, (side || 't') === k);
+    if (side) kept.push(cands[side]);
+  }
+}
+let pCardIdx = -1;
+function openPCard(i, ended = false) {
+  pCardIdx = i; const c = PCH[i];
+  $('plist').hidden = true; $('info').hidden = true; $('chapters').hidden = true;
+  $('pcTag').textContent = c.tag; $('pcTitle').textContent = c.title;
+  $('pcAff').textContent = `Room affordances: ${c.affordances.join(' · ')}` + (c.also && c.also.length ? `\nAlso supports: ${c.also.join(' · ')}` : '');
+  $('pcAff').hidden = false;
+  const feats = $('pcFeat'); feats.innerHTML = '';
+  for (const id of c.features) { const h = HOTSPOTS.find((x) => x.id === id); if (!h) continue; const s = document.createElement('span'); s.className = 'chip'; s.textContent = h.title; feats.appendChild(s); }
+  $('pcHow').textContent = c.how; $('pcTry').textContent = c.tryIt;
+  $('pcPlayLbl').textContent = ended ? `Replay scenario · ${fmt(c.duration)}` : `Play scenario · ${fmt(c.duration)}`;
+  $('pcard').hidden = false;
+}
+$('pcPlay').addEventListener('click', () => { $('pcard').hidden = true; startScene(pCardIdx); });
+{
+  const ol = $('plistItems');
+  PCH.forEach((c, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<button type="button"><span class="n">${String.fromCharCode(65 + i)}</span><span class="t"></span><span class="d">${fmt(c.duration)}</span><span class="tg"></span></button>`;
+    li.querySelector('.t').textContent = c.title; li.querySelector('.tg').textContent = c.tag;
+    li.querySelector('button').addEventListener('click', () => openPCard(i));
+    ol.appendChild(li);
+  });
+  const more = $('plistMore'); more.hidden = !MORE_AFFORDANCES.length;
+  for (const m of MORE_AFFORDANCES) {
+    const d = document.createElement('details'); d.innerHTML = '<summary><span class="t"></span><span class="tg"></span></summary><p class="feat"></p><p></p>';
+    d.querySelector('.t').textContent = m.title; d.querySelector('.tg').textContent = m.tag;
+    const ps = d.querySelectorAll('p'); ps[0].textContent = `Features: ${m.features}`; ps[1].textContent = m.how; more.appendChild(d);
+  }
+}
+$('pedaList').addEventListener('click', () => { $('pcard').hidden = true; $('plist').hidden = !$('plist').hidden; });
+$('modePeda').addEventListener('click', () => { if (ui.mode !== 'peda') setMode('peda'); });
+$('startPeda').addEventListener('click', () => setMode('peda'));
+$('scPlay').addEventListener('click', () => { const c = PCH[scenario.i]; if (!scenario.playing && scenario.t >= c.duration - 0.05) { scenario.t = 0; } scenePlay(!scenario.playing); });
+$('scPrev').addEventListener('click', () => { const c = PCH[scenario.i]; const k = Math.floor(uOf(c, scenario.t)); seekStep(scenario.t - c.cues[Math.min(k, c.cues.length - 1)].start > 2 ? k : k - 1); });
+$('scNext').addEventListener('click', () => { const c = PCH[scenario.i]; const k = Math.floor(uOf(c, scenario.t)); if (k + 1 >= c.cues.length) endScene(); else seekStep(k + 1); });
+$('scClose').addEventListener('click', () => { scenePlay(false); setMode('peda'); });
 
 
 /* ---------------------------------------------------------------- loop */
@@ -1441,6 +2180,14 @@ function frame() {
     target = { ...DEFAULTS, ...(c.fx ? c.fx(rt) : {}) };
     setPhotoStop($('info').hidden && $('chapters').hidden ? (STOPS[c.id] || []).find((st) => rt >= st.from && rt <= st.to) || null : null);
     renderProgress();
+  } else if (ui.mode === 'scene') {
+    setPhotoStop(null);
+    target = { ...DEFAULTS, ...sceneFrame(dt, time, now) };
+  } else if (ui.mode === 'peda') {
+    setPhotoStop(null);
+    if (houseIntro) { applyPose(houseGoal, quatFor(houseGoal, controls.target), HOUSE_VFOV(), now); if (!blend.active) { houseIntro = false; controls.enabled = true; controls.update(); } }
+    else { camera.fov = HOUSE_VFOV(); camera.updateProjectionMatrix(); controls.update(); }
+    target = { ...DEFAULTS, ...pedaFrame(dt, time) };
   } else {
     setPhotoStop(null);
     target = exploreFx;
@@ -1461,7 +2208,7 @@ function frame() {
   // dollhouse: hide walls between the camera and the room, and the ceiling from above
   for (const wl of walls) wl.group.visible = wl.n.dot(tmpV.subVectors(camera.position, wl.p)) > -0.02;
   ceil.visible = camera.position.y < H - 0.02;
-  placePins(); placeSpotPins();
+  placePins(); placeSpotPins(); placePPins();
   if (ready) renderer.render(scene, camera);
   requestAnimationFrame(frame);
 }
@@ -1470,8 +2217,8 @@ requestAnimationFrame(frame);
 const st = $('startTour'), stLabel = st.querySelector('span');
 loadFaces((f) => { stLabel.textContent = `Loading the room… ${Math.round(f * 100)}%`; }).then(() => {
   try { applyPhotoWalls(); } catch (e) { console.warn('photo walls', e); }
-  ready = true; st.disabled = false; stLabel.textContent = 'Start guided tour'; $('startExplore').disabled = false;
+  ready = true; st.disabled = false; stLabel.textContent = 'Start guided tour'; $('startExplore').disabled = false; $('startPeda').disabled = false;
 }).catch(() => { stLabel.textContent = 'Photo failed to load'; $('glErr').textContent = "The room's photo didn't load. Check your connection and reload the page."; $('glErr').hidden = false; });
 audioFor(0);
-if (location.hostname === 'localhost') window.__dbg = { seek, setMode, setView, tour, state, camera, openInfo, pv, sun, scene, model, renderer, goSpot, SPOT };
+if (location.hostname === 'localhost') window.__dbg = { seek, setMode, setView, tour, state, camera, openInfo, pv, sun, scene, model, renderer, goSpot, SPOT, startScene, seekStep, sc: scenario, PCH, layoutCtl, screens, THREE };
 </script>
