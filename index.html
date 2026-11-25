@@ -168,17 +168,35 @@ button { font: inherit; color: inherit; }
 .photostop figcaption span { background: var(--cap-bg); color: var(--cap-fg); padding: 4px 9px; border-radius: 7px; font-weight: 700; font-size: 14px; }
 .photostop figcaption .eyebrow { color: #8fd6e8; font-size: 10.5px; padding: 3px 7px; }
 .info-img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 10px; margin: 2px 0 4px; background: var(--line); }
-.hero { display: block; width: 100%; aspect-ratio: 16 / 7; object-fit: cover; border-radius: 12px; margin-bottom: 2px; background: var(--line); }
+.hero { display: block; width: 100%; aspect-ratio: 16 / 6; object-fit: cover; border-radius: 12px; margin-bottom: 2px; background: var(--line); }
 .ppin { width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 10px; background: #f2c230; color: #1b1503; border-color: #fff;
   font-family: var(--f-display); font-weight: 700; font-size: 15px; }
-.ppin .lbl { opacity: 1; }
+.pin.decl .lbl { opacity: 1; }
 .ppin .lbl { font-size: 13px; padding: 4px 9px; }
-.ppin.lbl-r .lbl { left: calc(100% + 8px); bottom: auto; top: 50%; transform: translateY(-50%); }
-.ppin.lbl-l .lbl { left: auto; right: calc(100% + 8px); bottom: auto; top: 50%; transform: translateY(-50%); }
-.ppin.lbl-b .lbl { bottom: auto; top: calc(100% + 8px); }
-.ppin.lbl-off .lbl { opacity: 0; }
-.ppin.lbl-off:hover .lbl, .ppin.lbl-off:focus-visible .lbl { opacity: 1; z-index: 3; }
+.pin.decl.lbl-r .lbl { left: calc(100% + 8px); bottom: auto; top: 50%; transform: translateY(-50%); }
+.pin.decl.lbl-l .lbl { left: auto; right: calc(100% + 8px); bottom: auto; top: 50%; transform: translateY(-50%); }
+.pin.decl.lbl-b .lbl { bottom: auto; top: calc(100% + 8px); }
+.pin.decl.lbl-off .lbl { opacity: 0; }
+.pin.decl.lbl-off:hover .lbl, .pin.decl.lbl-off:focus-visible .lbl { opacity: 1; z-index: 3; }
 .ppin:hover { box-shadow: 0 0 0 5px rgba(242, 194, 48, 0.35), 0 2px 10px rgba(0, 0, 0, 0.3); }
+.ppin.soc { background: #ff8f6b; color: #2a0d03; border-radius: 50% 50% 50% 10px; }
+.ppin.soc:hover { box-shadow: 0 0 0 5px rgba(255, 143, 107, 0.35), 0 2px 10px rgba(0, 0, 0, 0.3); }
+/* affordance picker on the start screen */
+.affpick { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 14px; }
+.affpick-h { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+.affgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.affbtn { all: unset; box-sizing: border-box; cursor: pointer; display: flex; flex-direction: column; gap: 4px; padding: 11px 12px 12px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--panel-solid); color: var(--ink); border-top: 4px solid var(--sw); transition: transform 0.15s, box-shadow 0.15s; }
+.affbtn b { font-family: var(--f-display); font-size: 15.5px; line-height: 1.15; }
+.affbtn span { font-size: 12.5px; line-height: 1.35; color: var(--muted); }
+.affbtn:hover:not([disabled]) { transform: translateY(-1px); box-shadow: var(--shadow); }
+.affbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.affbtn[disabled] { opacity: 0.55; cursor: default; }
+.affbtn[data-aff="peda"] { --sw: #f2c230; } .affbtn[data-aff="tech"] { --sw: var(--accent); } .affbtn[data-aff="social"] { --sw: #ff8f6b; }
+#affSeg button[data-aff] { display: inline-flex; align-items: center; gap: 6px; }
+#affSeg button[data-aff]::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--sw); }
+#affSeg button[data-aff="peda"] { --sw: #f2c230; } #affSeg button[data-aff="tech"] { --sw: var(--accent); } #affSeg button[data-aff="social"] { --sw: #ff8f6b; }
+@media (max-width: 520px) { .affgrid { grid-template-columns: 1fr; } .affbtn { flex-direction: row; align-items: baseline; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line); border-left: 4px solid var(--sw); } .affbtn b { flex: none; } }
 .steps { display: flex; gap: 6px; overflow-x: auto; padding: 2px 4px 4px; scrollbar-width: none; }
 .steps button { all: unset; box-sizing: border-box; display: inline-flex; gap: 6px; align-items: center; padding: 5px 11px; border-radius: 999px; border: 1px solid var(--line);
   font-size: 13px; font-weight: 700; white-space: nowrap; cursor: pointer; color: var(--muted); }
@@ -244,7 +262,7 @@ button { font: inherit; color: inherit; }
     <div class="seg glass" role="group" aria-label="Mode">
       <button id="modeTour" aria-pressed="true" type="button"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span class="lbltext">Guided tour</span><span class="lbltext-short">Tour</span></button>
       <button id="modeExplore" aria-pressed="false" type="button"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z" fill="currentColor"/></svg><span class="lbltext">Explore</span><span class="lbltext-short">Explore</span></button>
-      <button id="modePeda" aria-pressed="false" type="button"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg><span class="lbltext">Pedagogy</span><span class="lbltext-short">Pedagogy</span></button>
+      <button id="modePeda" aria-pressed="false" type="button"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg><span class="lbltext">Affordances</span><span class="lbltext-short">Affordances</span></button>
     </div>
     <button class="iconbtn glass" id="btnChapters" type="button" aria-label="Chapters and transcript" aria-pressed="false" aria-controls="chapters">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1" fill="currentColor"/><circle cx="4.5" cy="12" r="1" fill="currentColor"/><circle cx="4.5" cy="18" r="1" fill="currentColor"/></svg>
@@ -259,12 +277,12 @@ button { font: inherit; color: inherit; }
     <ol class="chlist" id="chlist"></ol>
   </aside>
 
-  <aside class="sheet glass plist" id="plist" hidden aria-label="Pedagogies in this room">
-    <header><h2>Pedagogies in this room</h2><button class="iconbtn" type="button" data-close="plist" aria-label="Close list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
+  <aside class="sheet glass plist" id="plist" hidden aria-label="Pedagogical affordances">
+    <header><h2 id="plistTitle">Pedagogical affordances</h2><button class="iconbtn" type="button" data-close="plist" aria-label="Close list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
     <div style="overflow-y:auto;min-height:0">
       <ol class="chlist" id="plistItems"></ol>
       <div class="plistmore" id="plistMore"><h3>Related pedagogies and affordances</h3></div>
-      <p class="plist-ref">Features are categorised by pedagogical and technical affordance using the PST model: Wang, Q. (2024). <i>Designing technology-mediated learning environments: Perspectives, processes, and applications.</i> Springer. doi.org/10.1007/978-981-96-0680-1</p>
+      <p class="plist-ref">Affordances are categorised as pedagogical, social and technological using the PST model: Wang, Q. (2024). <i>Designing technology-mediated learning environments: Perspectives, processes, and applications.</i> Springer. doi.org/10.1007/978-981-96-0680-1</p>
     </div>
   </aside>
 
@@ -285,6 +303,7 @@ button { font: inherit; color: inherit; }
     <div class="body">
       <img class="info-img" id="infoImg" alt="" hidden>
       <p class="info-text" id="infoText"></p>
+      <p class="pc-aff" id="infoAff" hidden></p>
       <div class="btnrow">
         <button class="btn primary" type="button" id="infoAction" hidden></button>
         <button class="btn" type="button" id="infoPlay"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Play this chapter</button>
@@ -318,7 +337,12 @@ button { font: inherit; color: inherit; }
       <div class="steps" id="scSteps" role="group" aria-label="Scenario steps"></div>
     </div>
     <div class="explorebar glass" id="pedabar" hidden>
-      <span class="hint">Tap a lettered marker to see how the room supports that pedagogy.</span>
+      <div class="seg" role="group" aria-label="Type of affordance" id="affSeg">
+        <button type="button" data-aff="peda" aria-pressed="true">Pedagogical</button>
+        <button type="button" data-aff="tech" aria-pressed="false">Technological</button>
+        <button type="button" data-aff="social" aria-pressed="false">Social</button>
+      </div>
+      <span class="hint" id="pedaHint">Tap a lettered marker to see how the room supports that pedagogy.</span>
       <button class="btn" type="button" id="pedaList">All pedagogies</button>
     </div>
     <div class="explorebar glass" id="explorebar" hidden>
@@ -337,14 +361,18 @@ button { font: inherit; color: inherit; }
       <div class="eyebrow">Virtual walkthrough · Hybrid learning space</div>
       <h1 id="introTitle">TR 321 Smart Classroom</h1>
       <p>A narrated tour of the room's 360° photo, with close-ups of each feature and a 3D dollhouse model, covering the technology that supports hybrid collaborative learning: real-time co-creation, group workspaces, central room control and AI-assisted audio and video.</p>
-      <ul class="features" aria-label="Features covered">
-        <li>Flexible seating</li><li>Interactive displays</li><li>AI tracking camera</li><li>Ceiling microphone</li><li>Teacher's station</li><li>Control panel</li><li>HD webcams</li><li>Smart blinds</li><li>Ceiling fans</li>
-      </ul>
-      <div class="meta"><span>13 chapters</span><span id="metaDur">4 min</span><span>Narrated, with captions</span><span>Real 360° photo</span><span>8 pedagogy scenarios</span></div>
+      <div class="meta"><span>13 chapters</span><span id="metaDur">4 min</span><span>Narrated, with captions</span><span>Real 360° photo</span><span>3 types of affordance</span></div>
       <div class="btnrow">
         <button class="btn primary" type="button" id="startTour" disabled><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg><span>Loading the room…</span></button>
         <button class="btn" type="button" id="startExplore" disabled>Explore on my own</button>
-        <button class="btn" type="button" id="startPeda" disabled>Pedagogy lens</button>
+      </div>
+      <div class="affpick" role="group" aria-labelledby="affPickH">
+        <div class="affpick-h" id="affPickH">Or explore the room by affordance</div>
+        <div class="affgrid">
+          <button class="affbtn" type="button" data-aff="peda" disabled><b>Pedagogical</b><span>8 ways of teaching, each a narrated scenario</span></button>
+          <button class="affbtn" type="button" data-aff="tech" disabled><b>Technological</b><span>9 features, with close-up photos</span></button>
+          <button class="affbtn" type="button" data-aff="social" disabled><b>Social</b><span>4 narrated scenarios on presence and interaction</span></button>
+        </div>
       </div>
       <p class="err" id="glErr" hidden>This device couldn't start 3D graphics. Try a recent version of Chrome, Safari, Edge or Firefox.</p>
     </div>
@@ -424,6 +452,9 @@ const HOTSPOTS = [
   { id: 'fans', photo: 'ceiling-fan', title: 'Ceiling Fans', ath: 79.7, atv: -37.3, chapter: 'fans',
     text: 'Ceiling fans support hybrid cooling. They improve air circulation and help maintain a comfortable learning environment throughout the day.' },
 ];
+// Where each feature's marker sits in the Technological affordances view: inside the room, clear of walls the
+// dollhouse hides and below the ceiling, so all nine show from above.
+const HS_AFF_POS = { mic: [0.3, 2.3, -3.05], displays: [-2.55, 2.05, -0.6], webcam: [2.65, 0.8, -1.8], blinds: [-2.85, 2.2, 3.4], fans: [1.6, 2.35, -0.4] };
 const HS_BY_CHAPTER = { seating: 'seating', camera: 'camera', mic: 'mic', desk: 'desk', control: 'control', side: 'displays', webcam: 'webcam', blinds: 'blinds', fans: 'fans' };
 
 // Camera keyframes per chapter, in authored seconds. Photo keys look around from the 360° spot
@@ -1180,7 +1211,7 @@ function showSpotPhoto(sp) { // point the photo layer at a spot's panorama
 }
 
 /* ---------------------------------------------------------------- tour engine */
-const ui = { mode: 'intro', view: 'photo' };
+const ui = { mode: 'intro', view: 'photo', aff: 'peda' };
 const tour = { idx: 0, t: 0, playing: false, started: false, audioOK: true, pending: false, muted: false, cc: true };
 const audios = [];
 // Narration is fetched up front as blobs: blob URLs are always seekable, whatever the host supports.
@@ -1358,7 +1389,8 @@ const pins = HOTSPOTS.map((h, i) => {
   b.setAttribute('aria-label', `${i + 1}. ${h.title}`);
   b.addEventListener('click', (e) => { e.stopPropagation(); openInfo(i); });
   pinsEl.appendChild(b);
-  return { el: b, h, v: h.pos ? V(...h.pos) : toShell(dirOf(h.ath, h.atv)) };
+  const v = h.pos ? V(...h.pos) : toShell(dirOf(h.ath, h.atv));
+  return { el: b, h, v0: v, vAff: HS_AFF_POS[h.id] ? V(...HS_AFF_POS[h.id]) : v, v };
 });
 function renderPinStates() {
   const featured = ui.mode === 'tour' && tour.started ? HS_BY_CHAPTER[CH[tour.idx].id] : null;
@@ -1366,8 +1398,9 @@ function renderPinStates() {
 }
 const proj = V(), tmpV = V();
 function placePins() {
-  const w = canvas.clientWidth, h = canvas.clientHeight, show = ui.mode === 'tour' || ui.mode === 'explore';
+  const w = canvas.clientWidth, h = canvas.clientHeight, show = ui.mode === 'tour' || ui.mode === 'explore' || (ui.mode === 'peda' && ui.aff === 'tech');
   for (const p of pins) {
+    p.v = ui.mode === 'peda' ? p.vAff : p.v0;
     proj.copy(p.v).project(camera);
     const behind = proj.z > 1 || proj.z < -1;
     const wallHidden = walls.some((wl) => !wl.group.visible && Math.abs(wl.n.dot(tmpV.subVectors(p.v, wl.p))) < 0.3);
@@ -1377,9 +1410,15 @@ function placePins() {
     p.sx = ((proj.x + 1) / 2) * w; p.sy = ((1 - proj.y) / 2) * h; p.vis = vis;
     if (vis) p.el.style.transform = `translate(${p.sx}px, ${p.sy}px)`;
   }
-  // Label decluttering: keep a label only if it doesn't overlap a label or marker already kept (front-most first).
-  // Hidden labels still show on hover or keyboard focus.
-  const kept = [], order = pPins.filter((p) => p.vis).sort((a, b) => b.sy - a.sy);
+  const decl = ui.mode === 'peda';
+  for (const p of pins) p.el.classList.toggle('decl', decl);
+  if (decl) declutter(pins);
+}
+// Label decluttering: keep a label only if it doesn't overlap a label or marker already kept (front-most first).
+// Hidden labels still show on hover or keyboard focus.
+function declutter(list) {
+  const w = canvas.clientWidth;
+  const kept = [], order = list.filter((p) => p.vis).sort((a, b) => b.sy - a.sy);
   for (const p of order) kept.push([p.sx - 19, p.sy - 19, p.sx + 19, p.sy + 19]);
   const hit = (r) => kept.some((k) => r[0] < k[2] && r[2] > k[0] && r[1] < k[3] && r[3] > k[1]);
   for (const p of order) {
@@ -1418,8 +1457,12 @@ function openInfo(i) {
   $('infoNo').textContent = `Feature ${i + 1} of ${HOTSPOTS.length}`;
   $('infoTitle').textContent = h.title; $('infoText').textContent = h.text;
   const im = $('infoImg'); im.hidden = !h.photo; if (h.photo) { im.src = `photos/${h.photo}.jpg`; im.alt = `Close-up: ${h.title}`; }
+  const sup = (lens) => PCH.filter((c) => c.lens === lens && c.features.includes(h.id)).map((c) => c.short);
+  const pe = sup('peda'), so = sup('social');
+  $('infoAff').textContent = [pe.length ? `Pedagogies it supports: ${pe.join(' · ')}` : '', so.length ? `Social affordances: ${so.join(' · ')}` : ''].filter(Boolean).join('\n');
+  $('infoAff').hidden = !pe.length && !so.length;
   if (ui.mode === 'tour') setPlaying(false);
-  else if (ui.view === 'photo') { // turn to face it from where you stand
+  else if (ui.mode === 'explore' && ui.view === 'photo') { // turn to face it from where you stand
     const d = pins[i].v.clone().sub(curSpot.pos);
     pv.ath = Math.atan2(d.x, -d.z) / D2R; pv.atv = -Math.atan2(d.y, Math.hypot(d.x, d.z)) / D2R; pv.fov = 60; startBlend(1.0);
   }
@@ -1429,7 +1472,7 @@ function openInfo(i) {
 function renderInfoAction() {
   const h = HOTSPOTS[infoIdx], btn = $('infoAction');
   const a = h && ACTIONS[h.action];
-  btn.hidden = !a || ui.mode !== 'explore';
+  btn.hidden = !a || (ui.mode !== 'explore' && ui.mode !== 'peda');
   if (a) btn.textContent = exploreFx[a.key] ? a.on : a.off;
 }
 $('infoAction').addEventListener('click', () => {
@@ -1528,7 +1571,7 @@ addEventListener('keydown', (e) => {
 });
 
 
-/* ---------------------------------------------------------------- pedagogy lens */
+/* ---------------------------------------------------------------- affordances: pedagogical, technological, social */
 // Eight pedagogies from "Pedagogical affordances of the renovated NIE tutorial rooms" (PST model, Wang 2024),
 // each with a narrated scenario played out in the 3D room. Screen content is placeholder.
 const PEDA_CUES = [{"id":"collab","title":"Collaborative learning","duration":29.46,"cues":[{"start":0.3,"end":8.25,"text":"Collaborative learning starts in small groups, with each group gathered around its own huddle space and interactive display."},{"start":8.6,"end":15.66,"text":"Members brainstorm, sketch and build an artefact together on the shared screen, so everyone's ideas are visible."},{"start":16.01,"end":22.61,"text":"The tutor moves between groups, listening in and prompting, while each group keeps ownership of its work."},{"start":22.96,"end":28.56,"text":"When the work is ready, a group shares it to the main display, and presents it to the class."}]},{"id":"config","title":"Inquiry- and project-based learning","duration":36.83,"cues":[{"start":0.3,"end":9.58,"text":"Inquiry and project-based learning moves through cycles, and because every table and chair is on castors, the room can change shape to follow them."},{"start":9.93,"end":15.41,"text":"Rows suit the launch, when the tutor frames the problem or project brief for everyone."},{"start":15.76,"end":22.45,"text":"Pods support investigation and creation, with each group close to its own screen, ready to share findings."},{"start":22.8,"end":29.43,"text":"A U-shape opens the room for presenting and discussing what groups found, so everyone can see one another."},{"start":29.78,"end":35.93,"text":"And spaced rows give students room to work on their own, for individual reflection or assessment."}]},{"id":"microteach","title":"Microteaching and peer teaching","duration":29.66,"cues":[{"start":0.3,"end":8.53,"text":"In microteaching, a student teacher teaches a short lesson segment to a small group of peers, while the classroom camera records it."},{"start":8.88,"end":15.92,"text":"Peers take on the role of learners, answering questions and joining in the activity, so the practice feels real."},{"start":16.27,"end":21.8,"text":"The tutor and other classmates observe with a focus, noting what helps the lesson work."},{"start":22.15,"end":28.76,"text":"Then roles rotate, so in peer teaching, every student teacher gets to teach, to learn and to give feedback."}]},{"id":"reflect","title":"Reflective practice","duration":26.96,"cues":[{"start":0.3,"end":6.87,"text":"Reflective practice turns a lesson into something a student teacher can look back on, not just remember."},{"start":7.22,"end":14.04,"text":"The recorded lesson plays back on one of the displays, so they see their teaching the way their learners did."},{"start":14.39,"end":20.13,"text":"Peers and the tutor add time-stamped feedback, pointing to specific moments in the lesson."},{"start":20.48,"end":26.06,"text":"The student teacher then reviews the evidence, and sets a clear goal for the next lesson."}]},{"id":"differentiate","title":"Differentiated learning","duration":24.06,"cues":[{"start":0.3,"end":5.77,"text":"With several independent displays, the tutor can run different tasks at the same time."},{"start":6.12,"end":11.79,"text":"Each screen carries its own instructions and resources, matched to what that group needs."},{"start":12.14,"end":17.16,"text":"Groups can rotate between stations, or stay with the task that suits them best."},{"start":17.51,"end":23.16,"text":"And the tutor can send extra support to one screen, without stopping the rest of the class."}]},{"id":"hybrid","title":"Flipped and blended learning","duration":36.48,"cues":[{"start":0.3,"end":10.34,"text":"Blended learning mixes in-person and online participation, and in hybrid mode, remote learners join through Zoom or Teams and appear on the classroom displays."},{"start":10.69,"end":16.6,"text":"The AI camera follows the tutor around the room, so remote students always see who is teaching."},{"start":16.95,"end":24.63,"text":"Ceiling microphones pick up voices from anywhere, including group discussions, so remote learners hear their peers too."},{"start":24.98,"end":35.58,"text":"And the quad view shows the tutor, the whiteboard, the shared screen and the class at once, while recordings let tutors flip the lesson and keep class time for discussion."}]},{"id":"presets","title":"Modelling technology-enabled pedagogy","duration":32.82,"cues":[{"start":0.3,"end":7.79,"text":"Tutors can model technology-enabled pedagogy, because the central control panel has a preset for each way of teaching."},{"start":8.14,"end":13.07,"text":"Present mode dims the lights, and puts the tutor's slides on the main displays."},{"start":13.42,"end":16.82,"text":"Group mode sends a workspace to every huddle screen."},{"start":17.17,"end":23.17,"text":"Hybrid mode turns on the cameras and microphones, and brings remote learners onto the displays."},{"start":23.52,"end":31.92,"text":"One tap changes the whole room, so student teachers see smooth, technology-enabled practice they can carry into their own classrooms."}]},{"id":"compare","title":"Learning through comparison and critique","duration":28.9,"cues":[{"start":0.3,"end":6.98,"text":"Learning through comparison and critique begins when groups tackle the same problem in different ways."},{"start":7.33,"end":13.69,"text":"The tutor brings two groups' work onto the main displays, side by side, so the whole class can see both."},{"start":14.04,"end":20.46,"text":"Students compare the approaches, asking what each one does well, and where its reasoning breaks down."},{"start":20.81,"end":28.0,"text":"They then critique, question and give feedback, and discuss alternative solutions before refining their own work."}]}];
@@ -1582,8 +1625,38 @@ const PEDA = [
     tryIt: 'Put two contrasting answers side by side and have the class judge which reasoning holds up, then let each group refine its own work.',
     steps: ['Different approaches', 'Side by side', 'Compare', 'Critique and refine'] },
 ];
+// Social affordances: how the room's audio-visual technology and seating support people learning together.
+const SOC_CUES = [{"id":"presence","title":"Social presence","duration":29.75,"cues":[{"start":0.3,"end":5.18,"text":"When some learners join from home, being seen matters as much as being heard."},{"start":5.53,"end":13.4,"text":"Each huddle display has its own high-definition webcam, so a remote learner can join a group directly, on that group's screen."},{"start":13.75,"end":21.86,"text":"The group sees their remote member's face and reactions, and the remote member sees the whole table, not a distant view of the room."},{"start":22.21,"end":28.85,"text":"Seeing expressions and gestures builds the trust and rapport that make a mixed group feel like one team."}]},{"id":"voice","title":"Equitable participation","duration":31.43,"cues":[{"start":0.3,"end":5.14,"text":"In a hybrid class, a comment no one can hear is a comment that never happened."},{"start":5.49,"end":13.81,"text":"The ceiling microphones cover the whole room, so students can speak from their seats without passing a handheld microphone around."},{"start":14.16,"end":22.91,"text":"A quiet student at the back is picked up as clearly as the tutor at the front, and remote learners hear their classmates, not just the teacher."},{"start":23.26,"end":30.53,"text":"Because every voice carries, more students take part, and the discussion stays open to everyone, wherever they are."}]},{"id":"tracking","title":"Natural turn-taking","duration":31.41,"cues":[{"start":0.3,"end":5.18,"text":"The AI tracking cameras keep remote learners looking at whoever is talking."},{"start":5.53,"end":13.58,"text":"As the tutor moves across the front of the room, the camera at the back follows, so remote learners never lose sight of the lesson."},{"start":13.93,"end":22.43,"text":"When a student speaks up, voice tracking turns the front camera towards them, so remote learners see who is asking, not just hear a voice."},{"start":22.78,"end":30.51,"text":"That makes turn-taking feel natural: remote learners can follow the back-and-forth of a discussion, and know when to come in."}]},{"id":"dialogue","title":"Face-to-face dialogue","duration":26.81,"cues":[{"start":0.3,"end":2.7,"text":"Seating shapes who students talk to."},{"start":3.05,"end":7.92,"text":"In rows, most students see the backs of heads, and talk flows through the tutor."},{"start":8.27,"end":17.21,"text":"In a U-shape, every student can see every other student's face, so comments go from student to student and the class builds on each other's ideas."},{"start":17.56,"end":25.91,"text":"Back in pods, the same furniture creates small communities, where students know each other well enough to take risks with their ideas."}]}];
+const SOCIAL = [
+  { id: 'presence', short: 'Social presence', tag: 'Social', marker: [-2.3, 1.9, -2.4],
+    affordances: ['HD webcam on every huddle display'], also: [],
+    features: ['webcam', 'displays'],
+    how: 'Social presence is the sense that the people you learn with are real and there with you. With a webcam on each huddle display, a remote learner can join a group on its own screen: they see the group at the table, and the group sees their face and reactions, so trust and rapport can build across the screen.',
+    tryIt: "Connect each remote learner to one group's huddle display, not only to the main class call, and ask every group to greet its remote member before starting.",
+    steps: ['Joining from home', 'One screen per group', 'Seeing each other', 'One team'] },
+  { id: 'voice', short: 'Equitable participation', tag: 'Social', marker: [0.3, 2.45, -3.0],
+    affordances: ['Ceiling microphones covering the whole room'], also: [],
+    features: ['mic', 'displays'],
+    how: 'Equitable participation means every learner has a real chance to be heard. Ceiling microphones pick up speech anywhere in the room, so students contribute from their seats, quieter voices are not lost, and remote learners hear their classmates as well as the tutor.',
+    tryIt: 'Open discussion to the whole room, including the back rows and remote learners, and invite a remote learner to respond to each in-room comment.',
+    steps: ['Unheard comments', 'Mics cover the room', 'Every seat, every voice', 'More students take part'] },
+  { id: 'tracking', short: 'Natural turn-taking', tag: 'Social', marker: [0.075, 1.95, 4.5],
+    affordances: ['AI tracking cameras with voice tracking'], also: [],
+    features: ['camera', 'mic'],
+    how: 'In a hybrid discussion, remote learners need to see who is speaking to join in naturally. The camera at the back follows the tutor as they move, and voice tracking turns the front camera to a student when they speak, so remote learners can follow the back-and-forth and judge when to take their turn.',
+    tryIt: 'In a whole-class discussion, ask students to say their name before they speak, and pause after each exchange so remote learners have a natural moment to come in.',
+    steps: ['Who is talking?', 'Camera follows the tutor', 'Voice tracking finds the student', 'Following the discussion'] },
+  { id: 'dialogue', short: 'Face-to-face dialogue', tag: 'Social', marker: [0.05, 1.0, 0.2],
+    affordances: ['Flexible seating on castors'], also: [],
+    features: ['seating'],
+    how: 'Seating shapes who students talk to. Rows send talk through the tutor; a U-shape lets every student see every other student\'s face, so comments pass from student to student; pods create small communities where students feel safe enough to take risks with their ideas.',
+    tryIt: 'For a whole-class discussion, move to a U-shape and ask students to respond to a classmate by name before adding their own point.',
+    steps: ['Seating shapes talk', 'Rows: through the tutor', 'U-shape: student to student', 'Pods: small communities'] },
+];
 const MORE_AFFORDANCES = [];
-const PCH = PEDA.map((p) => { const c = PEDA_CUES.find((q) => q.id === p.id); return { ...p, ...c, caps: c.cues.flatMap(chunkCue) }; });
+const withCues = (lens, prefix, cues) => (p) => { const c = cues.find((q) => q.id === p.id); return { ...p, ...c, lens, audio: `audio/${prefix}${p.id}.mp3`, caps: c.cues.flatMap(chunkCue) }; };
+const PCH = [...PEDA.map(withCues('peda', 'peda_', PEDA_CUES)), ...SOCIAL.map(withCues('social', 'soc_', SOC_CUES))];
+PCH.forEach((c) => { c.letter = String.fromCharCode(65 + PCH.filter((x) => x.lens === c.lens).indexOf(c)); });
 
 /* --- extra furniture layouts: U-shape (index 2) and assessment rows (index 3) */
 const uT = [], uC = [], exT = [], exC = [], exSpare = [];
@@ -1718,7 +1791,7 @@ function rr(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w
 function lines(g, x, y, w, n, gap = 26, color = 'rgba(30,40,50,0.35)') { const r = rng(n * 13 + x); g.fillStyle = color; for (let i = 0; i < n; i++) rr(g, x, y + i * gap, w * (0.55 + r() * 0.45), 9, 4), g.fill(); }
 function drawScreen(id, spec) {
   const S = screens[id]; if (S.spec === spec) return; S.spec = spec; S.m.visible = !!spec; if (!spec) return;
-  const g = S.g, W = S.c.width, Hh = S.c.height, [kind, a, b] = spec.split(':');
+  const g = S.g, W = S.c.width, Hh = S.c.height, [kind, a, b, c4] = spec.split(':');
   g.save(); g.clearRect(0, 0, W, Hh);
   if (kind === 'slide' || kind === 'teach') {
     const gr = g.createLinearGradient(0, 0, W, Hh); gr.addColorStop(0, '#1b4fd1'); gr.addColorStop(1, '#2468e8'); g.fillStyle = gr; g.fillRect(0, 0, W, Hh);
@@ -1739,6 +1812,23 @@ function drawScreen(id, spec) {
       }
       g.strokeStyle = col; g.lineWidth = 5; g.beginPath(); g.moveTo(110, 230); g.lineTo(260, 260); g.stroke();
     } else { g.fillStyle = 'rgba(30,40,50,0.18)'; g.font = '600 26px Arial, sans-serif'; g.fillText('Tap to start · pens · sticky notes · share', 28, Hh - 40); }
+  } else if (kind === 'call') {
+    // a remote group member on the group's own huddle display, seen through its webcam
+    const n = +a, col = GROUP_COLORS[(n - 1) % 5], tile = ['#2b5d73', '#5a4a7a', '#7a5a3a', '#2f6b4f'][(n - 1) % 4];
+    g.fillStyle = '#16181c'; g.fillRect(0, 0, W, Hh); g.fillStyle = col; g.fillRect(0, 0, W, 54);
+    g.fillStyle = '#fff'; g.font = '700 28px Arial, sans-serif'; g.fillText(`Group ${n} · video call`, 24, 37);
+    g.fillStyle = '#ff3b30'; g.beginPath(); g.arc(W - 120, 27, 9, 0, 7); g.fill(); g.fillStyle = '#fff'; g.font = '700 20px Arial, sans-serif'; g.fillText('LIVE', W - 102, 34);
+    const bx = 18, by = 70, bw = 470, bh = Hh - 88;
+    g.fillStyle = '#2a3038'; rr(g, bx, by, bw, bh, 14); g.fill();
+    g.fillStyle = tile; g.beginPath(); g.arc(bx + bw / 2, by + bh * 0.42, 84, 0, 7); g.fill(); rr(g, bx + bw / 2 - 110, by + bh * 0.62, 220, 160, 70); g.fill();
+    g.fillStyle = '#fff'; g.font = '700 72px Arial, sans-serif'; g.textAlign = 'center'; g.fillText((b || 'R')[0], bx + bw / 2, by + bh * 0.42 + 26); g.textAlign = 'left';
+    g.fillStyle = 'rgba(0,0,0,0.6)'; rr(g, bx + 12, by + bh - 46, 210, 34, 8); g.fill(); g.fillStyle = '#fff'; g.font = '600 20px Arial, sans-serif'; g.fillText(`${b || 'Remote'} · at home`, bx + 24, by + bh - 22);
+    if (c4 === 'talk') { g.strokeStyle = '#3fb950'; g.lineWidth = 8; rr(g, bx + 4, by + 4, bw - 8, bh - 8, 12); g.stroke(); }
+    const sx = 506, sw = W - sx - 18, sh = 190;
+    g.fillStyle = '#9aa3a8'; rr(g, sx, by, sw, sh, 12); g.fill(); g.fillStyle = '#f4f5f4'; g.fillRect(sx + 40, by + 110, sw - 80, 50);
+    ['#7f9bb0', '#8fa89a', '#a89b8a'].forEach((cc, i) => { g.fillStyle = cc; g.beginPath(); g.arc(sx + 60 + i * ((sw - 120) / 2), by + 86, 22, 0, 7); g.fill(); });
+    g.fillStyle = 'rgba(0,0,0,0.55)'; rr(g, sx + 8, by + sh - 34, 150, 26, 6); g.fill(); g.fillStyle = '#fff'; g.font = '600 16px Arial, sans-serif'; g.fillText('Room · webcam', sx + 16, by + sh - 15);
+    g.fillStyle = '#c9d2d8'; g.font = '600 18px Arial, sans-serif'; g.fillText('Sees the whole table', sx, by + sh + 34);
   } else if (kind === 'zoom') {
     g.fillStyle = '#16181c'; g.fillRect(0, 0, W, Hh);
     const names = ['Aisha', 'Ben', 'Chen', 'Divya', 'Ethan', 'Farah'], tiles = ['#2b5d73', '#5a4a7a', '#7a5a3a', '#2f6b4f', '#6b2f45', '#3d4a6b'];
@@ -1748,6 +1838,7 @@ function drawScreen(id, spec) {
       g.fillStyle = tiles[i]; g.beginPath(); g.arc(x + 118, y + 86, 44, 0, Math.PI * 2); g.fill();
       g.fillStyle = '#fff'; g.font = '700 36px Arial, sans-serif'; g.textAlign = 'center'; g.fillText(names[i][0], x + 118, y + 99);
       g.textAlign = 'left'; g.font = '400 18px Arial, sans-serif'; g.fillText(names[i], x + 10, y + 178);
+      if (a !== undefined && +a === i) { g.strokeStyle = '#3fb950'; g.lineWidth = 6; g.strokeRect(x + 3, y + 3, 230, 182); }
     }
   } else if (kind === 'task') {
     const [col, label] = TASK[a];
@@ -1808,10 +1899,10 @@ function beam(id) {
   const m = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ map: t, transparent: true, alphaTest: 0.05, depthWrite: false, toneMapped: false, color: 0xffffff }));
   m.renderOrder = 6; model.add(m); b = { id, m, key: '' }; beams.push(b); return b;
 }
-function setBeam(id, from, to, k, opacity = 1) {
-  const b = beam(id), key = from.join() + to.join();
+function setBeam(id, from, to, k, opacity = 1, arc = null) {
+  const b = beam(id), key = from.join() + to.join() + arc;
   if (b.key !== key) {
-    const A = V(...from), Bp = V(...to), mid = A.clone().lerp(Bp, 0.5); mid.y += 0.6 + A.distanceTo(Bp) * 0.12;
+    const A = V(...from), Bp = V(...to), mid = A.clone().lerp(Bp, 0.5); mid.y += arc ?? 0.6 + A.distanceTo(Bp) * 0.12;
     b.m.geometry.dispose(); b.m.geometry = new THREE.TubeGeometry(new THREE.QuadraticBezierCurve3(A, mid, Bp), 64, 0.04, 10, false); b.key = key;
   }
   const n = b.m.geometry.index.count; b.m.geometry.setDrawRange(0, Math.floor(n * clamp(k, 0, 1) / 6) * 6);
@@ -1819,14 +1910,17 @@ function setBeam(id, from, to, k, opacity = 1) {
   b.m.material.map.offset.x -= 0.035;
 }
 const coneMat = new THREE.MeshBasicMaterial({ color: 0x8fd6e8, transparent: true, opacity: 0.16, depthWrite: false, side: THREE.DoubleSide, toneMapped: false, blending: THREE.AdditiveBlending });
-const camCone = new THREE.Mesh(new THREE.ConeGeometry(0.42, 1, 32, 1, true).translate(0, -0.5, 0).rotateX(-Math.PI / 2), coneMat);
-camCone.visible = false; model.add(camCone);
+const coneGeo = new THREE.ConeGeometry(0.42, 1, 32, 1, true).translate(0, -0.5, 0).rotateX(-Math.PI / 2);
+const cones = Array.from({ length: 5 }, () => { const m = new THREE.Mesh(coneGeo, coneMat); m.visible = false; model.add(m); return m; });
 const PTZ_EYE = V(0.2, 1.97, -HZ + 0.2);
 const BACK_EYE = V(0.075, 2.19, HZ - 0.2); // measured from the Middle photo: black camera centred on the back wall, under the clock, between the doors
-function setCamCone(target) {
-  camCone.visible = !!target; if (!target) return;
-  const T = V(target[0], target[1], target[2]); camCone.position.copy(BACK_EYE); camCone.lookAt(T);
-  camCone.scale.set(1, 1, BACK_EYE.distanceTo(T));
+// view cones: S.cone is the back camera following the tutor; S.cones lists any others as { from, to }
+function setCones(list) {
+  cones.forEach((m, k) => {
+    const c = list[k]; m.visible = !!c; if (!c) return;
+    const F = Array.isArray(c.from) ? V(...c.from) : c.from, T = V(...c.to);
+    m.position.copy(F); m.lookAt(T); const d = F.distanceTo(T), r = c.r ?? 1; m.scale.set(r, r, d);
+  });
 }
 function spriteTex(draw, w = 256, h = 128) { const t = canvasTex(w, h, draw); return t; }
 const bubbleTex = spriteTex((g, w, h) => {
@@ -1859,7 +1953,95 @@ function drawRec(secs) {
 const seg = (u, a, b) => smooth(clamp((u - a) / (b - a), 0, 1));
 const on = (u, a, b) => u >= a && u < b;
 const Y_SIDE = 1.3, Y_FRONT = 1.32;
+// helpers for the social scenarios: seated students by where they sit now, the pods, and the huddle-display webcams
+function seatNear(x, z) { let best = 0, bd = 1e9; seated.forEach((st, i) => { const q = st.J.root.position, d = (q.x - x) ** 2 + (q.z - z) ** 2; if (d < bd) { bd = d; best = i; } }); return best; }
+const headOf = (i) => { const q = seated[i].J.root.position; return [+q.x.toFixed(2), 1.42, +q.z.toFixed(2)]; };
+const avg = (a) => a.reduce((x, y) => x + y, 0) / a.length;
+const POD_SEATS = [];
+for (let k = 0; k * 4 < seated.length; k++) { const m = seated.slice(k * 4, k * 4 + 4); POD_SEATS.push({ ids: m.map((_, j) => k * 4 + j), x: avg(m.map((st) => st.f.L[0].x)), z: avg(m.map((st) => st.f.L[0].z)) }); }
+const WEBCAMS = ['LF', 'LB', 'RF', 'RB'].map((id, k) => {
+  const d = SCREEN_DEF[id], eye = [d.x + (d.x < 0 ? 0.06 : -0.06), d.y - d.h / 2 - 0.08, d.z]; // webcam sits under each huddle display
+  const pod = POD_SEATS.reduce((a, b) => ((b.x - d.x) ** 2 + (b.z - d.z) ** 2 < (a.x - d.x) ** 2 + (a.z - d.z) ** 2 ? b : a));
+  return { id, n: k + 1, eye, pod };
+});
+const MIC_AT = [0.3, 2.74, -3.05];
 const SC = {
+  presence: {
+    shots: [{ s: 0, p: [2.4, 3.3, 4.6], t: [-0.6, 0.8, -1.4] }, { s: 1, p: [0.5, 2.1, -0.5], t: [-3.3, 1.1, -2.36] }, { s: 2, p: [0.9, 2.7, 0.4], t: [-2.4, 0.9, -2.3] },
+      { s: 3, p: [0.2, 4.6, 4.6], t: [0, 0.6, -1.0] }, { s: 4, p: [0.2, 4.7, 4.7], t: [0, 0.6, -1.0] }],
+    run(u, S) {
+      S.layout = 0; S.seated = true;
+      Object.assign(S.screens, { FL: 'slide', FR: 'zoom' });
+      [['Aisha', 0.95], ['Ben', 3.0], ['Chen', 3.12], ['Divya', 3.24]].forEach(([nm, t0], k) => {
+        const w = WEBCAMS[k], live = u > t0;
+        S.screens[w.id] = live ? `call:${w.n}:${nm}${k === 0 && on(u, 2.55, 3.0) ? ':talk' : ''}` : `work:${w.n}`;
+        if (live && u > t0 + 0.08) S.cones.push({ from: w.eye, to: [w.pod.x, 1.0, w.pod.z], r: 0.9 });
+      });
+      const g1 = WEBCAMS[0].pod.ids;
+      if (on(u, 2.05, 2.55)) S.bubbles = [[g1[0], 2.05], [g1[2], 2.25]].filter(([, t0]) => u > t0).map(([i]) => i);
+      if (u >= 3.35) S.bubbles = WEBCAMS.map((w, k) => [w.pod.ids[k % 4], 3.35 + k * 0.1]).filter(([, t0]) => u > t0).map(([i]) => i);
+      S.tutor = { x: 0.2, z: -4.35, face: 0 };
+      S.badge = on(u, 1, 2) ? 'A webcam under every huddle display' : on(u, 2, 3) ? 'The group and its remote member see each other' : u >= 3 ? 'One team, in the room and online' : '';
+    },
+  },
+  voice: {
+    shots: [{ s: 0, p: [2.6, 3.4, 4.8], t: [0, 0.8, -0.8] }, { s: 1, p: [0.3, 7.4, 3.4], t: [0.3, 0, -1.3] }, { s: 2, p: [3.2, 5.4, 5.4], t: [-0.6, 0.7, -0.9] },
+      { s: 3, p: [0.3, 6.2, 5.8], t: [0, 0.5, -1.0] }, { s: 4, p: [0.3, 6.3, 5.9], t: [0, 0.5, -1.0] }],
+    run(u, S) {
+      S.layout = 0; S.seated = true; S.mic = u >= 1 ? 1 : 0;
+      Object.assign(S.screens, { FL: 'slide:2', FR: u >= 3.05 && u < 3.5 ? 'zoom:2' : 'zoom' });
+      const back = seatNear(-1.9, 2.3), mid = seatNear(1.6, -1.8), front = seatNear(-1.6, -2.2), far = seatNear(1.6, 2.8);
+      if (on(u, 0.3, 1)) S.bubbles = [back];
+      // in range: each speaker's voice reaches the ceiling microphones
+      const speak = [[back, 2.05], [mid, 3.5], [front, 3.65], [far, 3.8]];
+      speak.forEach(([i, t0], k) => { if (u > t0 && u < t0 + 0.9 && (k > 0 || u < 3)) { S.bubbles.push(i); S.beams.push({ id: 'v' + k, from: headOf(i), to: MIC_AT, k: seg(u, t0, t0 + 0.25), o: 1 - seg(u, t0 + 0.6, t0 + 0.9), arc: 0.15 }); } });
+      const tg = on(u, 2.4, 2.8); S.tutor = { x: 0.2, z: -4.35, face: 0, gesture: tg ? 0.8 : 0 };
+      if (tg) S.beams.push({ id: 'vt', from: [0.2, 1.6, -4.35], to: MIC_AT, k: seg(u, 2.4, 2.6), o: 1 - seg(u, 2.65, 2.8), arc: 0.15 });
+      S.badge = on(u, 1, 2) ? 'Ceiling mics cover the whole room' : on(u, 2, 3) ? 'Every seat is in range' : u >= 3 ? 'More voices, one discussion' : '';
+    },
+  },
+  tracking: {
+    shots: [{ s: 0, p: [1.7, 3.0, 2.8], t: [0.2, 1.3, -4.6] }, { s: 1, p: [1.5, 3.4, 4.0], t: [0.1, 1.2, -3.0] }, { s: 2, p: [-1.6, 2.7, -4.3], t: [0.4, 1.0, 1.2] },
+      { s: 3, p: [2.3, 3.3, -4.4], t: [-0.4, 0.9, 1.0] }, { s: 4, p: [2.4, 3.3, -4.5], t: [-0.4, 0.9, 1.0] }],
+    run(u, S, time) {
+      S.layout = 1; S.seated = true;
+      Object.assign(S.screens, { FL: 'slide', FR: 'zoom' });
+      const walking = u >= 0.3 && u < 2, x = walking ? Math.sin((time - 0) * 0.35) * 1.6 : 0.2;
+      const A = seatNear(-1.2, 0.6), B = seatNear(1.4, 2.2), C = seatNear(-0.3, -1.6);
+      const talk = u < 2 ? null : u < 3 ? (u > 2.1 ? A : null) : [[A, 3.0], [B, 3.3], [A, 3.55], [C, 3.75]].filter(([, t0]) => u > t0).pop()[0];
+      S.tutor = walking ? { x, z: -4.3, walk: true, face: Math.cos(time * 0.35) > 0 ? Math.PI / 2 : -Math.PI / 2 }
+        : { x: 0.2, z: -4.3, face: talk !== null ? faceTo(0.2, -4.3, headOf(talk)[0], headOf(talk)[2]) : 0, gesture: on(u, 1.0, 1.3) ? 0.7 : 0 };
+      S.cone = [S.tutor.x, 1.35, -4.3];
+      if (talk !== null) { S.bubbles = [talk]; if (u > 2.2) S.cones.push({ from: PTZ_EYE, to: headOf(talk), r: 0.75 }); }
+      S.pip = on(u, 1.1, 2);
+      S.badge = u < 2 ? 'Back camera · following the tutor' : u < 3 ? 'Front camera · voice tracking' : 'Following the back-and-forth';
+    },
+  },
+  dialogue: {
+    shots: [{ s: 0, p: [4.4, 8.6, 6.6], t: [0, 0, -0.3] }, { s: 1, p: [0.3, 5.8, 5.2], t: [0, 0.4, -1.6] }, { s: 2, p: [0.2, 9.0, 4.4], t: [0, 0, -0.4] },
+      { s: 3, p: [-4.4, 8.6, 6.6], t: [0, 0, -0.3] }, { s: 4, p: [-4.5, 8.6, 6.7], t: [0, 0, -0.3] }],
+    run(u, S) {
+      S.seated = true; S.layout = u < 2 ? 1 : u < 3 ? 2 : 0;
+      Object.assign(S.screens, { FL: 'slide:2', FR: 'slide' });
+      const T = [0.2, 1.62, -4.35];
+      if (u < 2) {
+        S.tutor = { x: 0.2, z: -4.35, face: 0, gesture: on(u, 1.35, 1.65) ? 0.8 : 0 };
+        if (u >= 1) [[seatNear(-1.5, 1.6), 1.1], [seatNear(1.5, 0.0), 1.5]].forEach(([i, t0], k) => {
+          if (u > t0) { S.bubbles.push(i); S.beams.push({ id: 'r' + k, from: headOf(i), to: T, k: seg(u, t0, t0 + 0.25), o: 1 - seg(u, 1.85, 2) }); }
+        });
+      } else {
+        S.tutor = { x: 2.9, z: -4.7, face: faceTo(2.9, -4.7, 0, 0) };
+        if (u >= 2.35 && u < 3) {
+          const L1 = seatNear(-2.35, -1.7), R1 = seatNear(2.35, -0.1), R2 = seatNear(2.35, 1.5), B1 = seatNear(0.8, 3.65), L2 = seatNear(-2.35, -3.3);
+          [[L1, R1, 2.35], [R2, B1, 2.55], [B1, L2, 2.75]].forEach(([i, j, t0], k) => {
+            if (u > t0) { S.bubbles.push(i); S.beams.push({ id: 'u' + k, from: headOf(i), to: headOf(j), k: seg(u, t0, t0 + 0.2), o: 1 - seg(u, 2.85, 3), arc: 0.35 }); }
+          });
+        }
+        if (u >= 3.4) S.bubbles = POD_SEATS.map((pd, k) => [pd.ids[k % 4], 3.4 + k * 0.08]).filter(([, t0]) => u > t0).map(([i]) => i);
+      }
+      S.badge = u < 1 ? '' : u < 2 ? 'Rows · talk flows through the tutor' : u < 3 ? 'U-shape · student to student' : 'Pods · small communities';
+    },
+  },
   collab: {
     shots: [{ s: 0, p: [2.4, 3.3, 4.6], t: [-0.6, 0.8, -1.4] }, { s: 1, p: [0.6, 2.6, 3.4], t: [-3.0, 1.1, 0.9] }, { s: 2, p: [2.6, 3.6, 4.8], t: [0, 0.8, -0.8] },
       { s: 3, p: [1.4, 2.9, 1.0], t: [-0.6, 1.3, -5.2] }, { s: 4, p: [1.5, 2.9, 1.2], t: [-0.6, 1.3, -5.2] }],
@@ -1991,10 +2173,10 @@ const pAudio = {}, pBlobs = {};
 let pPrefetched = false;
 function prefetchPeda() {
   if (pPrefetched) return; pPrefetched = true;
-  PCH.reduce((pr, c) => pr.then(() => fetch(`audio/peda_${c.id}.mp3`).then((r) => (r.ok ? r.blob() : null)).then((b) => { if (b) pBlobs[c.id] = URL.createObjectURL(b); }).catch(() => {})), Promise.resolve());
+  PCH.reduce((pr, c) => pr.then(() => fetch(c.audio).then((r) => (r.ok ? r.blob() : null)).then((b) => { if (b) pBlobs[c.id] = URL.createObjectURL(b); }).catch(() => {})), Promise.resolve());
 }
 function sceneAudio(c) {
-  if (!pAudio[c.id]) { const a = new Audio(pBlobs[c.id] || `audio/peda_${c.id}.mp3`); a.preload = 'auto'; a.addEventListener('ended', () => { if (PCH[scenario.i] === c && ui.mode === 'scene') endScene(); }); pAudio[c.id] = a; }
+  if (!pAudio[c.id]) { const a = new Audio(pBlobs[c.id] || c.audio); a.preload = 'auto'; a.addEventListener('ended', () => { if (PCH[scenario.i] === c && ui.mode === 'scene') endScene(); }); pAudio[c.id] = a; }
   const a = pAudio[c.id]; if (pBlobs[c.id] && a.src !== pBlobs[c.id] && a.paused) a.src = pBlobs[c.id];
   return a;
 }
@@ -2014,7 +2196,7 @@ function scenePlay(on) {
 }
 function startScene(i, step = 0) {
   pauseAudio(); Object.values(pAudio).forEach((a) => a.pause());
-  scenario.i = i; const c = PCH[i]; $('pcard').hidden = true; $('plist').hidden = true;
+  scenario.i = i; const c = PCH[i]; setAff(c.lens); $('pcard').hidden = true; $('plist').hidden = true;
   scenario.t = step > 0 ? c.cues[step].start - 0.05 : 0;
   setMode('scene');
   $('scTitle').textContent = c.title; $('scTag').textContent = c.tag;
@@ -2038,7 +2220,7 @@ function sceneFrame(dt, time, now) {
   tickScene(dt);
   const c = PCH[scenario.i], u = uOf(c, scenario.t), def = SC[c.id];
   const pose = shotAt(def.shots, u); applyPose(pose.p, pose.q, pose.f, now);
-  const S = { layout: 0, seated: true, screens: {}, beams: [], tutor: null, trainee: null, crowd: null, bubbles: [], cone: null, rec: null, pip: false, dim: 0, mic: 0, badge: '' };
+  const S = { layout: 0, seated: true, screens: {}, beams: [], tutor: null, trainee: null, crowd: null, bubbles: [], cone: null, cones: [], rec: null, pip: false, dim: 0, mic: 0, badge: '' };
   def.run(u, S, time);
   applyStage(S, dt, time);
   // captions, step chips
@@ -2053,7 +2235,7 @@ function applyStage(S, dt, time) {
   placeSeated(S.seated);
   for (const id of Object.keys(screens)) drawScreen(id, S.screens[id] || null);
   const used = new Set();
-  for (const b of S.beams) { setBeam(b.id, b.from, b.to, b.k, b.o ?? 1); used.add(b.id); }
+  for (const b of S.beams) { setBeam(b.id, b.from, b.to, b.k, b.o ?? 1, b.arc ?? null); used.add(b.id); }
   for (const b of beams) if (!used.has(b.id)) b.m.visible = false;
   placeStanding(tutor, S.tutor, time); placeStanding(trainee, S.trainee, time);
   crowd.forEach((J, k) => placeStanding(J, S.crowd ? S.crowd[k] : null, time + k * 0.3));
@@ -2062,7 +2244,7 @@ function applyStage(S, dt, time) {
     sp.visible = !!fig && S.seated; if (!sp.visible) return;
     sp.position.set(fig.J.root.position.x, 1.42 + Math.sin(time * 3 + k) * 0.02, fig.J.root.position.z);
   });
-  setCamCone(S.cone);
+  setCones([...(S.cone ? [{ from: BACK_EYE, to: S.cone }] : []), ...S.cones]);
   recSprite.visible = S.rec !== null; if (S.rec !== null) drawRec(S.rec);
   $('pip').classList.toggle('is-on', !!S.pip);
 }
@@ -2070,27 +2252,29 @@ function clearStage() {
   for (const id of Object.keys(screens)) drawScreen(id, null);
   for (const b of beams) b.m.visible = false;
   [tutor, trainee, ...crowd].forEach((J) => { J.root.visible = false; });
-  placeSeated(false); bubbles.forEach((s) => { s.visible = false; }); camCone.visible = false; recSprite.visible = false;
+  placeSeated(false); bubbles.forEach((s) => { s.visible = false; }); cones.forEach((m) => { m.visible = false; }); recSprite.visible = false;
   $('pip').classList.remove('is-on'); $('scBadge').hidden = true; lastBadge = '';
 }
-// browsing the lens: the room is populated, no scenario playing
+// browsing affordances: the room is populated, no scenario playing
 function pedaFrame(dt, time) {
-  driveLayout(dt, 0); placeSeated(true);
+  const fx = ui.aff === 'tech' ? exploreFx : DEFAULTS;
+  driveLayout(dt, fx.layout ? 1 : 0); placeSeated(true);
   placeStanding(tutor, { x: 0.2, z: -4.35, face: 0 }, time);
-  return { dim: 0, mic: 0, layout: 0 };
+  return { dim: fx.dim, mic: fx.mic, layout: 0 };
 }
 
-/* --- lens markers, cards and list */
+/* --- affordance markers, cards and list */
 const pPins = PCH.map((c, i) => {
-  const b = document.createElement('button'); b.type = 'button'; b.className = 'pin ppin';
-  b.innerHTML = `<span class="ico">${String.fromCharCode(65 + i)}</span><span class="lbl"></span>`; b.querySelector('.lbl').textContent = c.short;
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'pin ppin decl' + (c.lens === 'social' ? ' soc' : '');
+  b.innerHTML = `<span class="ico">${c.letter}</span><span class="lbl"></span>`; b.querySelector('.lbl').textContent = c.short;
   b.setAttribute('aria-label', `${c.title}: open`);
   b.addEventListener('click', (e) => { e.stopPropagation(); openPCard(i); });
-  $('pins').appendChild(b); return { el: b, v: V(...c.marker) };
+  $('pins').appendChild(b); return { el: b, c, v: V(...c.marker) };
 });
 function placePPins() {
-  const w = canvas.clientWidth, h = canvas.clientHeight, show = ui.mode === 'peda';
+  const w = canvas.clientWidth, h = canvas.clientHeight;
   for (const p of pPins) {
+    const show = ui.mode === 'peda' && ui.aff === p.c.lens;
     proj.copy(p.v).project(camera);
     const wallHidden = walls.some((wl) => !wl.group.visible && Math.abs(wl.n.dot(tmpV.subVectors(p.v, wl.p))) < 0.4);
     const vis = show && proj.z < 1 && proj.z > -1 && !wallHidden && Math.abs(proj.x) < 1.05 && Math.abs(proj.y) < 1.05;
@@ -2098,21 +2282,7 @@ function placePPins() {
     p.sx = ((proj.x + 1) / 2) * w; p.sy = ((1 - proj.y) / 2) * h; p.vis = vis;
     if (vis) p.el.style.transform = `translate(${p.sx}px, ${p.sy}px)`;
   }
-  // Label decluttering: keep a label only if it doesn't overlap a label or marker already kept (front-most first).
-  // Hidden labels still show on hover or keyboard focus.
-  const kept = [], order = pPins.filter((p) => p.vis).sort((a, b) => b.sy - a.sy);
-  for (const p of order) kept.push([p.sx - 19, p.sy - 19, p.sx + 19, p.sy + 19]);
-  const hit = (r) => kept.some((k) => r[0] < k[2] && r[2] > k[0] && r[1] < k[3] && r[3] > k[1]);
-  for (const p of order) {
-    const lbl = p.el.querySelector('.lbl'); p.lw = p.lw || lbl.offsetWidth || 160; p.lh = p.lh || lbl.offsetHeight || 26;
-    const { sx: x, sy: y, lw, lh } = p;
-    const cands = { r: [x + 23, y - lh / 2, x + 27 + lw, y + lh / 2], l: [x - 27 - lw, y - lh / 2, x - 23, y + lh / 2],
-      t: [x - lw / 2, y - 27 - lh, x + lw / 2, y - 23], b: [x - lw / 2, y + 23, x + lw / 2, y + 27 + lh] };
-    const side = ['r', 'l', 't', 'b'].find((k) => !hit(cands[k]) && cands[k][0] > 4 && cands[k][2] < w - 4);
-    p.el.classList.toggle('lbl-off', !side);
-    for (const k of ['r', 'l', 't', 'b']) p.el.classList.toggle('lbl-' + k, (side || 't') === k);
-    if (side) kept.push(cands[side]);
-  }
+  declutter(pPins);
 }
 let pCardIdx = -1;
 function openPCard(i, ended = false) {
@@ -2128,25 +2298,41 @@ function openPCard(i, ended = false) {
   $('pcard').hidden = false;
 }
 $('pcPlay').addEventListener('click', () => { $('pcard').hidden = true; startScene(pCardIdx); });
-{
-  const ol = $('plistItems');
-  PCH.forEach((c, i) => {
+const AFF = {
+  peda: { title: 'Pedagogical affordances', list: 'All pedagogies', hint: 'Tap a lettered marker to see how the room supports that pedagogy.' },
+  tech: { title: 'Technological affordances', list: 'All features', hint: 'Tap a numbered marker to see what each feature does and what it supports.' },
+  social: { title: 'Social affordances', list: 'All social affordances', hint: 'Tap a marker to see how the room supports people learning together.' },
+};
+function buildPList() {
+  const ol = $('plistItems'); ol.innerHTML = '';
+  const items = ui.aff === 'tech'
+    ? HOTSPOTS.map((h, i) => {
+      const ch = CH.find((c) => c.id === h.chapter), np = PCH.filter((c) => c.features.includes(h.id));
+      const nPe = np.filter((c) => c.lens === 'peda').length, nSo = np.length - nPe;
+      return { n: String(i + 1), t: h.title, d: ch ? fmt(ch.duration) : '', tg: [nPe && `${nPe} ${nPe > 1 ? 'pedagogies' : 'pedagogy'}`, nSo && `${nSo} social`].filter(Boolean).join(' · ') || 'Technological', go: () => openInfo(i) };
+    })
+    : PCH.map((c, i) => [c, i]).filter(([c]) => c.lens === ui.aff).map(([c, i]) => ({ n: c.letter, t: c.title, d: fmt(c.duration), tg: c.tag, go: () => openPCard(i) }));
+  for (const it of items) {
     const li = document.createElement('li');
-    li.innerHTML = `<button type="button"><span class="n">${String.fromCharCode(65 + i)}</span><span class="t"></span><span class="d">${fmt(c.duration)}</span><span class="tg"></span></button>`;
-    li.querySelector('.t').textContent = c.title; li.querySelector('.tg').textContent = c.tag;
-    li.querySelector('button').addEventListener('click', () => openPCard(i));
+    li.innerHTML = `<button type="button"><span class="n"></span><span class="t"></span><span class="d"></span><span class="tg"></span></button>`;
+    li.querySelector('.n').textContent = it.n; li.querySelector('.t').textContent = it.t; li.querySelector('.d').textContent = it.d; li.querySelector('.tg').textContent = it.tg;
+    li.querySelector('button').addEventListener('click', it.go);
     ol.appendChild(li);
-  });
-  const more = $('plistMore'); more.hidden = !MORE_AFFORDANCES.length;
-  for (const m of MORE_AFFORDANCES) {
-    const d = document.createElement('details'); d.innerHTML = '<summary><span class="t"></span><span class="tg"></span></summary><p class="feat"></p><p></p>';
-    d.querySelector('.t').textContent = m.title; d.querySelector('.tg').textContent = m.tag;
-    const ps = d.querySelectorAll('p'); ps[0].textContent = `Features: ${m.features}`; ps[1].textContent = m.how; more.appendChild(d);
   }
+  $('plistMore').hidden = true;
 }
-$('pedaList').addEventListener('click', () => { $('pcard').hidden = true; $('plist').hidden = !$('plist').hidden; });
+function setAff(a) {
+  if (!AFF[a]) return; const changed = ui.aff !== a; ui.aff = a;
+  document.querySelectorAll('#affSeg [data-aff]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.aff === a)));
+  $('pedaHint').textContent = AFF[a].hint; $('pedaList').textContent = AFF[a].list;
+  $('plistTitle').textContent = AFF[a].title; $('plist').setAttribute('aria-label', AFF[a].title);
+  if (changed) { $('pcard').hidden = true; $('info').hidden = true; Object.assign(exploreFx, DEFAULTS); }
+  buildPList();
+}
+setAff('peda');
+$('pedaList').addEventListener('click', () => { $('pcard').hidden = true; $('info').hidden = true; $('plist').hidden = !$('plist').hidden; });
 $('modePeda').addEventListener('click', () => { if (ui.mode !== 'peda') setMode('peda'); });
-$('startPeda').addEventListener('click', () => setMode('peda'));
+document.querySelectorAll('.affbtn, #affSeg [data-aff]').forEach((b) => b.addEventListener('click', () => { setAff(b.dataset.aff); if (ui.mode !== 'peda') setMode('peda'); }));
 $('scPlay').addEventListener('click', () => { const c = PCH[scenario.i]; if (!scenario.playing && scenario.t >= c.duration - 0.05) { scenario.t = 0; } scenePlay(!scenario.playing); });
 $('scPrev').addEventListener('click', () => { const c = PCH[scenario.i]; const k = Math.floor(uOf(c, scenario.t)); seekStep(scenario.t - c.cues[Math.min(k, c.cues.length - 1)].start > 2 ? k : k - 1); });
 $('scNext').addEventListener('click', () => { const c = PCH[scenario.i]; const k = Math.floor(uOf(c, scenario.t)); if (k + 1 >= c.cues.length) endScene(); else seekStep(k + 1); });
@@ -2217,7 +2403,7 @@ requestAnimationFrame(frame);
 const st = $('startTour'), stLabel = st.querySelector('span');
 loadFaces((f) => { stLabel.textContent = `Loading the room… ${Math.round(f * 100)}%`; }).then(() => {
   try { applyPhotoWalls(); } catch (e) { console.warn('photo walls', e); }
-  ready = true; st.disabled = false; stLabel.textContent = 'Start guided tour'; $('startExplore').disabled = false; $('startPeda').disabled = false;
+  ready = true; st.disabled = false; stLabel.textContent = 'Start guided tour'; $('startExplore').disabled = false; document.querySelectorAll('.affbtn').forEach((b) => { b.disabled = false; });
 }).catch(() => { stLabel.textContent = 'Photo failed to load'; $('glErr').textContent = "The room's photo didn't load. Check your connection and reload the page."; $('glErr').hidden = false; });
 audioFor(0);
 if (location.hostname === 'localhost') window.__dbg = { seek, setMode, setView, tour, state, camera, openInfo, pv, sun, scene, model, renderer, goSpot, SPOT, startScene, seekStep, sc: scenario, PCH, layoutCtl, screens, THREE };
