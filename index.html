@@ -583,9 +583,20 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(70, 1, 0.02, 200);
+// backdrop: a soft vertical gradient with a faint accent glow behind the room (no floor, no grid)
 function syncSceneBg() {
-  const c = getComputedStyle(document.documentElement).getPropertyValue('--stage').trim() || '#d9dfe3';
-  scene.background = new THREE.Color(c);
+  const cv = document.createElement('canvas'); cv.width = 512; cv.height = 512;
+  const g = cv.getContext('2d');
+  const grad = g.createLinearGradient(0, 0, 0, 512);
+  grad.addColorStop(0, '#080d10'); grad.addColorStop(1, '#17282f');
+  g.fillStyle = grad; g.fillRect(0, 0, 512, 512);
+  const glow = g.createRadialGradient(256, 300, 0, 256, 300, 330);
+  glow.addColorStop(0, 'rgba(82, 184, 209, 0.16)'); glow.addColorStop(1, 'rgba(82, 184, 209, 0)');
+  g.fillStyle = glow; g.fillRect(0, 0, 512, 512);
+  const tex = new THREE.CanvasTexture(cv);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  if (scene.background && scene.background.dispose) scene.background.dispose();
+  scene.background = tex;
 }
 syncSceneBg();
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', syncSceneBg);
