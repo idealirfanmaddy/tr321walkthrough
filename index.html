@@ -2021,8 +2021,9 @@ const SC = {
     },
   },
   tracking: {
-    shots: [{ s: 0, p: [1.7, 3.0, 2.8], t: [0.2, 1.3, -4.6] }, { s: 1, p: [1.5, 3.4, 4.0], t: [0.1, 1.2, -3.0] }, { s: 2, p: [-1.6, 2.7, -4.3], t: [0.4, 1.0, 1.2] },
-      { s: 3, p: [2.3, 3.3, -4.4], t: [-0.4, 0.9, 1.0] }, { s: 4, p: [2.4, 3.3, -4.5], t: [-0.4, 0.9, 1.0] }],
+    // top views (camera above the ceiling, so it is hidden): the tutor, camera cones and speakers stay in view
+    shots: [{ s: 0, p: [4.4, 8.6, 6.6], t: [0, 0, -0.3] }, { s: 1, p: [0.3, 7.4, 3.4], t: [0.3, 0, -1.3] }, { s: 2, p: [-1.0, 8.4, 4.2], t: [-0.2, 0, -1.0] },
+      { s: 3, p: [0.2, 9.0, 4.4], t: [0, 0, -0.4] }, { s: 4, p: [1.2, 9.4, 5.6], t: [0, 0, -0.4] }],
     run(u, S, time) {
       S.layout = 1; S.seated = true;
       Object.assign(S.screens, { FL: 'slide', FR: 'zoom' });
